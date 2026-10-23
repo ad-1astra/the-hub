@@ -1,0 +1,36 @@
+{
+ "meta": {
+  "room": "Office Space 1",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 2,
+  "links": [],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "e00",
+   "x": -10.3,
+   "y": 0.6,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Office Space 1, inside the door",
+   "neighbours": [
+    "e01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "e01",
+   "x": -10.0,
+   "y": -1.1,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Office Space 1, between the desks",
+   "neighbours": [
+    "e00"
+   ],
+   "order": 1
+  }
+ ]
+}

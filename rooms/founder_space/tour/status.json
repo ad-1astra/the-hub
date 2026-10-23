@@ -1,0 +1,10 @@
+{
+ "state": "done",
+ "done": 5,
+ "total": 5,
+ "avg_s": 87,
+ "started": "08:30",
+ "updated": "08:37",
+ "first_ready": null,
+ "eta_all": "08:37"
+}

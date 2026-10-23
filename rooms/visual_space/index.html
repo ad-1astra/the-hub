@@ -1,0 +1,74 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Visual Space Renders</title>
+<style>
+:root{--bg:#f7f6f4;--fg:#1b1b1e;--mut:#6d6d74;--line:#e2e0dd;--card:#fff;--accent:#9d5f3f;
+ --warn:#b2804f;--ok:#3f7d52;--err:#b2554f}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141416;--fg:#ececef;
+ --mut:#9a9aa2;--line:#2b2b30;--card:#1c1c20}}
+:root[data-theme=dark]{--bg:#141416;--fg:#ececef;--mut:#9a9aa2;--line:#2b2b30;--card:#1c1c20}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1500px;margin:0 auto;padding:52px 16px 80px}
+header{border-bottom:1px solid var(--line);padding-bottom:26px}
+h1{font-size:clamp(25px,4vw,38px);margin:0 0 10px;letter-spacing:-.02em}
+.sub{color:var(--mut);margin:0;max-width:76ch}
+.pill{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+ padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mut);margin-right:8px}
+.pill.draft{border-color:var(--warn);color:var(--warn)}
+.pill.ok{border-color:var(--ok);color:var(--ok)}
+.pill.err{border-color:var(--err);color:var(--err)}
+section{padding:40px 0;border-bottom:1px solid var(--line)}
+.ahead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.num{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+h2{font-size:21px;margin:0;letter-spacing:-.01em}
+.cap{color:var(--mut);margin:8px 0 18px;max-width:82ch}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:880px){.pair{grid-template-columns:1fr}}
+figure{margin:0}
+.shot{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+ background:var(--card)}
+.shot img{display:block;width:100%;height:auto}
+.tag{position:absolute;top:0;left:0;background:#1b1b1e;color:#fff;font-size:11px;
+ letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:0 0 8px 0}
+.dtag{position:absolute;top:0;right:0;background:var(--warn);color:#fff;font-size:11px;
+ letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:0 0 0 8px}
+.missing{aspect-ratio:16/9;display:grid;place-items:center;color:var(--mut);font-size:14px}
+model-viewer{width:100%;height:clamp(360px,54vh,580px);background:var(--card);
+ border:1px solid var(--line);border-radius:10px}
+.note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);
+ border-radius:8px;padding:14px 18px;margin-top:16px;color:var(--mut);font-size:14.5px;max-width:92ch}
+.note b{color:var(--fg)}
+.stat{font-size:14px;margin:12px 0 0;padding:9px 14px;border-radius:7px;border:1px solid var(--line);
+ background:var(--card);color:var(--mut)}
+.stat.ok{border-color:var(--ok);color:var(--ok)}
+.stat.err{border-color:var(--err);color:var(--err)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
+th{text-align:left;color:var(--mut);font-weight:500;border-bottom:1px solid var(--line);
+ padding:8px 10px 8px 0}
+td{border-bottom:1px solid var(--line);padding:7px 10px 7px 0;vertical-align:top}
+td.n{font-variant-numeric:tabular-nums;color:var(--mut);white-space:nowrap}
+dl{margin:18px 0 0;border-top:1px solid var(--line)}
+.srow{display:grid;grid-template-columns:230px 1fr;gap:16px;padding:10px 0;
+ border-bottom:1px solid var(--line)}
+@media(max-width:640px){.srow{grid-template-columns:1fr;gap:2px}}
+dt{color:var(--mut);font-size:14px}
+dd{margin:0;font-size:14.5px}
+footer{color:var(--mut);font-size:13.5px;padding-top:28px}
+a{color:var(--accent)}
+ .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:980px){.trio{grid-template-columns:1fr}} ol li,ul li{margin:4px 0}</style></head>
+<body><div class="wrap"><header><p><a href="../../index.html">&larr; all rooms</a></p>
+<h1>Visual Space &mdash; National ICT Innovation Hub</h1><p class="sub">Ground floor, top-left corner room, west of KaCyber. A small auditorium: carpeted two-step stage against a black lining wall (west), two carpeted seating tiers of red theatre seats facing it (east), window wall to the north, glazed corridor screen with an open 1.22 m doorway to the south. Furniture at real scale; what does not fit is listed below.</p>
+<p class="sub" style="margin-top:8px">Zone: X -18.62..-15.41, Y +3.35..+7.82 (clear 3.10 x 4.31 m inside the black lining wall), ceiling soffit 2.14 m. Each angle: the reference photo, the <b>shell</b> (model
+with materials and light only) and the <b>furnished</b> scene. The original meshes are untouched; no
+render contains people.</p><p style="margin-top:14px"><span class="pill draft">3 draft</span><span class="pill ok">1 final</span></p></header><section><div class="ahead"><span class="num">ZONE</span><h2>Zone check and photo mapping</h2><span class="pill ok">high confidence - matches the plan within 0.3 m</span></div><p class="cap">Automatic check: the model&#x27;s clear room (black lining wall X -18.45, partition to KaCyber X -15.46, corridor screen Y 3.40, window sill Y 7.71) agrees with the plan&#x27;s &#x27;Visual Space&#x27; box (about X -18.75..-15.5, Y 3.4..7.85) within 0.3 m on every side, and the photos agree: window wall with louvres and blinds to the north, glazed corridor screen with a glass door to the south, white partition with clerestory glass to KaCyber in the east, black stage wall in the west.</p><div class="trio" style="grid-template-columns:1fr 1fr"><figure><div class="shot"><a href="zone_plan.png"><img src="zone_plan.png" alt="zone on the floor plan"></a></div></figure><div><table><thead><tr><th>Photo</th><th>Where it looks</th><th>Angle</th></tr></thead><tbody><tr><td>75 - 78</td><td>Seating tiers and loose chairs, the partition, the corridor screen</td><td>detail only (close-ups)</td></tr><tr><td>79</td><td>East: tiers in front of the white partition</td><td>03</td></tr><tr><td>80 / 81</td><td>South: tiers left, stage right, corridor door at the end</td><td>01</td></tr><tr><td>82 / 84 / 85</td><td>West: the stage, TV, flip chart, mirror wall</td><td>02</td></tr><tr><td>83</td><td>North-west: stage and window corner</td><td>covered by 02</td></tr><tr><td>233</td><td>Gold circuit wall and floor AC - outside this room (lobby side)</td><td>not used</td></tr><tr><td>-</td><td>Doorway, toward the stage and window</td><td>04 (no photo)</td></tr></tbody></table></div></div></section><section><div class="ahead"><span class="num">01</span><h2>From the window toward the corridor screen</h2><span class="pill">photo Hub Space-80.jpg, Hub Space-81.jpg</span></div><p class="cap">Looking south: the seating tiers on the left, the stage with the TVs and flip chart on the right, the glazed corridor screen and glass door at the end.</p><div class="trio"><figure><div class="shot"><img src="ref/Hub Space-80.jpg" alt="reference photo" loading="lazy"><span class="tag">Photo Hub Space-80.jpg</span></div></figure><figure><div class="shot"><div class="missing">not rendered yet</div><span class="tag">Shell</span></div></figure><figure><div class="shot"><img src="01_toward_corridor_furnished.png" alt="From the window toward the corridor screen Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section><section><div class="ahead"><span class="num">02</span><h2>The stage and the black wall</h2><span class="pill">photo Hub Space-82.jpg, Hub Space-84.jpg, Hub Space-85.jpg</span></div><p class="cap">Looking west from the seats: the two-step stage, TV on a stand, flip chart, the mirror wall, the glass boards and the wire bar table.</p><div class="trio"><figure><div class="shot"><img src="ref/Hub Space-82.jpg" alt="reference photo" loading="lazy"><span class="tag">Photo Hub Space-82.jpg</span></div></figure><figure><div class="shot"><div class="missing">not rendered yet</div><span class="tag">Shell</span></div></figure><figure><div class="shot"><img src="02_stage_west_furnished.png" alt="The stage and the black wall Furnished" loading="lazy"><span class="tag">Furnished</span></div></figure></div></section><section><div class="ahead"><span class="num">03</span><h2>The seating tiers</h2><span class="pill">photo Hub Space-79.jpg</span></div><p class="cap">Looking east at the stepped tiers of red theatre seats in front of the white partition with its clerestory glass.</p><div class="trio"><figure><div class="shot"><img src="ref/Hub Space-79.jpg" alt="reference photo" loading="lazy"><span class="tag">Photo Hub Space-79.jpg</span></div></figure><figure><div class="shot"><div class="missing">not rendered yet</div><span class="tag">Shell</span></div></figure><figure><div class="shot"><img src="03_tiers_east_furnished.png" alt="The seating tiers Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section><section><div class="ahead"><span class="num">04</span><h2>From the doorway (no matching photo)</h2><span class="pill">photo no matching photo</span></div><p class="cap">An extra view from just inside the doorway, toward the stage and the window. There is no reference photo for this angle.</p><div class="trio"><figure><div class="shot"><div class="missing">no matching photo</div><span class="tag">Photo</span></div></figure><figure><div class="shot"><div class="missing">not rendered yet</div><span class="tag">Shell</span></div></figure><figure><div class="shot"><img src="04_from_doorway_furnished.png" alt="From the doorway (no matching photo) Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section>
+<section><div class="ahead"><span class="num">DIFF</span><h2>What differs from the photos (ranked)</h2></div>
+<ol><li>Not reviewed yet.</li></ol></section>
+<section><div class="ahead"><span class="num">DROP</span><h2>Dropped at real scale</h2></div>
+<table><thead><tr><th>Item</th><th>Why</th></tr></thead><tbody><tr><td>Third and fourth seat tiers (about 20 more theatre seats)</td><td>the model room is 3.1 m wide; the stage, an aisle and two tiers at real scale fill it</td></tr><tr><td>Loose chairs (pink banquet chair, cream, red and lime side chairs)</td><td>no free floor left between the tiers and the stage aisle</td></tr><tr><td>Second stage TV and the wall-mounted dark glass board behind it</td><td>the stage is 2.5 m long at real scale; one TV, one small TV and the flip chart fill it</td></tr><tr><td>Bar stool by the bar table</td><td>it would stand in the camera position at the window</td></tr><tr><td>Gold circuit-pattern wall and the floor-standing AC (photo 233)</td><td>they are outside this room&#x27;s zone (lobby side)</td></tr><tr><td>Plant and black tripod bag by the corridor screen</td><td>no room beside the doorway</td></tr></tbody></table></section>
+<section><div class="ahead"><span class="num">WALK</span><h2>Free camera</h2></div><p class="stat ok"><a href="walkbaked/index.html">Walk the photoreal Visual Space (baked, free camera) &rarr;</a></p><p class="stat ok"><a href="tour/index.html">360° tour of Visual Space (Cycles panoramas) &rarr;</a></p><p class="stat ok"><a href="walk/index.html">Walk Visual Space (flat colours, preview) &rarr;</a></p></section>
+<section><div class="ahead"><span class="num">FILES</span><h2>Files and last updated</h2></div>
+<table><thead><tr><th>File</th><th>Kind</th><th>Size</th><th>Modified</th></tr></thead><tbody><tr><td>01_toward_corridor_furnished.png</td><td class='n'>DRAFT</td><td class='n'>944.9 KB</td><td class='n'>2026-10-02 05:18</td></tr><tr><td>02_stage_west_furnished.png</td><td class='n'>final</td><td class='n'>1.3 MB</td><td class='n'>2026-10-02 07:19</td></tr><tr><td>03_tiers_east_furnished.png</td><td class='n'>DRAFT</td><td class='n'>925.6 KB</td><td class='n'>2026-10-02 05:19</td></tr><tr><td>04_from_doorway_furnished.png</td><td class='n'>DRAFT</td><td class='n'>964.8 KB</td><td class='n'>2026-10-02 05:20</td></tr><tr><td>tour/index.html</td><td class='n'>free-camera page</td><td class='n'>14.9 KB</td><td class='n'>2026-10-02 06:06</td></tr><tr><td>walk/index.html</td><td class='n'>free-camera page</td><td class='n'>26.6 KB</td><td class='n'>2026-10-02 05:16</td></tr><tr><td>walkbaked/index.html</td><td class='n'>free-camera page</td><td class='n'>52.7 KB</td><td class='n'>2026-10-02 07:13</td></tr></tbody></table></section>
+<section style="border-bottom:none"><div class="ahead"><span class="num">&#9881;</span><h2>Render settings</h2></div>
+<dl><div class="srow"><dt>Room</dt><dd>Visual Space - X -18.62..-15.41, Y +3.35..+7.82, soffit 2.14 m</dd></div><div class="srow"><dt>Renderer</dt><dd>Blender 4.2 LTS, Cycles, CPU only (i5-10505)</dd></div><div class="srow"><dt>Draft settings</dt><dd>1280 x 720, 32 samples, adaptive 0.012, OIDN (finals 1600 x 900, 256 samples)</dd></div><div class="srow"><dt>Daylight</dt><dd>North glazing - 12 x 6 m soft panel 4 m out (6500 W), louvre band, vertical blinds; the west facade glazing is covered by the black lining wall</dd></div><div class="srow"><dt>Ceiling lights</dt><dd>4 LED panels 600 x 600, 5000 K, plus a soft ceiling fill</dd></div><div class="srow"><dt>Tone mapping</dt><dd>AgX, Medium High Contrast, exposure -0.22 (same as the other rooms)</dd></div><div class="srow"><dt>Furniture</dt><dd>Real scale, nothing shrunk</dd></div><div class="srow"><dt>People</dt><dd>None, by design</dd></div></dl></section><footer>Page built 2026-10-23 03:03:55 &middot; nothing uploaded anywhere</footer></div></body></html>

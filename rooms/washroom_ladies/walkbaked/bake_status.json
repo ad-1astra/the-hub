@@ -1,0 +1,124 @@
+{
+ "jobs": {
+  "floor": {
+   "res": 2048,
+   "coverage": 0.779,
+   "combined_s": 552.4,
+   "s_per_mtexel": 169.02,
+   "prep_s": 16.3,
+   "files": {
+    "albedo": "bake_raw\\floor_2048_albedo.exr",
+    "normal_obj": "bake_raw\\floor_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\floor_2048_s128_combined_raw.exr",
+    "lighting": "bake\\floor_2048_s128_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\floor_2048_s128_lighting.exr"
+  },
+  "wall_west": {
+   "res": 2048,
+   "coverage": 0.545,
+   "combined_s": 283.7,
+   "s_per_mtexel": 124.11,
+   "prep_s": 39.7,
+   "files": {
+    "albedo": "bake_raw\\wall_west_2048_albedo.exr",
+    "normal_obj": "bake_raw\\wall_west_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\wall_west_2048_s128_combined_raw.exr",
+    "lighting": "bake\\wall_west_2048_s128_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\wall_west_2048_s128_lighting.exr"
+  },
+  "wall_north": {
+   "res": 2048,
+   "coverage": 0.465,
+   "combined_s": 413.8,
+   "s_per_mtexel": 212.13,
+   "prep_s": 68.0,
+   "files": {
+    "albedo": "bake_raw\\wall_north_2048_albedo.exr",
+    "normal_obj": "bake_raw\\wall_north_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\wall_north_2048_s128_combined_raw.exr",
+    "lighting": "bake\\wall_north_2048_s128_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\wall_north_2048_s128_lighting.exr"
+  },
+  "furn_a": {
+   "res": 2048,
+   "coverage": 0.576,
+   "combined_s": 442.5,
+   "s_per_mtexel": 183.19,
+   "prep_s": 42.8,
+   "files": {
+    "albedo": "bake_raw\\furn_a_2048_albedo.exr",
+    "normal_obj": "bake_raw\\furn_a_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\furn_a_2048_s128_combined_raw.exr",
+    "lighting": "bake\\furn_a_2048_s128_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\furn_a_2048_s128_lighting.exr"
+  },
+  "furn_b": {
+   "res": 2048,
+   "coverage": 0.652,
+   "combined_s": 409.6,
+   "s_per_mtexel": 149.81,
+   "prep_s": 40.4,
+   "files": {
+    "albedo": "bake_raw\\furn_b_2048_albedo.exr",
+    "normal_obj": "bake_raw\\furn_b_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\furn_b_2048_s128_combined_raw.exr",
+    "lighting": "bake\\furn_b_2048_s128_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\furn_b_2048_s128_lighting.exr"
+  },
+  "wall_east": {
+   "res": 2048,
+   "coverage": 0.541,
+   "combined_s": 324.2,
+   "s_per_mtexel": 142.92,
+   "prep_s": 38.4,
+   "files": {
+    "albedo": "bake_raw\\wall_east_2048_albedo.exr",
+    "normal_obj": "bake_raw\\wall_east_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\wall_east_2048_s128_combined_raw.exr",
+    "lighting": "bake\\wall_east_2048_s128_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\wall_east_2048_s128_lighting.exr"
+  },
+  "wall_south": {
+   "res": 2048,
+   "coverage": 0.456,
+   "combined_s": 254.0,
+   "s_per_mtexel": 132.71,
+   "prep_s": 35.3,
+   "files": {
+    "albedo": "bake_raw\\wall_south_2048_albedo.exr",
+    "normal_obj": "bake_raw\\wall_south_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\wall_south_2048_s128_combined_raw.exr",
+    "lighting": "bake\\wall_south_2048_s128_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\wall_south_2048_s128_lighting.exr"
+  },
+  "ceiling": {
+   "res": 2048,
+   "coverage": 0.78,
+   "combined_s": 662.9,
+   "s_per_mtexel": 202.69,
+   "prep_s": 56.4,
+   "files": {
+    "albedo": "bake_raw\\ceiling_2048_albedo.exr",
+    "normal_obj": "bake_raw\\ceiling_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\ceiling_2048_s128_combined_raw.exr",
+    "lighting": "bake\\ceiling_2048_s128_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\ceiling_2048_s128_lighting.exr"
+  }
+ }
+}

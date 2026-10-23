@@ -1,0 +1,25 @@
+{
+ "cams": [
+  {
+   "id": "01_vip_desk",
+   "title": "From the door to the desk",
+   "where": "inside the door looking plan-north-west: lounge on the navy wall, the executive desk at the windows, 20 mm",
+   "photo": null,
+   "nophoto": "No photos: typical layout",
+   "draft": 1792530984,
+   "final": 1792531563
+  },
+  {
+   "id": "02_vip_door",
+   "title": "Back to the door",
+   "where": "window corner looking plan-south-east: desk, visitor chairs, bookcases, the door, 20 mm",
+   "photo": null,
+   "nophoto": "No photos: typical layout",
+   "draft": null,
+   "final": 1792532134
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> Plan label cell converted with the first-floor plan calibration (X = &minus;18.8 + px&middot;0.029984, Y = 7.83 &minus; (py&minus;187)&middot;0.030273), then ray casts into the original GLB (typical_rooms/probe_new.py, probe_new2.py): each wall face = median of 7 parallel casts at floor + 1.0 m, doorways and windows from scans 0.25 m inside each face at floor + 1.0 / 1.5 / 2.2 m, floor and soffit measured at 5 points in this room (floor 2.44, soffit 2.56 m above it). Doors: S wall -17.65..-16.60 to the west arm (open leaf into the arm). Windows on the n wall.</p><p><b>Photos.</b> None for this room: <b>No photos: typical layout</b>.</p><p><b>Built as new objects.</b> Armchairs, glass-door mahogany bookcases with binders, a coffee table, an abstract painting, a potted plant, a rug, a navy sofa, an executive desk with a high-back chair, red visitor chairs. Fit check: every footprint inside the zone and clear of the doors (check_layout.py), every built object inside the zone and every 360 node &ge; 0.30 m from anything (check_scene.py).</p><p><b>Dropped (real scale, no shrinking).</b></p><ul><li>nothing (everything of the typical layout fits at real scale)</li></ul><p><b>Differences.</b> (1) The model has no suspended ceiling: a 600 mm grid with LED panels is built at 2.51 m. (2) Door openings and windows are the model's; a door leaf of the upper-floor scene stands open in this room's renders only.</p>",
+ "typical": true,
+ "updated": "2026-10-20 17:07:27"
+}

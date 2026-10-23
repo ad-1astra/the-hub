@@ -1,0 +1,103 @@
+{
+ "meta": {
+  "room": "Founder Space 1",
+  "eye": 1.6,
+  "count": 5,
+  "image_centre": "+X (east)",
+  "picked": "by hand, ray-cast checked",
+  "generated": "2026-10-03T08:30:02"
+ },
+ "nodes": [
+  {
+   "id": "p00",
+   "x": 4.5,
+   "y": 3.1,
+   "z": 1.6,
+   "clear": 1.25,
+   "zone": "corridor",
+   "name": "Reception doorway, looking in",
+   "look": [
+    12.0,
+    3.1
+   ],
+   "neighbours": [
+    "p03",
+    "p01"
+   ]
+  },
+  {
+   "id": "p01",
+   "x": 13.4,
+   "y": 2.4,
+   "z": 1.6,
+   "clear": 1.82,
+   "zone": "room",
+   "name": "Middle of the room, facing the stair",
+   "look": [
+    16.8,
+    2.95
+   ],
+   "neighbours": [
+    "p02",
+    "p03",
+    "p04",
+    "p00"
+   ]
+  },
+  {
+   "id": "p02",
+   "x": 14.45,
+   "y": 2.95,
+   "z": 1.6,
+   "clear": 1.8,
+   "zone": "room",
+   "name": "At the stair",
+   "look": [
+    17.5,
+    2.95
+   ],
+   "neighbours": [
+    "p01",
+    "p03",
+    "p04"
+   ]
+  },
+  {
+   "id": "p03",
+   "x": 12.1,
+   "y": 3.5,
+   "z": 1.6,
+   "clear": 1.37,
+   "zone": "room",
+   "name": "Lounge seating area",
+   "look": [
+    11.0,
+    2.4
+   ],
+   "neighbours": [
+    "p01",
+    "p02",
+    "p04",
+    "p00"
+   ]
+  },
+  {
+   "id": "p04",
+   "x": 18.0,
+   "y": 0.72,
+   "z": 1.6,
+   "clear": 0.72,
+   "zone": "room",
+   "name": "Far east end",
+   "look": [
+    10.0,
+    2.4
+   ],
+   "neighbours": [
+    "p02",
+    "p01",
+    "p03"
+   ]
+  }
+ ]
+}

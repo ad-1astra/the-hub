@@ -1,0 +1,25 @@
+{
+ "cams": [
+  {
+   "id": "01_wl_east",
+   "title": "Vanity on the left, door ahead",
+   "where": "cubicle front looking plan-east: the vanity with two basins under the mirror on the left, the door, 20 mm",
+   "photo": "female wash room.jpg",
+   "nophoto": "Style reference only: style reference (the ground-floor Ladies' photo)",
+   "draft": 1792498880,
+   "final": 1792499893
+  },
+  {
+   "id": "02_wl_west",
+   "title": "From the door to the cubicles",
+   "where": "inside the lobby door looking plan-west: vanity on the right, oak cubicles ahead, 20 mm",
+   "photo": null,
+   "nophoto": "No matching photo for this angle",
+   "draft": null,
+   "final": 1792501506
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> Plan label cell converted with the first-floor plan calibration (X = &minus;18.8 + px&middot;0.029984, Y = 7.83 &minus; (py&minus;187)&middot;0.030273), then ray casts into the original GLB (typical_rooms/probe_new.py, probe_new2.py): each wall face = median of 7 parallel casts at floor + 1.0 m, doorways and windows from scans 0.25 m inside each face at floor + 1.0 / 1.5 / 2.2 m, floor and soffit measured at 5 points in this room (floor 2.44, soffit 2.56 m above it). Doors: E wall -2.65..-1.80 to the lobby (open leaf into the lobby). Windows on the s wall.</p><p><b>Photos.</b> female wash room.jpg (style reference (the ground-floor Ladies' photo)). People in photos are ignored.</p><p><b>Built as new objects.</b> Fixtures. A white solid-surface vanity with two inset basins and sensor taps under a full-length mirror, two oak cubicles on grey pilasters (one open), towel dispenser, hand dryer, lilac 150 mm tiles floor to ceiling, light grey 300 floor tiles, downlights. Fit check: every footprint inside the zone and clear of the doors (check_layout.py), every built object inside the zone and every 360 node &ge; 0.30 m from anything (check_scene.py).</p><p><b>Dropped (real scale, no shrinking).</b></p><ul><li>two of the four basins of the ground-floor vanity: the north wall takes a 1.35 m vanity with two basins (the door needs the rest)</li><li>the third cubicle: the 1.69 m west wall takes two 0.84 m cubicles (1.40 m deep)</li><li>the second hand dryer (one on the east wall by the door)</li></ul><p><b>Differences.</b> (1) The model has no suspended ceiling: a 600 mm grid with LED panels is built at 2.51 m. (2) Door openings and windows are the model's; a door leaf of the upper-floor scene stands open in this room's renders only.</p>",
+ "typical": false,
+ "updated": "2026-10-20 17:07:26"
+}

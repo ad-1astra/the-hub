@@ -1,0 +1,11 @@
+{
+ "now": "high-quality bake: floor 4096 at 256 samples",
+ "pct": 40,
+ "fast_end": "05:34 (done)",
+ "hq_start": "06:00",
+ "hq_end": "about 08:10",
+ "bake_start": "06:00",
+ "bake_end": "08:10",
+ "best_frame": "../01_toward_corridor_furnished.png",
+ "best_frame_label": "Cycles draft 1280 x 720"
+}

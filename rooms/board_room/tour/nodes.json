@@ -1,0 +1,73 @@
+{
+ "meta": {
+  "room": "Board Room",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 4,
+  "links": [
+   [
+    "r00",
+    "u07"
+   ],
+   [
+    "r01",
+    "u05"
+   ]
+  ],
+  "generated": "2026-10-19T07:37:03"
+ },
+ "nodes": [
+  {
+   "id": "r00",
+   "x": -13.37,
+   "y": -0.25,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Board Room, inside the corridor door",
+   "neighbours": [
+    "r02",
+    "r01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "r01",
+   "x": -17.1,
+   "y": 0.8,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Board Room, inside the west-arm door",
+   "neighbours": [
+    "r03",
+    "r00"
+   ],
+   "order": 1
+  },
+  {
+   "id": "r02",
+   "x": -12.35,
+   "y": -2.55,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Board Room, east end by the windows",
+   "neighbours": [
+    "r00",
+    "r03"
+   ],
+   "order": 2
+  },
+  {
+   "id": "r03",
+   "x": -17.9,
+   "y": -2.45,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Board Room, by the screen",
+   "neighbours": [
+    "r02",
+    "r01"
+   ],
+   "order": 3
+  }
+ ]
+}

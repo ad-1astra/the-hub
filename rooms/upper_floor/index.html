@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upper floor — National ICT Innovation Hub</title>
+<link rel="stylesheet" href="../../tour/lib/pannellum.css">
+<style>
+:root{--bg:#f6f4f0;--panel:#fff;--line:#ded8cf;--fg:#1d1f22;--mut:#6b665d;--accent:#9d5f3f;--ok:#3f7d5a}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1500px;margin:0 auto;padding:22px 18px 60px}
+a{color:var(--accent)}
+h1{font-size:26px;margin:6px 0 4px}
+h2{font-size:19px;margin:34px 0 10px;padding-top:8px;border-top:1px solid var(--line)}
+.sub{color:var(--mut);max-width:1050px}
+.btns a{display:inline-block;margin:0 8px 8px 0;padding:8px 15px;border-radius:8px;border:2px solid var(--accent);text-decoration:none;font-weight:700}
+.btns a.main{background:var(--accent);color:#fff}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 26px}
+.row figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.row img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#e9e5de;cursor:zoom-in}
+.row figcaption{font-size:12.5px;color:var(--mut);padding:6px 10px}
+.row .empty{aspect-ratio:16/9;display:grid;place-items:center;color:var(--mut);font-size:13px;background:#ece8e1}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:5px;margin-right:6px;color:#fff;background:#8f8b85}
+.tag.final{background:var(--ok)}.tag.draft{background:#b07a3c}
+.camhead{font-weight:700;margin:0 0 6px}
+.camhead small{font-weight:400;color:var(--mut)}
+#tourbox{position:relative;height:72vh;min-height:460px;border-radius:10px;overflow:hidden;background:#16181b;border:1px solid var(--line)}
+#pano{position:absolute;inset:0}
+.ov{position:absolute;background:rgba(250,249,246,.94);border:1px solid var(--line);border-radius:9px;box-shadow:0 2px 12px rgba(0,0,0,.25);z-index:5}
+#info{top:12px;left:12px;padding:9px 12px;width:255px;font-size:13px}
+#where{font-weight:700;font-size:15.5px}
+#status,#coords,#keys{font-size:12px;color:var(--mut)}
+#mini{bottom:12px;left:12px;padding:7px}
+#mini canvas{display:block;border-radius:5px;cursor:pointer}
+#mini .cap{font-size:11px;color:var(--mut);text-align:center;margin-top:2px}
+.arrowspot{width:58px;height:58px;margin:-29px 0 0 -29px;cursor:pointer}
+.arrowspot .ring{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.85);box-shadow:0 0 10px rgba(0,0,0,.35);transform:scaleY(.55)}
+.arrowspot:hover .ring{background:rgba(157,95,63,.75)}
+.arrowspot .chev{position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-12px 0 0 -8px;border-top:4px solid #fff;border-left:4px solid #fff;transform:rotate(45deg);filter:drop-shadow(0 0 2px #000)}
+.arrowspot .lbl{position:absolute;top:56px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:12px;color:#fff;background:rgba(0,0,0,.55);padding:1px 7px;border-radius:4px;opacity:0}
+.arrowspot:hover .lbl{opacity:1}
+#wait{position:absolute;inset:0;display:none;place-items:center;color:#ddd;text-align:center;padding:20px}
+#wait img{max-width:min(900px,90%);border-radius:8px;opacity:.85}
+table{border-collapse:collapse;font-size:13px;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+td,th{padding:5px 9px;border-bottom:1px solid #eee9e1;text-align:left;vertical-align:top}
+th{background:#f1ede6}
+.cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.cols img{width:100%;border:1px solid var(--line);border-radius:8px;background:#fff}
+ul{margin:6px 0;padding-left:20px}
+#zoom{position:fixed;inset:0;background:rgba(10,10,12,.88);display:none;place-items:center;z-index:50;cursor:zoom-out}
+#zoom img{max-width:96vw;max-height:94vh}
+@media (max-width:900px){.row,.cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="btns"><a class="main" href="../../building/index.html">Whole building (Upper floor &rarr; corridors) &rarr;</a><a href="../../index.html">Gallery</a><a href="../../tour/index.html">Reception 360 tour</a><a href="../cafeteria/index.html">Cafeteria</a><a href="../upper_founder_space/index.html">Upper Founder Space</a><a href="../stairs/index.html">Stairs</a><a href="../balcony/index.html">Balcony</a></div>
+  <h1>Upper-floor corridors &middot; first floor &middot; National ICT Innovation Hub</h1>
+  <p class="sub">The first-floor corridors: the ring round the &ldquo;Opening to ground level&rdquo; (X &minus;15.42..&minus;8.50, Y 0.49..4.14, void X &minus;14.40..&minus;9.85),
+  its west arm (VIP Suite, Board Room) and its east arm to the Cafeteria, and the lobby south of the Cafeteria (X &minus;1.78..+0.50) at the top of the
+  Reception stair. Floor 2.44 m, model ceiling 2.51 m. The model's ring corridors are about 0.8 m wide, much narrower than the real ones (about
+  1.5 m), so the views are tighter than the photos. Rebuilt from 19 photographs (29 Sep 2026, 15:51&ndash;16:06). Same colour management as the Reception.
+  No people and no vehicles.</p>
+
+  <div id="prog" style="margin:14px 0 4px;max-width:1050px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 14px">
+    <div style="display:flex;justify-content:space-between;font-size:13.5px"><b id="progstep">Render progress</b><span id="progeta" style="color:var(--mut)"></span></div>
+    <div style="height:10px;background:#ece8e1;border-radius:6px;margin:7px 0 5px;overflow:hidden"><div id="progbar" style="height:100%;width:0;background:var(--ok);transition:width .6s"></div></div>
+    <div id="progdone" style="font-size:12.5px;color:var(--mut)"></div></div>
+
+  <h2>Renders next to their photos</h2>
+  <div id="renders"><p class="sub">Loading&hellip;</p></div>
+
+  <h2>360 tour of the upper-floor corridors</h2>
+  <p class="sub">Eleven panoramas about every 3 m round the ring, on both arms and in the lobby. In the whole-building page the east arm continues into the
+  Cafeteria (west door) and the lobby into the Cafeteria and the stair tour.</p>
+  <div id="tourbox">
+    <div id="pano"></div>
+    <div class="ov" id="info"><div id="where">&mdash;</div><div id="coords"></div><div id="status">Loading&hellip;</div>
+      <div id="keys">Drag to look &middot; click a floor ring &middot; <b>W</b>/<b>S</b> forward/back &middot; <b>A D</b> turn &middot; map click jumps</div></div>
+    <div class="ov" id="mini"><canvas id="map" width="300" height="300"></canvas><div class="cap">filled = rendered &middot; grey = not rendered yet</div></div>
+    <div id="wait"><div><img id="waitimg" alt=""><p id="waittxt">Not rendered yet.</p></div></div>
+  </div>
+
+  <h2>Zone check and where the photos were taken</h2>
+  <div class="cols">
+    <div><img src="zone_plan.png" alt="First-floor plan with the zones, flights, voids, still cameras and 360 nodes"></div>
+    <div id="notes"></div>
+  </div>
+</div>
+<div id="zoom"><img alt=""></div>
+
+<script src="../../tour/lib/pannellum.js"></script>
+<script>
+"use strict";
+// ---------------------------------------------------------------- renders (renders.json written by publish.py)
+const zoom = document.getElementById('zoom');
+zoom.onclick = () => zoom.style.display = 'none';
+function zoomable(img) { img.onclick = () => { zoom.querySelector('img').src = img.src; zoom.style.display = 'grid'; }; }
+async function loadRenders() {
+  let R;
+  try { R = await (await fetch('renders.json', { cache: 'no-store' })).json(); } catch (e) { return; }
+  const box = document.getElementById('renders'); box.innerHTML = '';
+  for (const c of R.cams) {
+    const h = document.createElement('div'); h.className = 'camhead';
+    h.innerHTML = `${c.id} &middot; ${c.title} <small>&mdash; ${c.where}</small>`; box.appendChild(h);
+    const row = document.createElement('div'); row.className = 'row';
+    const fig = (src, tag, cap) => { const f = document.createElement('figure');
+      if (src) { const i = document.createElement('img'); i.loading = 'lazy'; i.src = src; i.alt = cap; zoomable(i); f.appendChild(i); }
+      else { const d = document.createElement('div'); d.className = 'empty'; d.textContent = cap; f.appendChild(d); }
+      const fc = document.createElement('figcaption'); fc.innerHTML = tag + (src ? cap : ''); f.appendChild(fc); return f; };
+    row.appendChild(fig('photos/' + encodeURIComponent(c.photo), '<span class="tag">PHOTO</span>', c.photo));
+    row.appendChild(fig(c.draft ? 'renders/draft/' + c.id + '.jpg?v=' + c.draft : null, '<span class="tag draft">DRAFT</span>',
+      c.draft ? '1280 x 720, 32 samples + denoise' : 'draft not rendered yet'));
+    row.appendChild(fig(c.final ? 'renders/final/' + c.id + '.jpg?v=' + c.final : null, '<span class="tag final">FINAL</span>',
+      c.final ? '1600 x 900, 256 samples + denoise' : 'final not rendered yet (queued)'));
+    box.appendChild(row);
+  }
+  document.getElementById('notes').innerHTML = R.notes || '';
+}
+loadRenders(); setInterval(loadRenders, 60000);
+async function loadProgress() {
+  let P; try { P = await (await fetch('progress.json', { cache: 'no-store' })).json(); } catch (e) { return; }
+  document.getElementById('progstep').textContent = 'Now: ' + P.step + (P.N ? ' (' + P.n + ' of ' + P.N + ')' : '');
+  document.getElementById('progeta').textContent = P.eta ? 'all done by ~' + P.eta + ' · updated ' + P.updated.slice(11, 16) : '';
+  document.getElementById('progbar').style.width = Math.round(100 * P.frac) + '%';
+  document.getElementById('progdone').textContent = 'Finished: ' + (P.done.join(' · ') || 'nothing yet');
+}
+loadProgress(); setInterval(loadProgress, 30000);
+
+// ---------------------------------------------------------------- 360 tour (same mechanics as the corridor tour)
+let nodes = [], byId = {}, rendered = new Set(), viewer = null, current = null, VER = {};
+const EYE = 1.6;
+const yawTo = (a, b) => -Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;      // image centre = plan +X, yaw clockwise
+const dist = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
+const label = n => n.name || n.id;
+function arrow(div, n) {
+  div.classList.add('arrowspot');
+  div.innerHTML = '<div class="ring"></div><div class="chev"></div><div class="lbl">' + label(n) + '</div>';
+  div.dataset.target = n.id;
+}
+const spot = (n, m) => ({ id: 'to_' + m.id, type: 'scene', sceneId: m.id, targetYaw: 'sameAzimuth', yaw: yawTo(n, m),
+  pitch: -Math.atan2(EYE + (n.floor || 0) - (m.floor || 0), dist(n, m)) * 180 / Math.PI,
+  cssClass: 'arrowspot-host', createTooltipFunc: arrow, createTooltipArgs: m });
+const hotspotsFor = n => n.neighbours.filter(id => rendered.has(id) && byId[id]).map(id => spot(n, byId[id]));
+const sceneCfg = n => ({ type: 'equirectangular', panorama: 'tour/' + n.id + '.png' + (VER[n.id] ? '?v=' + VER[n.id] : ''),
+  title: '', hfov: 100, yaw: 0, pitch: -4, hotSpots: hotspotsFor(n) });
+async function scan() {
+  let list = [];
+  try { const r = await fetch('tour/rendered.json', { cache: 'no-store' }); if (r.ok) list = await r.json(); } catch (e) {}
+  let ver = {};
+  try { const r = await fetch('tour/versions.json', { cache: 'no-store' }); if (r.ok) ver = await r.json(); } catch (e) {}
+  const fresh = [], changed = [];
+  for (const n of nodes) {
+    if (!list.includes(n.id)) continue;
+    if (!rendered.has(n.id)) { rendered.add(n.id); fresh.push(n); }
+    else if (ver[n.id] && VER[n.id] && ver[n.id] !== VER[n.id]) changed.push(n);
+  }
+  VER = ver;
+  return { fresh, changed };
+}
+function addFresh(fresh) {
+  for (const n of fresh) viewer.addScene(n.id, sceneCfg(n));
+  for (const n of fresh) for (const m of nodes)
+    if (m.id !== n.id && rendered.has(m.id) && !fresh.includes(m) && m.neighbours.includes(n.id)) viewer.addHotSpot(spot(m, n), m.id);
+}
+function setStatus() {
+  document.getElementById('status').textContent = rendered.size + ' of ' + nodes.length + ' panoramas rendered' +
+    (rendered.size < nodes.length ? ' — still rendering, new ones appear by themselves.' : '.');
+}
+function go(id) { if (!rendered.has(id) || !viewer || id === current) return false; viewer.loadScene(id, 'same', 'sameAzimuth', 'same'); return true; }
+function stepDir(back) {
+  if (!current) return null;
+  const n = byId[current], view = viewer.getYaw() + (back ? 180 : 0);
+  let best = null, bestA = 55;
+  for (const id of n.neighbours) {
+    if (!rendered.has(id) || !byId[id]) continue;
+    const a = Math.abs(((yawTo(n, byId[id]) - view) % 360 + 540) % 360 - 180);
+    if (a < bestA) { bestA = a; best = id; }
+  }
+  if (best) go(best);
+  return best;
+}
+const tourbox = document.getElementById('tourbox');
+let hot = false;
+tourbox.addEventListener('pointerenter', () => hot = true); tourbox.addEventListener('pointerleave', () => hot = false);
+addEventListener('keydown', e => {
+  if (!viewer || !hot) return;
+  const k = e.key.toLowerCase();
+  if (k === 'w' || e.key === 'ArrowUp') { stepDir(false); e.preventDefault(); }
+  else if (k === 's' || e.key === 'ArrowDown') { stepDir(true); e.preventDefault(); }
+  else if (k === 'a' || e.key === 'ArrowLeft') viewer.setYaw(viewer.getYaw() - 15, 250);
+  else if (k === 'd' || e.key === 'ArrowRight') viewer.setYaw(viewer.getYaw() + 15, 250);
+});
+// minimap: balcony + Cafeteria from the model (plan coordinates, plan +Y up as on the first-floor plan)
+const map = document.getElementById('map'), ctx = map.getContext('2d');
+const VIEW = { x0: -19.2, x1: 1.2, y0: -3.6, y1: 5.0 };
+const S = Math.min(map.width / (VIEW.x1 - VIEW.x0), map.height / (VIEW.y1 - VIEW.y0));
+const m2p = (x, y) => ({ x: map.width / 2 + (x - (VIEW.x0 + VIEW.x1) / 2) * S, y: map.height / 2 - (y - (VIEW.y0 + VIEW.y1) / 2) * S });
+const rect = (x0, x1, y0, y1, fill, stroke) => { const a = m2p(x0, y0), b = m2p(x1, y1);
+  ctx.fillStyle = fill; ctx.fillRect(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.abs(b.x - a.x), Math.abs(b.y - a.y));
+  if (stroke) { ctx.strokeStyle = stroke; ctx.strokeRect(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.abs(b.x - a.x), Math.abs(b.y - a.y)); } };
+function drawMap() {
+  ctx.fillStyle = '#dfe8d2'; ctx.fillRect(0, 0, map.width, map.height);
+  rect(-18.8, 18.8, -3.22, 7.83, '#e4e0d8', '#6b665d');
+  for (const [x0, x1, y0, y1] of [[-5.28, 3.82, 1.24, 7.80], [-1.80, 0.55, -3.16, 1.24], [3.90, 18.72, -3.22, 7.78],
+       [-18.66, -15.42, 1.27, 3.34], [-15.42, -8.50, 0.49, 4.14], [-8.50, -5.32, 1.27, 3.34]]) rect(x0, x1, y0, y1, '#f3f0ea');
+  for (const [x0, x1, y0, y1] of [[10.15, 12.95, 0.55, 4.15], [-14.40, -9.85, 1.27, 3.30], [15.10, 18.72, 1.58, 4.85], [0.85, 3.82, 0.26, 1.25]])
+    rect(x0, x1, y0, y1, '#2f4f8f');
+  for (const [x0, x1, y0, y1] of [[0.85, 2.92, 1.27, 2.00], [1.25, 2.92, 0.26, 1.22], [15.40, 17.45, 3.86, 4.67], [17.86, 18.70, 2.55, 3.86], [15.10, 17.39, 1.62, 2.53]])
+    rect(x0, x1, y0, y1, '#a0582a');
+  rect(4.85, 7.03, -2.48, 0.0, '#cfcac1', '#8f8b85');
+  ctx.fillStyle = '#6b665d'; ctx.font = '10px sans-serif';
+  let p = m2p(-12.1, 2.3); ctx.fillStyle = '#fff'; ctx.fillText('Opening', p.x - 18, p.y); ctx.fillStyle = '#6b665d'; p = m2p(-2.0, 5.0); ctx.fillText('Cafeteria', p.x - 20, p.y);
+  ctx.fillStyle = '#3d3a35'; ctx.font = 'bold 11px sans-serif'; ctx.fillText('plan N \u2191', map.width - 50, 16);
+  ctx.strokeStyle = 'rgba(157,95,63,.4)'; ctx.lineWidth = 1;
+  for (const n of nodes) for (const id of n.neighbours) if (id > n.id && byId[id]) {
+    const a = m2p(n.x, n.y), b = m2p(byId[id].x, byId[id].y); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+  if (current && viewer) {
+    const n = byId[current], q = m2p(n.x, n.y), yaw = viewer.getYaw() * Math.PI / 180, hf = viewer.getHfov() / 2 * Math.PI / 180;
+    // yaw 0 = plan +X = screen right; clockwise in plan = clockwise on screen
+    ctx.fillStyle = 'rgba(157,95,63,.28)'; ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.arc(q.x, q.y, 30, yaw - hf, yaw + hf); ctx.closePath(); ctx.fill();
+  }
+  for (const n of nodes) {
+    const q = m2p(n.x, n.y), on = rendered.has(n.id);
+    ctx.beginPath(); ctx.arc(q.x, q.y, n.id === current ? 6 : 4, 0, 7);
+    ctx.fillStyle = n.id === current ? '#9d5f3f' : (on ? 'rgba(157,95,63,.85)' : '#bdb9b3'); ctx.fill();
+    ctx.lineWidth = 1.3; ctx.strokeStyle = on ? '#fff' : '#8f8b85'; ctx.stroke();
+  }
+}
+map.addEventListener('click', e => {
+  const r = map.getBoundingClientRect(), x = (e.clientX - r.left) * map.width / r.width, y = (e.clientY - r.top) * map.height / r.height;
+  let best = null, bd = 16;
+  for (const n of nodes) { const q = m2p(n.x, n.y), d = Math.hypot(q.x - x, q.y - y); if (d < bd && rendered.has(n.id)) { bd = d; best = n.id; } }
+  if (best) go(best);
+});
+function onScene(id) {
+  current = id; const n = byId[id];
+  document.getElementById('where').textContent = label(n);
+  document.getElementById('coords').textContent = id + ' · plan X ' + n.x.toFixed(1) + '  Y ' + n.y.toFixed(1) + ' · floor ' + (n.floor || 0).toFixed(2) + ' m';
+}
+(async () => {
+  let data;
+  try { data = await (await fetch('tour/nodes.json', { cache: 'no-store' })).json(); }
+  catch (e) { document.getElementById('status').textContent = 'Tour nodes not published yet.'; return; }
+  nodes = data.nodes; nodes.forEach(n => byId[n.id] = n);
+  await scan(); setStatus();
+  (function loop() { drawMap(); requestAnimationFrame(loop); })();
+  if (!rendered.size) {
+    const w = document.getElementById('wait'); w.style.display = 'grid';
+    document.getElementById('waitimg').src = 'renders/draft/04_ring.jpg';
+    document.getElementById('waitimg').onerror = function () { this.style.display = 'none'; };
+    document.getElementById('waittxt').textContent = 'The 360 panoramas are not rendered yet (0 of ' + nodes.length + '). This view starts by itself when the first one is ready.';
+    const t = setInterval(async () => { if ((await scan()).fresh.length) { clearInterval(t); location.reload(); } }, 20000);
+    return;
+  }
+  const order = nodes.map(n => n.id), first = ['u01', 'u03', 'u09'].find(id => rendered.has(id)) || order.find(id => rendered.has(id));
+  const scenes = {};
+  for (const id of rendered) scenes[id] = sceneCfg(byId[id]);
+  scenes[first].yaw = 180;
+  viewer = pannellum.viewer('pano', {
+    default: { firstScene: first, sceneFadeDuration: 650, autoLoad: true, showFullscreenCtrl: true, keyboardZoom: false,
+               disableKeyboardCtrl: true, compass: false, hfov: 100, minHfov: 50, maxHfov: 120 }, scenes });
+  viewer.on('scenechange', onScene);
+  viewer.on('load', () => { onScene(viewer.getScene()); window.__tour.loads++; });
+  viewer.on('error', m => { document.getElementById('status').textContent = 'Panorama error: ' + m; console.error(m); });
+  onScene(first);
+  setInterval(async () => { const { fresh } = await scan(); if (fresh.length) { addFresh(fresh); setStatus(); } }, 30000);
+})();
+window.__tour = { loads: 0, get ready() { return !!viewer && this.loads > 0; }, current: () => current, rendered: () => [...rendered],
+  nodes: () => nodes.length, go: id => go(id), forward: () => stepDir(false), back: () => stepDir(true) };
+</script>
+</body>
+</html>

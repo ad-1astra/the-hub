@@ -1,0 +1,25 @@
+{
+ "cams": [
+  {
+   "id": "01_su_lounge",
+   "title": "From the door to the lounge",
+   "where": "inside the door looking plan-south: standing table, sofa, armchairs, the window wall, 20 mm",
+   "photo": null,
+   "nophoto": "No photos: typical layout",
+   "draft": 1792524265,
+   "final": 1792524913
+  },
+  {
+   "id": "02_su_back",
+   "title": "Back across the room",
+   "where": "window corner looking plan-north-west: armchairs, sofa on the mustard wall, bookcase, the door, 20 mm",
+   "photo": null,
+   "nophoto": "No photos: typical layout",
+   "draft": null,
+   "final": 1792525545
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> Plan label cell converted with the first-floor plan calibration (X = &minus;18.8 + px&middot;0.029984, Y = 7.83 &minus; (py&minus;187)&middot;0.030273), then ray casts into the original GLB (typical_rooms/probe_new.py, probe_new2.py): each wall face = median of 7 parallel casts at floor + 1.0 m, doorways and windows from scans 0.25 m inside each face at floor + 1.0 / 1.5 / 2.2 m, floor and soffit measured at 5 points in this room (floor 2.44, soffit 2.56 m above it). Doors: N wall -7.70..-6.40 to the west-wing arm (open leaf into the arm). Windows on the s wall.</p><p><b>Photos.</b> None for this room: <b>No photos: typical layout</b>.</p><p><b>Built as new objects.</b> Armchairs, a standing table, glass-door mahogany bookcases with binders, a coffee table, a potted plant, a rug, a navy sofa, stools, a whiteboard. Fit check: every footprint inside the zone and clear of the doors (check_layout.py), every built object inside the zone and every 360 node &ge; 0.30 m from anything (check_scene.py).</p><p><b>Dropped (real scale, no shrinking).</b></p><ul><li>a second sofa (the room takes one 2.0 m sofa, two armchairs and a standing table)</li></ul><p><b>Differences.</b> (1) The model has no suspended ceiling: a 600 mm grid with LED panels is built at 2.51 m. (2) Door openings and windows are the model's; a door leaf of the upper-floor scene stands open in this room's renders only.</p>",
+ "typical": true,
+ "updated": "2026-10-20 17:07:27"
+}

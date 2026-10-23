@@ -1,0 +1,54 @@
+{
+ "meta": {
+  "room": "Podcast Room (The Pod)",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 3,
+  "links": [
+   [
+    "d00",
+    "c07"
+   ]
+  ],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "d00",
+   "x": -17.1,
+   "y": 0.75,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Podcast Room, inside the door",
+   "neighbours": [
+    "d01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "d01",
+   "x": -16.2,
+   "y": -0.7,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Podcast Room, by the table",
+   "neighbours": [
+    "d00",
+    "d02"
+   ],
+   "order": 1
+  },
+  {
+   "id": "d02",
+   "x": -17.1,
+   "y": -2.65,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Podcast Room, by the window",
+   "neighbours": [
+    "d01"
+   ],
+   "order": 2
+  }
+ ]
+}

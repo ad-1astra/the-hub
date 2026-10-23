@@ -1,0 +1,54 @@
+{
+ "meta": {
+  "room": "VIP Suite",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 3,
+  "links": [
+   [
+    "q00",
+    "u05"
+   ]
+  ],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "q00",
+   "x": -17.1,
+   "y": 3.85,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "VIP Suite, inside the door",
+   "neighbours": [
+    "q01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "q01",
+   "x": -16.05,
+   "y": 4.05,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "VIP Suite, by the armchair",
+   "neighbours": [
+    "q00",
+    "q02"
+   ],
+   "order": 1
+  },
+  {
+   "id": "q02",
+   "x": -18.3,
+   "y": 6.1,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "VIP Suite, beside the desk",
+   "neighbours": [
+    "q01"
+   ],
+   "order": 2
+  }
+ ]
+}

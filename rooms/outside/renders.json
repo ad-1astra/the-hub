@@ -1,0 +1,38 @@
+{
+ "cams": [
+  {
+   "id": "01_approach",
+   "title": "Approach road",
+   "where": "on the murram road ~36 m south of the porch, looking north at the front (south) facade",
+   "photo": "Hub Space.jpg",
+   "draft": 1791445194,
+   "final": 1791462216
+  },
+  {
+   "id": "02_porch",
+   "title": "Porch and name sign",
+   "where": "on the clay paving of the forecourt, ~10 m from the porch columns",
+   "photo": "Hub Space-6.jpg",
+   "draft": 1791445286,
+   "final": 1791446638
+  },
+  {
+   "id": "03_rear_bank",
+   "title": "North side from the bank",
+   "where": "up the grass bank north-east of the building (solved from the photo)",
+   "photo": "Hub Space-221.jpg",
+   "draft": 1791445365,
+   "final": 1791462789
+  },
+  {
+   "id": "04_audi_sunlit",
+   "title": "Auditorium, sunlit west glazing",
+   "where": "on the lawn west of the Auditorium, 16:11 sun behind the camera",
+   "photo": "Hub Space-213.jpg",
+   "draft": null,
+   "final": 1791463434
+  }
+ ],
+ "notes": "<p><b>Compass.</b> The floor plan's top is <b>real south</b>, not north: the 14:55 car shadows at the porch, the 16:10 table shadows on the north lawn and the sunlit (213) / back-lit (226) Auditorium glazing only agree with the afternoon sun if the porch faces south. The site plan keeps the floor plan's orientation; the arrow shows real north. Facade names below use the real compass.</p>\n<table>\n<tr><th>Facade</th><th>Photos</th></tr>\n<tr><td>Front (south): porch, name sign, forecourt, approach road</td><td>Hub Space, 2, 3, 4, 5, 6, 252</td></tr>\n<tr><td>Rear (north): terraces, ramps, north lawn</td><td>209, 210, 220, 222, 225, 227, 228</td></tr>\n<tr><td>Covered passage and rear door</td><td>211, 212, 214, 215, 217, 218</td></tr>\n<tr><td>Auditorium west glazing (sunlit) / east glazing (back-lit)</td><td>213 / 221, 223, 226</td></tr>\n<tr><td>East end and the bank</td><td>221, 224</td></tr>\n</table>\n<p><b>Model.</b> Main block 37.6 x 11.1 m, two storeys, 5.3 m high; Auditorium 13.0 x 8.2 m, single storey, 2.7 m; the shell is unchanged. The real building is taller, the real Auditorium is a double-height hall about three times larger, and the real passage is wider and roofed: those are the main remaining differences to the photos.</p>\n<p><b>Added</b> (new objects only): terrain and bank, clay paving, parking bays, murram road, kerbs, lawns, terraces with stone faces, porch floor and steps, railings, passage floor and canopy, water tanks, column cladding, piers, panels, fascia, roof, signage, AC units, solar street lights, trees, palms, shrubs and hedges, neighbouring blocks. <b>Left out:</b> people, vehicles, flags, the event tent and tables.</p>\n",
+ "updated": "2026-10-08 05:44:01"
+}

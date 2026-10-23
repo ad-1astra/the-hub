@@ -1,0 +1,623 @@
+{
+ "files": {
+  "building/world/corridor_props.glb": {
+   "size": 3919868,
+   "tiers": {
+    "mid": {
+     "bytes": 552280,
+     "tris": [
+      95664,
+      16277
+     ],
+     "textures": 0
+    },
+    "low": {
+     "bytes": 444292,
+     "tris": [
+      95664,
+      11937
+     ],
+     "textures": 0
+    }
+   }
+  },
+  "rooms/auditorium/walkbaked/auditorium_walk.glb": {
+   "size": 22821756,
+   "tiers": {
+    "mid": {
+     "bytes": 3959792,
+     "tris": [
+      470370,
+      63000
+     ],
+     "textures": 8
+    },
+    "low": {
+     "bytes": 2615952,
+     "tris": [
+      470370,
+      44335
+     ],
+     "textures": 10
+    }
+   }
+  },
+  "building/world/world_ext0.glb": {
+   "size": 1801076,
+   "tiers": {
+    "mid": {
+     "bytes": 664612,
+     "tris": [
+      13940,
+      9206
+     ],
+     "textures": 1
+    },
+    "low": {
+     "bytes": 436104,
+     "tris": [
+      13940,
+      7534
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_ext1.glb": {
+   "size": 4970472,
+   "tiers": {
+    "mid": {
+     "bytes": 2276056,
+     "tris": [
+      64282,
+      40418
+     ],
+     "textures": 0
+    },
+    "low": {
+     "bytes": 1643292,
+     "tris": [
+      64282,
+      32161
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_ext2.glb": {
+   "size": 1125132,
+   "tiers": {
+    "mid": {
+     "bytes": 761440,
+     "tris": [
+      9478,
+      7962
+     ],
+     "textures": 0
+    },
+    "low": {
+     "bytes": 464576,
+     "tris": [
+      9478,
+      6836
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_glass.glb": {
+   "size": 66484,
+   "tiers": {
+    "mid": {
+     "bytes": 53988,
+     "tris": [
+      1894,
+      1206
+     ],
+     "textures": 0
+    },
+    "low": {
+     "bytes": 51864,
+     "tris": [
+      1894,
+      1088
+     ],
+     "textures": 0
+    }
+   }
+  },
+  "building/world/world_in0.glb": {
+   "size": 6482688,
+   "tiers": {
+    "mid": {
+     "bytes": 2777788,
+     "tris": [
+      83174,
+      38998
+     ],
+     "textures": 0
+    },
+    "low": {
+     "bytes": 1508928,
+     "tris": [
+      83174,
+      24081
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_in1c.glb": {
+   "size": 12425564,
+   "tiers": {
+    "mid": {
+     "bytes": 2533564,
+     "tris": [
+      200396,
+      39730
+     ],
+     "textures": 1
+    },
+    "low": {
+     "bytes": 1729996,
+     "tris": [
+      200396,
+      26298
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_in1e.glb": {
+   "size": 11935508,
+   "tiers": {
+    "mid": {
+     "bytes": 3651268,
+     "tris": [
+      153908,
+      58619
+     ],
+     "textures": 1
+    },
+    "low": {
+     "bytes": 2204972,
+     "tris": [
+      153908,
+      35289
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_in1w.glb": {
+   "size": 13279956,
+   "tiers": {
+    "mid": {
+     "bytes": 3053564,
+     "tris": [
+      160140,
+      44981
+     ],
+     "textures": 1
+    },
+    "low": {
+     "bytes": 2243132,
+     "tris": [
+      160140,
+      33148
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_roof.glb": {
+   "size": 173608,
+   "tiers": {
+    "mid": {
+     "bytes": 173592,
+     "tris": [
+      40,
+      40
+     ],
+     "textures": 0
+    },
+    "low": {
+     "bytes": 50760,
+     "tris": [
+      40,
+      40
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_shell0.glb": {
+   "size": 2129480,
+   "tiers": {
+    "mid": {
+     "bytes": 1171536,
+     "tris": [
+      16126,
+      14599
+     ],
+     "textures": 1
+    },
+    "low": {
+     "bytes": 951704,
+     "tris": [
+      16126,
+      14287
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_shell1.glb": {
+   "size": 1781004,
+   "tiers": {
+    "mid": {
+     "bytes": 786952,
+     "tris": [
+      8642,
+      7212
+     ],
+     "textures": 1
+    },
+    "low": {
+     "bytes": 540928,
+     "tris": [
+      8642,
+      6707
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/world/world_trees.glb": {
+   "size": 4930416,
+   "tiers": {
+    "mid": {
+     "bytes": 4591884,
+     "tris": [
+      74572,
+      71748
+     ],
+     "textures": 0
+    },
+    "low": {
+     "bytes": 3894644,
+     "tris": [
+      74572,
+      71267
+     ],
+     "textures": 1
+    }
+   }
+  },
+  "building/base.glb": {
+   "size": 3111212,
+   "tiers": {
+    "mid": {
+     "bytes": 1684176,
+     "tris": [
+      26019,
+      19521
+     ],
+     "textures": 0
+    },
+    "low": {
+     "bytes": 1615928,
+     "tris": [
+      26019,
+      16180
+     ],
+     "textures": 0
+    }
+   }
+  },
+  "building/rooms/reception/reception_walk.glb": {
+   "size": 6993300,
+   "tiers": {
+    "mid": {
+     "bytes": 2386636,
+     "tris": [
+      71420,
+      34626
+     ],
+     "textures": 11
+    },
+    "low": {
+     "bytes": 1693680,
+     "tris": [
+      71420,
+      29534
+     ],
+     "textures": 11
+    }
+   }
+  },
+  "rooms/founder_space/walkbaked/founder_space_walk.glb": {
+   "size": 18480572,
+   "tiers": {
+    "mid": {
+     "bytes": 4388228,
+     "tris": [
+      225850,
+      72792
+     ],
+     "textures": 8
+    },
+    "low": {
+     "bytes": 3120412,
+     "tris": [
+      225850,
+      51662
+     ],
+     "textures": 8
+    }
+   }
+  },
+  "rooms/iot_lab/walkbaked/iot_walk.glb": {
+   "size": 11914888,
+   "tiers": {
+    "mid": {
+     "bytes": 2663056,
+     "tris": [
+      146874,
+      37463
+     ],
+     "textures": 8
+    },
+    "low": {
+     "bytes": 2051560,
+     "tris": [
+      146874,
+      35337
+     ],
+     "textures": 8
+    }
+   }
+  },
+  "rooms/kacyber/walkbaked/kacyber_walk.glb": {
+   "size": 6871796,
+   "tiers": {
+    "mid": {
+     "bytes": 2213220,
+     "tris": [
+      68352,
+      29893
+     ],
+     "textures": 10
+    },
+    "low": {
+     "bytes": 1621216,
+     "tris": [
+      68352,
+      27716
+     ],
+     "textures": 10
+    }
+   }
+  },
+  "rooms/smart_ideas/walkbaked/smart_ideas_walk.glb": {
+   "size": 11395664,
+   "tiers": {
+    "mid": {
+     "bytes": 3516568,
+     "tris": [
+      173216,
+      45038
+     ],
+     "textures": 6
+    },
+    "low": {
+     "bytes": 2482208,
+     "tris": [
+      173216,
+      38870
+     ],
+     "textures": 10
+    }
+   }
+  },
+  "rooms/visual_space/walkbaked/visual_space_walk.glb": {
+   "size": 11255612,
+   "tiers": {
+    "mid": {
+     "bytes": 5845408,
+     "tris": [
+      53568,
+      37963
+     ],
+     "textures": 2
+    },
+    "low": {
+     "bytes": 3087296,
+     "tris": [
+      53568,
+      35349
+     ],
+     "textures": 8
+    }
+   }
+  },
+  "rooms/washroom_gents/walkbaked/washroom_gents_walk.glb": {
+   "size": 5429212,
+   "tiers": {
+    "mid": {
+     "bytes": 1941012,
+     "tris": [
+      98498,
+      31295
+     ],
+     "textures": 8
+    },
+    "low": {
+     "bytes": 1429464,
+     "tris": [
+      98498,
+      27068
+     ],
+     "textures": 8
+    }
+   }
+  },
+  "rooms/washroom_ladies/walkbaked/washroom_ladies_walk.glb": {
+   "size": 5372844,
+   "tiers": {
+    "mid": {
+     "bytes": 1929088,
+     "tris": [
+      100422,
+      31864
+     ],
+     "textures": 8
+    },
+    "low": {
+     "bytes": 1446964,
+     "tris": [
+      100422,
+      27648
+     ],
+     "textures": 8
+    }
+   }
+  },
+  "building/world/world_ext0_orm.png": {
+   "size": 25169,
+   "tiers": {
+    "mid": {
+     "bytes": 15760
+    },
+    "low": {
+     "bytes": 13008
+    }
+   }
+  },
+  "building/world/world_ext1_orm.png": {
+   "size": 69577,
+   "tiers": {
+    "mid": {
+     "bytes": 46196
+    },
+    "low": {
+     "bytes": 58987
+    }
+   }
+  },
+  "building/world/world_ext2_orm.png": {
+   "size": 22289,
+   "tiers": {
+    "mid": {
+     "bytes": 12468
+    },
+    "low": {
+     "bytes": 11121
+    }
+   }
+  },
+  "building/world/world_in0_orm.png": {
+   "size": 209640,
+   "tiers": {
+    "mid": {
+     "bytes": 163621
+    },
+    "low": {
+     "bytes": 86037
+    }
+   }
+  },
+  "building/world/world_in1c_orm.png": {
+   "size": 228252,
+   "tiers": {
+    "mid": {
+     "bytes": 184874
+    },
+    "low": {
+     "bytes": 92020
+    }
+   }
+  },
+  "building/world/world_in1e_orm.png": {
+   "size": 187109,
+   "tiers": {
+    "mid": {
+     "bytes": 132692
+    },
+    "low": {
+     "bytes": 66617
+    }
+   }
+  },
+  "building/world/world_in1w_orm.png": {
+   "size": 201789,
+   "tiers": {
+    "mid": {
+     "bytes": 166657
+    },
+    "low": {
+     "bytes": 91046
+    }
+   }
+  },
+  "building/world/world_roof_orm.png": {
+   "size": 18345,
+   "tiers": {
+    "mid": {
+     "bytes": 9518
+    },
+    "low": {
+     "bytes": 4381
+    }
+   }
+  },
+  "building/world/world_shell0_orm.png": {
+   "size": 58578,
+   "tiers": {
+    "mid": {
+     "bytes": 37374
+    },
+    "low": {
+     "bytes": 61623
+    }
+   }
+  },
+  "building/world/world_shell1_orm.png": {
+   "size": 54552,
+   "tiers": {
+    "mid": {
+     "bytes": 37489
+    },
+    "low": {
+     "bytes": 62323
+    }
+   }
+  },
+  "building/world/world_trees_orm.png": {
+   "size": 135917,
+   "tiers": {
+    "mid": {
+     "bytes": 66837
+    },
+    "low": {
+     "bytes": 159340
+    }
+   }
+  }
+ },
+ "built": "2026-10-21T16:12:27.543Z",
+ "tiers": {
+  "mid": {
+   "world": 2048,
+   "room": 1024,
+   "orm": 1024,
+   "err": 0.004
+  },
+  "low": {
+   "world": 1024,
+   "room": 512,
+   "orm": 512,
+   "err": 0.008
+  }
+ }
+}

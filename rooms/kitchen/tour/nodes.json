@@ -1,0 +1,58 @@
+{
+ "meta": {
+  "room": "Kitchen",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 3,
+  "links": [
+   [
+    "k00",
+    "u00"
+   ],
+   [
+    "k01",
+    "c02"
+   ]
+  ],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "k00",
+   "x": -6.3,
+   "y": 4.5,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Kitchen, inside the arm door",
+   "neighbours": [
+    "k01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "k01",
+   "x": -6.2,
+   "y": 6.2,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Kitchen, by the Cafeteria door",
+   "neighbours": [
+    "k00",
+    "k02"
+   ],
+   "order": 1
+  },
+  {
+   "id": "k02",
+   "x": -7.7,
+   "y": 6.8,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Kitchen, at the counter",
+   "neighbours": [
+    "k01"
+   ],
+   "order": 2
+  }
+ ]
+}

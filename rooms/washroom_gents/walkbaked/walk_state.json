@@ -1,0 +1,16 @@
+{
+ "version": "20261005-034553",
+ "glb": "washroom_gents_walk.glb",
+ "bytes": 5429212,
+ "baked": [
+  "ceiling",
+  "floor",
+  "furn_a",
+  "furn_b",
+  "wall_east",
+  "wall_north",
+  "wall_south",
+  "wall_west"
+ ],
+ "placeholder": []
+}

@@ -1,0 +1,93 @@
+{
+ "meta": {
+  "room": "Visual Space",
+  "eye": 1.6,
+  "count": 7,
+  "image_centre": "+X (east)",
+  "provisional": "planned positions; make_nodes.py replaces this before the panoramas render"
+ },
+ "nodes": [
+  {
+   "id": "p00",
+   "x": -17.1,
+   "y": 2.8,
+   "z": 1.6,
+   "clear": 0.5,
+   "zone": "corridor",
+   "neighbours": [
+    "p01"
+   ]
+  },
+  {
+   "id": "p01",
+   "x": -17.1,
+   "y": 4.0,
+   "z": 1.6,
+   "clear": 0.5,
+   "zone": "room",
+   "neighbours": [
+    "p00",
+    "p02"
+   ]
+  },
+  {
+   "id": "p02",
+   "x": -17.1,
+   "y": 5.0,
+   "z": 1.6,
+   "clear": 0.5,
+   "zone": "room",
+   "neighbours": [
+    "p01",
+    "p03"
+   ]
+  },
+  {
+   "id": "p03",
+   "x": -17.1,
+   "y": 6.2,
+   "z": 1.6,
+   "clear": 0.5,
+   "zone": "room",
+   "neighbours": [
+    "p02",
+    "p04"
+   ]
+  },
+  {
+   "id": "p04",
+   "x": -17.2,
+   "y": 7.25,
+   "z": 1.6,
+   "clear": 0.5,
+   "zone": "room",
+   "neighbours": [
+    "p03",
+    "p05"
+   ]
+  },
+  {
+   "id": "p05",
+   "x": -15.75,
+   "y": 4.0,
+   "z": 1.6,
+   "clear": 0.5,
+   "zone": "room",
+   "neighbours": [
+    "p04",
+    "p06"
+   ]
+  },
+  {
+   "id": "p06",
+   "x": -17.85,
+   "y": 6.95,
+   "z": 1.6,
+   "clear": 0.5,
+   "zone": "room",
+   "neighbours": [
+    "p05"
+   ]
+  }
+ ]
+}

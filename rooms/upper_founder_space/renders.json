@@ -1,0 +1,30 @@
+{
+ "cams": [
+  {
+   "id": "01_mural",
+   "title": "Across the void to the sun mural",
+   "where": "east of the Artifact/Opening looking plan-west: wire sculpture, railings, mural round the Cafeteria door, 24 mm",
+   "photo": "Hub Space-121.jpg",
+   "draft": 1792395923,
+   "final": 1792396934
+  },
+  {
+   "id": "02_east",
+   "title": "Along the north aisle to the east wall",
+   "where": "aisle north of the middle desks looking plan-east: banners, the void, the swirl wall, 24 mm",
+   "photo": "Hub Space-136.jpg",
+   "draft": 1792395536,
+   "final": 1792397804
+  },
+  {
+   "id": "03_west",
+   "title": "From the south-east over the desks",
+   "where": "south-east part looking plan-west-north-west: south desks, the void railing, the sculpture, 24 mm",
+   "photo": "Hub Space-132.jpg",
+   "draft": 1792396023,
+   "final": 1792398720
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> First-floor plan, balcony/cafeteria calibration (X = &minus;18.8 + px&middot;0.029984,\nY = 7.83 &minus; (py&minus;187)&middot;0.030273); ray casts, sections and height maps of the GLB (scripts/probe_upper.py, survey_upper.png).\nThe plan's cells east of Founder Space 2 (110, 323, 21, 62, 349 sq ft) do not exist in the model. Doors: Cafeteria X 3.90, Y 1.95..3.55;\nMeeting Podium X 5.25..6.45. The east stair arrives at X 15.10, Y 1.62..2.53.</p>\n<p><b>Photos.</b> 116&ndash;126, 129, 131, 132, 135, 136 plus 115, 121 and 123 from the &ldquo;upper floor&rdquo; folder. 102 was taken from the ground\nfloor (Founder Space 1) looking up, so it is not used as a viewpoint. People in the photos are ignored.</p>\n<p><b>Built as new objects.</b> 500 mm glazed floor tiles; mint walls with the yellow sun mural (rays, circuit traces) round the Cafeteria door; black-and-white\nswirl stripes on the east wall; 600 mm lay-in ceiling with LED panels; a crinkled dark foil coffer over the void with a white edge; the blue wire &ldquo;net globe&rdquo;\nwith yellow balls, hung on cables; steel railings with wood handrails and dark grey fascia panels round the void and the stair well; a clock on the fascia;\n34 desk places (mahogany desks, black or maroon executive chairs, monitors or an iMac, towers, keyboards) as collection instances; roll-up banners\n(KII-IMPACT, SafeBangle, i-define hub, Sleek, EXPLORE, SUMIC IT); grey fabric stands; a green birdhouse box; a whiteboard on an easel; potted plants;\nsheer curtains; the Meeting Podium door and sign.</p>\n<p><b>Differences from the photos.</b> (1) The real void is larger and the ceiling over it is a deep sloped coffer; the model's void is 2.8 &times; 3.6 m and\nits ceiling is flat at 2.51 m, so the coffer is a flat foil panel and the sculpture is smaller. (2) The real room holds more desks; seats that did not fit\nwith at least 0.75 m aisles were dropped (no shrinking). (3) The model has no columns upstairs.</p>",
+ "updated": "2026-10-19 07:45:36"
+}

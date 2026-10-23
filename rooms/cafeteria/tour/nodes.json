@@ -1,0 +1,115 @@
+{
+ "meta": {
+  "room": "Cafeteria",
+  "eye": 1.6,
+  "floor": 2.44,
+  "image_centre": "+X (plan)",
+  "count": 7,
+  "links": [
+   [
+    "c00",
+    "b00"
+   ],
+   [
+    "c05",
+    "p09"
+   ]
+  ],
+  "generated": "2026-10-12T02:27:24"
+ },
+ "nodes": [
+  {
+   "id": "c00",
+   "x": -0.6,
+   "y": 6.4,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Cafeteria, at the balcony door",
+   "neighbours": [
+    "c01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "c01",
+   "x": -0.6,
+   "y": 4.85,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Cafeteria, centre aisle",
+   "neighbours": [
+    "c00",
+    "c02",
+    "c03",
+    "c04"
+   ],
+   "order": 1
+  },
+  {
+   "id": "c02",
+   "x": -3.45,
+   "y": 4.85,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Cafeteria, at the serving counter",
+   "neighbours": [
+    "c01",
+    "c06"
+   ],
+   "order": 2
+  },
+  {
+   "id": "c03",
+   "x": 3.0,
+   "y": 2.8,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Cafeteria, at the east door (SparkLab side)",
+   "neighbours": [
+    "c01",
+    "c04"
+   ],
+   "order": 3
+  },
+  {
+   "id": "c04",
+   "x": -0.6,
+   "y": 1.95,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Cafeteria, lobby by the stairs",
+   "neighbours": [
+    "c01",
+    "c03",
+    "c05",
+    "c06"
+   ],
+   "order": 4
+  },
+  {
+   "id": "c05",
+   "x": -0.4,
+   "y": 0.6,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Cafeteria, top of the stairs",
+   "neighbours": [
+    "c04"
+   ],
+   "order": 5
+  },
+  {
+   "id": "c06",
+   "x": -4.7,
+   "y": 2.45,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Cafeteria, at the west door",
+   "neighbours": [
+    "c02",
+    "c04"
+   ],
+   "order": 6
+  }
+ ]
+}

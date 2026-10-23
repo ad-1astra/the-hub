@@ -1,0 +1,30 @@
+{
+ "cams": [
+  {
+   "id": "01_along",
+   "title": "Along the balcony",
+   "where": "plan-east end by the glazing, looking along the balcony (glazing left, railing right), 24 mm",
+   "photo": "Hub Space-253.jpg",
+   "draft": 1791791209,
+   "final": 1791792172
+  },
+  {
+   "id": "02_glazing",
+   "title": "Curtain wall and Cafeteria door",
+   "where": "plan-west end by the railing, looking at the curtain wall and the double door, 24 mm",
+   "photo": "Hub Space-257.jpg",
+   "draft": 1791791302,
+   "final": 1791792989
+  },
+  {
+   "id": "03_railing",
+   "title": "Railing, planters and buffet",
+   "where": "mid-balcony looking out over the railing at the painted pot, planter and buffet table, 50 mm",
+   "photo": "Hub Space-256.jpg",
+   "draft": 1791791391,
+   "final": null
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> First-floor plan calibrated on its own (building outline px 0..1253 = X &minus;18.8..+18.77,\nnorth face py 187 = Y 7.83, 0.030 m/px); its &ldquo;Balcony 537 sq ft&rdquo; box lands on X &minus;5.25..+3.78, Y 7.83..13.34. Ray casts into the GLB: slab top 2.44 m\nover X &minus;5.60..+4.10, Y 7.83..13.52; roof slab over it (soffit 5.00 m); three columns on Y 13.24 (X &minus;5.25, &minus;0.75, +3.75); a thin railing on\nthe three open sides and a 0.23 m kerb on the edge; curtain wall Y 7.82, X &minus;5.21..+3.76, with one door opening X &minus;2.40..+0.80 into the Cafeteria.</p>\n<p><b>Photos.</b> Hub Space-253 (24 mm, along the balcony), -257 / -259 (24 mm, curtain wall and door), -255 / -256 (70 mm, ~0.9 m high,\nrailing with pot, planter, buffet). People ignored.</p>\n<p><b>Built as new objects.</b> 400 mm glazed tile floor with 3 mm joints (balcony and Cafeteria), tiled kerb with coping, stainless slot drain + two gullies,\nstainless balustrade (posts ~1.5 m, 4 rails, 50 mm handrail at 1.05 m), column cladding (middle column, balcony level), white aluminium curtain-wall frames,\nglazed double door + sidelights + transom, CAFETERIA sign, 600 mm lay-in tile ceiling by the glazing, downstand beam, fluorescent battens, teal cone pendants,\n2 mahogany tables with 12 slatted chairs (burgundy pads), buffet table with white cloth and cream skirt, painted pots with snake plants, painted trough with an umbrella tree.</p>\n<p><b>Differences from the photos.</b> (1) Both ends of the real balcony have a wall with a louvre window and an orange band; the model is open there (railing);\nthe shell was not changed. (2) The model soffit gives 2.56 m clear height; the real one looks ~3 m. (3) The view beyond the railing is the Outside room's site,\nnot the city skyline of 255/256. (4) 255/256 were shot ~0.9 m high; the render uses the required eye height 1.6 m (50 mm instead of 70 mm).\n(5) A third table was dropped (open floor in 253).</p>",
+ "updated": "2026-10-12 01:53:05"
+}

@@ -1,0 +1,30 @@
+{
+ "floor": {
+  "file": "bake\\floor_1024_glossy.exr",
+  "applies_to": [
+   "bake\\floor_2048_lighting.exr",
+   "bake\\floor_4096_256spp_lighting.exr"
+  ],
+  "res": 1024,
+  "spp": 128,
+  "made": "2026-10-02 06:36:32"
+ },
+ "furn_a": {
+  "file": "bake\\furn_a_1024_glossy.exr",
+  "applies_to": [
+   "bake\\furn_a_1024_lighting.exr"
+  ],
+  "res": 1024,
+  "spp": 128,
+  "made": "2026-10-02 06:39:12"
+ },
+ "furn_b": {
+  "file": "bake\\furn_b_1024_glossy.exr",
+  "applies_to": [
+   "bake\\furn_b_1024_lighting.exr"
+  ],
+  "res": 1024,
+  "spp": 128,
+  "made": "2026-10-02 06:41:42"
+ }
+}

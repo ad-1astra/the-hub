@@ -1,0 +1,41 @@
+{
+ "meta": {
+  "room": "Gents Room (first floor)",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 2,
+  "links": [
+   [
+    "g00",
+    "u10"
+   ]
+  ],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "g00",
+   "x": 1.2,
+   "y": -2.4,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Gents (first floor), inside the door",
+   "neighbours": [
+    "g01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "g01",
+   "x": 2.05,
+   "y": -2.55,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Gents (first floor), by the cubicles",
+   "neighbours": [
+    "g00"
+   ],
+   "order": 1
+  }
+ ]
+}

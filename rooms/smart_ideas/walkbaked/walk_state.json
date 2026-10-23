@@ -1,0 +1,16 @@
+{
+ "version": "20261004-233714",
+ "glb": "smart_ideas_walk.glb",
+ "bytes": 11395664,
+ "baked": [
+  "ceiling",
+  "floor",
+  "furn_a",
+  "furn_b",
+  "wall_east",
+  "wall_north",
+  "wall_south",
+  "wall_west"
+ ],
+ "placeholder": []
+}

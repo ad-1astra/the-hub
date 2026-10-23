@@ -1,0 +1,114 @@
+{
+ "meta": {
+  "room": "Upper Founder Space",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 7,
+  "links": [
+   [
+    "f00",
+    "c03"
+   ],
+   [
+    "f03",
+    "s05"
+   ]
+  ],
+  "generated": "2026-10-19T00:19:50"
+ },
+ "nodes": [
+  {
+   "id": "f00",
+   "x": 5.0,
+   "y": 2.75,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "At the Cafeteria door",
+   "neighbours": [
+    "f01",
+    "f05"
+   ],
+   "order": 0
+  },
+  {
+   "id": "f01",
+   "x": 7.7,
+   "y": 4.35,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Aisle north of the middle desks",
+   "neighbours": [
+    "f00",
+    "f02"
+   ],
+   "order": 1
+  },
+  {
+   "id": "f02",
+   "x": 11.45,
+   "y": 4.9,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "North of the void, under the sculpture",
+   "neighbours": [
+    "f01",
+    "f03"
+   ],
+   "order": 2
+  },
+  {
+   "id": "f03",
+   "x": 13.9,
+   "y": 3.2,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "East of the void, by the stair",
+   "neighbours": [
+    "f02",
+    "f04",
+    "f06"
+   ],
+   "order": 3
+  },
+  {
+   "id": "f04",
+   "x": 11.45,
+   "y": 0.1,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "South of the void",
+   "neighbours": [
+    "f03",
+    "f05",
+    "f06"
+   ],
+   "order": 4
+  },
+  {
+   "id": "f05",
+   "x": 7.7,
+   "y": 0.35,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Aisle by the Meeting Podium",
+   "neighbours": [
+    "f04",
+    "f00"
+   ],
+   "order": 5
+  },
+  {
+   "id": "f06",
+   "x": 16.9,
+   "y": 0.6,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "East end, south of the stair well",
+   "neighbours": [
+    "f03",
+    "f04"
+   ],
+   "order": 6
+  }
+ ]
+}

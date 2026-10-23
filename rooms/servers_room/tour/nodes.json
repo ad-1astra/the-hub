@@ -1,0 +1,36 @@
+{
+ "meta": {
+  "room": "Servers Room (Cloud Centre)",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 2,
+  "links": [],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "v00",
+   "x": -7.33,
+   "y": 0.5,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Servers Room, inside the door",
+   "neighbours": [
+    "v01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "v01",
+   "x": -6.4,
+   "y": -2.3,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Servers Room, rear aisle",
+   "neighbours": [
+    "v00"
+   ],
+   "order": 1
+  }
+ ]
+}

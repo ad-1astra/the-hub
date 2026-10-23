@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Room Status — National ICT Innovation Hub</title>
+<style>
+:root{--bg:#f6f4f0;--panel:#fff;--line:#ded8cf;--fg:#1d1f22;--mut:#6b665d;--accent:#9d5f3f;--ok:#3f7d5a;--warn:#a0632a;--head:#f1ede6;--typ:#7a5aa6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#17181a;--panel:#212226;--line:#34353a;--fg:#ececef;--mut:#a09d97;--head:#2a2b2f}}
+:root[data-theme="dark"]{--bg:#17181a;--panel:#212226;--line:#34353a;--fg:#ececef;--mut:#a09d97;--head:#2a2b2f}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:14.5px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:22px 16px 60px}
+a{color:var(--accent)}
+h1{font-size:25px;margin:4px 0 6px}
+h2{font-size:18px;margin:26px 0 8px}
+.sub{color:var(--mut);max-width:1000px;margin:0 0 10px}
+.btns a{display:inline-block;margin:0 8px 8px 0;padding:7px 14px;border-radius:8px;border:2px solid var(--accent);text-decoration:none;font-weight:700}
+.btns a.main{background:var(--accent);color:#fff}
+.eta{display:inline-block;margin:6px 0 4px;padding:9px 14px;border-radius:9px;background:var(--panel);border:1px solid var(--line);font-weight:700}
+.eta small{font-weight:400;color:var(--mut)}
+.bar{height:8px;background:#e6e1d9;border-radius:5px;overflow:hidden;min-width:80px}
+.bar div{height:100%;background:var(--ok)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:13.5px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--head);font-weight:700;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+tr.cur td{background:rgba(157,95,63,.08)}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;color:#fff;background:var(--mut);white-space:nowrap;margin:0 4px 2px 0}
+.pill.ok{background:var(--ok)}.pill.run{background:var(--accent)}.pill.no{background:var(--warn)}.pill.q{background:#8f8b85}.pill.typ{background:var(--typ)}
+.mut{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="btns"><a class="main" href="../index.html">Gallery</a><a href="../building/index.html">Whole building</a><a href="../upper-floor/index.html">Upper floor</a><a href="upper_offices/index.html">Upper offices</a></div>
+  <h1>Every room &middot; status</h1>
+  <p class="sub">Every room and area of both plans (ground floor G, first floor 1). <span class="pill ok">finished</span> Cycles finals and 360 tour done;
+  <span class="pill run">rendering</span> the job running now; <span class="pill q">queued</span> waiting in the render queue;
+  <span class="pill typ">typical layout</span> no photos of the room exist, so it is built with a typical layout in the style of the finished offices;
+  <span class="pill no">not rendered</span>. &ldquo;Walk&rdquo; opens the room page with its 360 walk at the top. New rooms update by themselves every 30 s.</p>
+  <div class="eta" id="eta">Render queue: loading&hellip;</div>
+  <div class="tw" style="margin-top:12px"><table><thead><tr><th>Room / area</th><th>Floor</th><th>Status</th><th>Progress</th><th>What exists</th><th>Walk</th><th>Photos</th></tr></thead><tbody id="tb"></tbody></table></div>
+  <p class="sub" style="margin-top:14px">The east wing of the first floor (the plan's unnamed 110 / 323 / 21 / 62 / 349 sq ft cells) has no partitions in the model and is part of
+  Founder Space 2. The entrance passage between the ground-floor washrooms has photos (corner 26&ndash;29) but its zone still needs your OK.</p>
+</div>
+<script>
+"use strict";
+// [name, floor, kind of status, details, walk link, photo folder]; new rooms come from typical_status.json (key = slug)
+const FIN = [
+  ['Reception Area', 'G', '5 finals · 360 tour 13/13', '../tour/index.html', 'hub reciption'],
+  ['Corridor (Reception ↔ Visual Space)', 'G', '360 tour 9/9', 'corridor/index.html', 'corner (30–34)'],
+  ['Founder Space 1 (+ Meeting Podium 1 outside)', 'G', '1 final · 360 tour 5/5 · real-time bake', 'founder_space/index.html', 'founder space'],
+  ['Smart Ideas', 'G', '2 finals · real-time bake', 'smart_ideas/index.html', 'Smart ideas'],
+  ['KaCyber', 'G', '3 finals · real-time bake · 360 tour 1/7', 'kacyber/index.html', 'kacyber room'],
+  ['Visual Space', 'G', '1 final · real-time bake', 'visual_space/index.html', 'Visual space'],
+  ['IoT Lab', 'G', 'drafts · 360 tour 6/6 · real-time bake', 'iot_lab/index.html', 'iot room'],
+  ['Washroom Gents (ground)', 'G', '2 finals · real-time bake', 'washroom_gents/index.html', 'wash room / male'],
+  ['Washroom Ladies (ground)', 'G', '2 finals · real-time bake', 'washroom_ladies/index.html', 'wash room / female'],
+  ['Auditorium', 'G', '2 finals · real-time bake', 'auditorium/index.html', 'Auditoruim'],
+  ['Outside (site, porch, forecourt)', 'G', '4 finals · 360 tour 34/34', 'outside/index.html', 'outside'],
+  ['Stairs (Reception ↔ Cafeteria, Founder Space 1 ↔ 2)', 'G/1', '3 finals · 360 tour 6/6 (2048)', 'stairs/index.html', 'upper floor'],
+  ['Cafeteria', '1', '3 finals · 360 tour 7/7', 'cafeteria/index.html', 'Cafeteria'],
+  ['Balcony', '1', '2 finals · 360 tour 5/5', 'balcony/index.html', 'Balcony'],
+  ['Founder Space 2 (Upper Founder Space, whole east wing)', '1', '3 finals · 360 tour 7/7 (2048)', 'upper_founder_space/index.html', 'upperfloorfounderspace'],
+  ['Upper corridors (west ring, arms, lobby)', '1', '2 finals · 360 tour 11/11 (2048)', 'upper_floor/index.html', 'upper floor; corner'],
+  ['Team Lead Office', '1', '4 finals · 360 tour 2/2 (2048)', 'team_lead_office/index.html', 'team lead office'],
+  ['Hub Personel', '1', '2 finals · 360 tour 3/3 (2048)', 'hub_personel/index.html', 'hub personal'],
+  ['Board Room', '1', '2 finals · 360 tour 4/4 (2048)', 'board_room/index.html', 'board room'],
+];
+const NOT = [['Entrance passage (south doors ↔ Reception)', 'G', 'needs your OK on the zone', 'corner (26–29)']];
+const pill = (t, c) => `<span class="pill ${c}">${t}</span>`;
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+let S = null;
+function rows() {
+  const out = [];
+  for (const r of FIN) out.push({ n: r[0], f: r[1], st: pill('finished', 'ok'), frac: 1, what: r[2], walk: r[3], ph: r[4] });
+  if (S) for (const [slug, r] of Object.entries(S.rooms)) {
+    const cur = S.now && S.now.room === r.title && S.running;
+    const st = r.step === 'complete' ? pill('finished', 'ok') : cur ? pill('rendering', 'run') : r.frac > 0 ? pill('rendering (part done)', 'run') : pill('queued', 'q');
+    out.push({ n: r.title, f: r.floor ? '1' : 'G', st: st + (r.typical ? pill('typical layout', 'typ') : ''), frac: r.frac, cur,
+      what: (cur ? '<b>now: ' + esc(S.now.step) + (S.now.N ? ` ${S.now.n} of ${S.now.N}` : '') + '</b><br>' : '') + (r.done.join(' · ') || 'nothing yet') +
+            (r.tour ? '' : ' <span class="mut">(stills only, no tour)</span>'),
+      walk: slug + '/index.html', ph: r.typical ? 'none' : (slug.includes('gents') ? 'wash room / male' : 'wash room / female') });
+  }
+  for (const r of NOT) out.push({ n: r[0], f: r[1], st: pill('not rendered', 'no'), frac: 0, what: r[2], walk: null, ph: r[3] });
+  return out;
+}
+function draw() {
+  document.getElementById('tb').innerHTML = rows().map(r => `<tr class="${r.cur ? 'cur' : ''}"><td>${r.walk ? `<a href="${r.walk}">${esc(r.n)}</a>` : esc(r.n)}</td><td>${r.f}</td>
+    <td>${r.st}</td><td><div class="bar"><div style="width:${Math.round(100 * r.frac)}%"></div></div></td><td>${r.what}</td>
+    <td>${r.walk ? `<a href="${r.walk}">walk &rarr;</a>` : '<span class="mut">—</span>'}</td><td class="mut">${esc(r.ph)}</td></tr>`).join('');
+  const e = document.getElementById('eta');
+  if (!S) { e.textContent = 'Render queue: status not published yet.'; return; }
+  e.innerHTML = S.running ? `Render queue running: all ${Object.keys(S.rooms).length} new rooms (fast renders, then the 2048 tours) done by ~${esc((S.eta || '').slice(11))}
+     <small>&middot; now ${esc(S.now.room)} &middot; ${esc(S.now.step)} &middot; updated ${esc(S.updated.slice(11, 16))}</small>`
+    : `Render queue ${S.final === 'COMPLETE' ? 'complete' : (S.final ? 'stopped' : 'not started')} <small>&middot; updated ${esc(S.updated.slice(11, 16))}</small>`;
+}
+async function poll() {
+  try { S = await (await fetch('typical_status.json', { cache: 'no-store' })).json(); } catch (e) {}
+  draw();
+}
+draw(); poll(); setInterval(poll, 30000);
+</script>
+</body>
+</html>

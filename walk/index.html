@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Walk the building &mdash; National ICT Innovation Hub</title>
+<style>
+:root{--bg:#dfe6ec;--panel:rgba(255,255,255,.93);--line:#cdd6de;--fg:#1b1f24;--mut:#5f6b76;
+ --accent:#9d5f3f;--ok:#3f7d52}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);
+ font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+canvas{display:block}
+#ui{position:fixed;inset:0;pointer-events:none}
+.panel{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+ backdrop-filter:blur(8px);pointer-events:auto;box-shadow:0 2px 14px rgba(0,0,0,.10)}
+#rooms{top:14px;left:14px;width:198px;max-height:calc(100vh - 290px);overflow:auto;padding:10px}
+#rooms h3{margin:2px 0 8px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+#rooms button{display:block;width:100%;text-align:left;margin:0 0 3px;padding:7px 9px;border:0;
+ border-radius:6px;background:transparent;color:var(--fg);font:inherit;cursor:pointer}
+#rooms button:hover{background:#eef2f5}
+#rooms button.on{background:var(--accent);color:#fff}
+#rooms .sep{height:1px;background:var(--line);margin:7px 2px}
+#hud{top:14px;right:14px;padding:10px 13px;min-width:210px}
+#hud .mode{font-size:17px;font-weight:600;letter-spacing:-.01em}
+#hud .mode small{font-weight:400;color:var(--mut);font-size:12px;display:block;margin-top:2px}
+#hud .row{display:flex;gap:8px;align-items:center;margin-top:9px;font-size:12.5px;color:var(--mut)}
+#hud label{display:flex;gap:7px;align-items:center;cursor:pointer}
+#pos{font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--mut);margin-top:7px}
+#mini{bottom:14px;left:14px;padding:8px}
+#mini canvas{border-radius:5px;cursor:crosshair;display:block}
+#mini .cap{font-size:11px;color:var(--mut);margin-top:5px;text-align:center}
+#note{bottom:14px;left:50%;transform:translateX(-50%);padding:8px 15px;font-size:12.5px;
+ color:var(--mut);white-space:nowrap}
+#click{position:absolute;inset:0;display:grid;place-items:center;pointer-events:auto;cursor:pointer;
+ background:rgba(223,230,236,.55);backdrop-filter:blur(2px)}
+#click div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 30px;
+ text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+#click b{font-size:17px;display:block;margin-bottom:5px}
+#click span{color:var(--mut);font-size:13px}
+#help{position:absolute;inset:0;display:none;place-items:center;pointer-events:auto;
+ background:rgba(20,24,28,.60)}
+#help .card{background:#fff;border-radius:12px;padding:24px 28px;max-width:560px;max-height:84vh;
+ overflow:auto}
+#help h2{margin:0 0 12px;font-size:19px}
+#help table{width:100%;border-collapse:collapse;font-size:13.5px}
+#help td{padding:4px 10px 4px 0;border-bottom:1px solid #eef1f4;vertical-align:top}
+#help td.k{white-space:nowrap;color:var(--accent);font-weight:600;width:132px}
+#help .x{margin-top:16px;color:var(--mut);font-size:12.5px}
+#load{position:absolute;inset:0;display:grid;place-items:center;pointer-events:auto;background:var(--bg)}
+#load div{text-align:center;color:var(--mut)}
+#load b{display:block;font-size:16px;color:var(--fg);margin-bottom:6px}
+#err{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;max-width:560px;
+ background:#fff;border:1px solid #d99;border-left:4px solid #b2554f;border-radius:10px;padding:16px 20px;
+ pointer-events:auto;color:#7d3b36;font-size:13.5px}
+.stick{position:absolute;bottom:22px;width:116px;height:116px;border-radius:50%;
+ background:rgba(255,255,255,.4);border:1px solid var(--line);pointer-events:auto;display:none}
+.stick i{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;
+ border-radius:50%;background:rgba(157,95,63,.75)}
+#sL{left:22px} #sR{right:22px}
+@media (pointer:coarse){.stick{display:block} #click{display:none}}
+</style>
+</head>
+<body>
+<div id="ui">
+  <div class="panel" id="rooms"><h3>Go to</h3><div id="roomlist"></div></div>
+
+  <div class="panel" id="hud">
+    <div class="mode" id="mode">WALK<small id="modesub">first person &middot; press F to fly</small></div>
+    <div class="row"><label><input type="checkbox" id="hideUpper"> Hide upper floor &amp; roof</label></div>
+    <div class="row"><label><input type="checkbox" id="furnished"> Furnished reception</label></div>
+    <div id="pos">&mdash;</div>
+  </div>
+
+  <div class="panel" id="mini">
+    <canvas id="minimap" width="300" height="206"></canvas>
+    <div class="cap">click the plan to teleport</div>
+  </div>
+
+  <div class="panel" id="note">Simple colours. The photoreal look is in the renders and the tour.</div>
+
+  <div id="click"><div><b>Click to walk</b><span>W A S D move &middot; mouse look &middot; Shift run &middot; Esc release</span></div></div>
+
+  <div id="help"><div class="card">
+    <h2>Controls</h2>
+    <table>
+      <tr><td class="k">Click canvas</td><td>Capture the mouse and start walking</td></tr>
+      <tr><td class="k">W A S D</td><td>Move</td></tr>
+      <tr><td class="k">Mouse</td><td>Look around</td></tr>
+      <tr><td class="k">Shift</td><td>Run / fly fast</td></tr>
+      <tr><td class="k">F</td><td>Toggle WALK &harr; FLY (noclip)</td></tr>
+      <tr><td class="k">Q / E</td><td>Down / up (FLY only)</td></tr>
+      <tr><td class="k">1 / 2</td><td>Ground floor / upper floor</td></tr>
+      <tr><td class="k">R</td><td>Reset to the reception</td></tr>
+      <tr><td class="k">H</td><td>Show / hide this help</td></tr>
+      <tr><td class="k">Esc</td><td>Release the mouse</td></tr>
+      <tr><td class="k">Room menu</td><td>Teleport inside any room, at eye height</td></tr>
+      <tr><td class="k">Minimap</td><td>Click anywhere on the plan to teleport there</td></tr>
+      <tr><td class="k">Touch</td><td>Left stick moves, right stick looks</td></tr>
+    </table>
+    <div class="x">WALK mode collides with walls, glass, columns and furniture, snaps to the floor and
+    climbs stairs up to a 0.35 m step. FLY mode has no collision, so you can get anywhere.</div>
+    <div class="x">Press H or click anywhere to close.</div>
+  </div></div>
+
+  <div id="load"><div><b>Loading the building&hellip;</b><span id="loadpct">0%</span></div></div>
+  <div id="err"></div>
+
+  <div class="stick" id="sL"><i></i></div>
+  <div class="stick" id="sR"><i></i></div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "./lib/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from './lib/GLTFLoader.js';
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from './lib/three-mesh-bvh.js';
+
+// ---- BVH acceleration for every raycast against the building -----------------------------
+THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+THREE.Mesh.prototype.raycast = acceleratedRaycast;
+
+// ---- coordinates -------------------------------------------------------------------------
+// The model is authored in Blender (Z up) and exported to glTF (Y up). three.js uses the glTF
+// convention, so:   three.x = blender.x,  three.y = blender.z,  three.z = -blender.y
+const B2T = (bx, by, bz) => new THREE.Vector3(bx, bz, -by);
+const T2B = v => ({ x: v.x, y: -v.z, z: v.y });
+
+const EYE = 1.6, PLAYER_R = 0.32, STEP = 0.35, HEAD = 0.12;
+
+// Room spawn points. Every one was verified against the model by ray-casting: floor found,
+// >= 2.04 m of headroom and >= 1.2 m of lateral clearance. Coordinates are Blender X/Y/floorZ.
+const ROOMS = [
+  { n:'Reception Area',   x:-0.76, y: 5.58, z:0,    look:[ 3.80, 5.20] },
+  { n:'Founder Space 1',  x:11.30, y: 5.58, z:0,    look:[17.00, 3.20] },
+  { n:'Smart Ideas',      x:-8.68, y: 5.58, z:0,    look:[-8.68, 7.60] },
+  { n:'KaCyber',          x:-13.75,y: 5.58, z:0,    look:[-13.75,7.60] },
+  { n:'Visual Space',     x:-17.15,y: 5.58, z:0,    look:[-17.15,7.60] },
+  { n:'Podcast Room',     x:-17.15,y:-1.14, z:0,    look:[-17.15,-3.10] },
+  { n:'IoT Lab',          x:-13.75,y:-1.14, z:0,    look:[-13.75,-3.10] },
+  { n:'Office Space 1',   x:-10.30,y:-1.14, z:0,    look:[-10.30,-3.10] },
+  { n:'Servers Room',     x:-6.98, y:-1.14, z:0,    look:[-6.98,-3.10] },
+  { n:'Ladies Room',      x:-3.61, y:-1.14, z:0,    look:[-3.61,-3.10] },
+  { n:'Gents Rooms',      x: 2.24, y:-1.14, z:0,    look:[ 2.24,-3.10] },
+  { n:'Auditorium',       x:-0.76, y:-9.36, z:0,    look:[-0.76,-13.0] },
+  { sep:true },
+  { n:'Upper floor',      x:-0.76, y: 5.58, z:2.44, look:[ 3.80, 5.20] },
+  { n:'Roof',             x:-0.76, y: 5.58, z:5.30, look:[ 10.0, 5.20] },
+];
+
+// ---- scene -------------------------------------------------------------------------------
+const renderer = new THREE.WebGLRenderer({ antialias:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+// The building is almost entirely white/grey. Without tone mapping the interior clipped to a
+// flat sheet and the geometry disappeared; ACES plus a lower exposure brings the edges back.
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.78;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xdfe6ec);     // sky colour, no fog
+
+const camera = new THREE.PerspectiveCamera(70, innerWidth/innerHeight, 0.05, 400);
+
+const hemi = new THREE.HemisphereLight(0xeaf1ff, 0xa89f93, 1.05);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff2e0, 1.55);
+sun.position.set(14, 26, 10);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+const sc = sun.shadow.camera;
+sc.left = -32; sc.right = 32; sc.top = 32; sc.bottom = -32; sc.near = 1; sc.far = 90;
+sun.shadow.bias = -0.0012;
+scene.add(sun, sun.target);
+scene.add(new THREE.AmbientLight(0xffffff, 0.12));
+
+// ---- model loading -----------------------------------------------------------------------
+let building = null;                 // current THREE.Group
+const colliders = [];                // meshes with a BVH, used for collision + floor snap
+const upperParts = [];               // LAYER_1 / LAYER_2 meshes, for the hide toggle
+const loader = new GLTFLoader();
+const loadEl = document.getElementById('load'), pctEl = document.getElementById('loadpct');
+const errEl = document.getElementById('err');
+
+function fail(msg) {
+  errEl.style.display = 'block';
+  errEl.textContent = msg;
+  loadEl.style.display = 'none';
+  console.error(msg);
+}
+
+function prepare(root) {
+  colliders.length = 0; upperParts.length = 0;
+  root.traverse(o => {
+    if (!o.isMesh) return;
+    o.castShadow = true; o.receiveShadow = true;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    for (const m of mats) {
+      if (!m) continue;
+      m.side = THREE.DoubleSide;           // the source meshes are mostly single-sided planes
+      if (m.transparent && m.opacity < 0.95) m.depthWrite = false;
+      if (m.emissiveIntensity !== undefined) m.emissiveIntensity = 0.35;
+    }
+    if (o.geometry && !o.geometry.boundsTree) {
+      try { o.geometry.computeBoundsTree(); } catch (e) { /* non-indexed or empty */ }
+    }
+    colliders.push(o);
+    if (/SOURCE_LAYER_[12]_/.test(o.name)) upperParts.push(o);
+  });
+}
+
+function loadModel(url) {
+  return new Promise((res, rej) => {
+    loadEl.style.display = 'grid';
+    loader.load(url, g => {
+      if (building) { scene.remove(building); }
+      building = g.scene;
+      prepare(building);
+      scene.add(building);
+      applyHideUpper();
+      loadEl.style.display = 'none';
+      res(g);
+    }, ev => {
+      if (ev.total) pctEl.textContent = Math.round(ev.loaded / ev.total * 100) + '%';
+    }, err => { rej(err); });
+  });
+}
+
+// ---- player ------------------------------------------------------------------------------
+const pos = new THREE.Vector3();      // camera position (eye)
+let yaw = 0, pitch = 0, fly = false, running = false;
+const keys = Object.create(null);
+const ray = new THREE.Raycaster();
+ray.firstHitOnly = true;              // three-mesh-bvh fast path
+
+function castAll(origin, dir, far) {
+  ray.set(origin, dir); ray.far = far; ray.near = 0;
+  let best = null;
+  for (const m of colliders) {
+    const hit = ray.intersectObject(m, false)[0];
+    if (hit && (!best || hit.distance < best.distance)) best = hit;
+  }
+  return best;
+}
+
+const DOWN = new THREE.Vector3(0,-1,0), UP = new THREE.Vector3(0,1,0);
+
+function floorAt(x, z, fromY) {
+  return castAll(new THREE.Vector3(x, fromY, z), DOWN, 60);
+}
+
+function teleport(r) {
+  const p = B2T(r.x, r.y, r.z);
+  pos.set(p.x, p.y + EYE, p.z);
+  const t = B2T(r.look[0], r.look[1], r.z);
+  yaw = Math.atan2(-(t.x - p.x), -(t.z - p.z));
+  pitch = 0;
+  if (!fly) snapFloor(true);
+}
+
+// Horizontal movement with per-axis sliding, so grazing a wall slides along it instead of
+// stopping dead. Three probe heights catch low sills, mid walls and head-height beams.
+function moveWithCollision(dx, dz) {
+  const probes = [0.35, 0.95, 1.50];
+  for (const [axis, d] of [['x', dx], ['z', dz]]) {
+    if (Math.abs(d) < 1e-5) continue;
+    const dir = new THREE.Vector3(); dir[axis] = Math.sign(d);
+    let allowed = Math.abs(d);
+    for (const h of probes) {
+      const o = new THREE.Vector3(pos.x, pos.y - EYE + h, pos.z);
+      const hit = castAll(o, dir, Math.abs(d) + PLAYER_R + 0.02);
+      if (hit) allowed = Math.min(allowed, Math.max(0, hit.distance - PLAYER_R));
+    }
+    pos[axis] += Math.sign(d) * allowed;
+  }
+}
+
+// Floor snap with a step limit: look for ground from just above the step height down. If the
+// ground found is more than STEP above the feet, the move is refused (that is a wall, not a stair).
+function snapFloor(force) {
+  const feet = pos.y - EYE;
+  const hit = floorAt(pos.x, pos.z, feet + STEP + 0.05);
+  if (!hit) return true;
+  const rise = hit.point.y - feet;
+  if (!force && rise > STEP + 0.02) return false;
+  pos.y = hit.point.y + EYE;
+  const head = castAll(new THREE.Vector3(pos.x, hit.point.y + 0.15, pos.z), UP, 6);
+  if (head && head.point.y - hit.point.y < EYE + HEAD) {
+    pos.y = Math.max(hit.point.y + 0.9, head.point.y - HEAD);
+  }
+  return true;
+}
+
+// ---- input -------------------------------------------------------------------------------
+const canvas = renderer.domElement;
+const clickEl = document.getElementById('click');
+const helpEl = document.getElementById('help');
+const modeEl = document.getElementById('mode'), modeSub = document.getElementById('modesub');
+
+canvas.addEventListener('click', () => canvas.requestPointerLock());
+clickEl.addEventListener('click', () => canvas.requestPointerLock());
+document.addEventListener('pointerlockchange', () => {
+  clickEl.style.display = (document.pointerLockElement === canvas) ? 'none' : 'grid';
+});
+document.addEventListener('mousemove', e => {
+  if (document.pointerLockElement !== canvas) return;
+  yaw   -= e.movementX * 0.0022;
+  pitch -= e.movementY * 0.0022;
+  pitch = Math.max(-1.52, Math.min(1.52, pitch));
+});
+addEventListener('keydown', e => {
+  keys[e.code] = true;
+  const k = e.key.toLowerCase();
+  if (k === 'f') setMode(!fly);
+  if (k === 'h') helpEl.style.display = helpEl.style.display === 'grid' ? 'none' : 'grid';
+  if (k === 'r') teleport(ROOMS[0]);
+  if (k === '1') { document.getElementById('hideUpper').checked = true;  applyHideUpper(); }
+  if (k === '2') { document.getElementById('hideUpper').checked = false; applyHideUpper();
+                   teleport(ROOMS.find(r => r.n === 'Upper floor')); }
+  if (e.code === 'Space') e.preventDefault();
+});
+addEventListener('keyup', e => { keys[e.code] = false; });
+helpEl.addEventListener('click', () => helpEl.style.display = 'none');
+
+function setMode(f) {
+  fly = f;
+  modeEl.childNodes[0].nodeValue = fly ? 'FLY' : 'WALK';
+  modeSub.textContent = fly ? 'noclip · Q/E down-up · press F to walk'
+                            : 'first person · press F to fly';
+  if (!fly) snapFloor(true);
+}
+
+// touch joysticks
+function stick(el) {
+  const s = { x:0, y:0 }; const knob = el.querySelector('i'); let id = null, ox = 0, oy = 0;
+  el.addEventListener('touchstart', e => {
+    const t = e.changedTouches[0]; id = t.identifier;
+    const r = el.getBoundingClientRect(); ox = r.left + r.width/2; oy = r.top + r.height/2;
+    e.preventDefault();
+  }, {passive:false});
+  el.addEventListener('touchmove', e => {
+    for (const t of e.changedTouches) if (t.identifier === id) {
+      let dx = (t.clientX - ox) / 46, dy = (t.clientY - oy) / 46;
+      const m = Math.hypot(dx, dy); if (m > 1) { dx /= m; dy /= m; }
+      s.x = dx; s.y = dy;
+      knob.style.transform = `translate(${dx*34}px,${dy*34}px)`;
+    }
+    e.preventDefault();
+  }, {passive:false});
+  const end = () => { id = null; s.x = s.y = 0; knob.style.transform = ''; };
+  el.addEventListener('touchend', end); el.addEventListener('touchcancel', end);
+  return s;
+}
+const stickL = stick(document.getElementById('sL'));
+const stickR = stick(document.getElementById('sR'));
+
+// ---- UI ----------------------------------------------------------------------------------
+const list = document.getElementById('roomlist');
+ROOMS.forEach(r => {
+  if (r.sep) { const d = document.createElement('div'); d.className = 'sep'; list.appendChild(d); return; }
+  const b = document.createElement('button');
+  b.textContent = r.n;
+  b.onclick = () => {
+    teleport(r);
+    [...list.children].forEach(c => c.classList && c.classList.remove('on'));
+    b.classList.add('on');
+  };
+  list.appendChild(b);
+});
+
+const hideUpperEl = document.getElementById('hideUpper');
+function applyHideUpper() {
+  const h = hideUpperEl.checked;
+  for (const m of upperParts) m.visible = !h;
+}
+hideUpperEl.addEventListener('change', applyHideUpper);
+
+const furnEl = document.getElementById('furnished');
+furnEl.addEventListener('change', async () => {
+  const keep = { p: pos.clone(), yaw, pitch };
+  try {
+    await loadModel(furnEl.checked ? '../model_reception_furnished.glb' : './building.glb');
+    pos.copy(keep.p); yaw = keep.yaw; pitch = keep.pitch;
+  } catch (e) {
+    furnEl.checked = !furnEl.checked;
+    fail('Could not load that model: ' + e.message);
+  }
+});
+
+// ---- minimap -----------------------------------------------------------------------------
+// The plan is calibrated to the model: px 1 -> X -18.8, px 939 -> X +18.8 (0.0400853 m/px),
+// py 135 -> Y +7.8 (0.040288 m/px). Same calibration used to place every room.
+const PLAN = { x0:1, x1:939, mx0:-18.8, mx1:18.8, y0:135, my0:7.8, sy:0.040288 };
+const mini = document.getElementById('minimap'), mctx = mini.getContext('2d');
+const planImg = new Image(); planImg.src = './plan.jpg';
+let planReady = false;
+planImg.onload = () => { planReady = true; };
+const SX = () => mini.width / planImg.naturalWidth;
+const SY = () => mini.height / planImg.naturalHeight;
+const mToPx = (bx, by) => ({
+  px: (PLAN.x0 + (bx - PLAN.mx0) / 0.0400853) * SX(),
+  py: (PLAN.y0 + (PLAN.my0 - by) / PLAN.sy) * SY()
+});
+const pxToM = (px, py) => ({
+  x: PLAN.mx0 + (px / SX() - PLAN.x0) * 0.0400853,
+  y: PLAN.my0 - (py / SY() - PLAN.y0) * PLAN.sy
+});
+mini.addEventListener('click', e => {
+  const r = mini.getBoundingClientRect();
+  const m = pxToM((e.clientX - r.left) * mini.width / r.width,
+                  (e.clientY - r.top)  * mini.height / r.height);
+  const p = B2T(m.x, m.y, 0);
+  const hit = floorAt(p.x, p.z, 40);
+  pos.set(p.x, (hit ? hit.point.y : 0) + EYE, p.z);
+  if (!fly) snapFloor(true);
+});
+function drawMini() {
+  if (!planReady) return;
+  mctx.clearRect(0,0,mini.width,mini.height);
+  mctx.globalAlpha = .92; mctx.drawImage(planImg, 0, 0, mini.width, mini.height); mctx.globalAlpha = 1;
+  const b = T2B(pos);
+  const p = mToPx(b.x, b.y);
+  mctx.strokeStyle = '#9d5f3f'; mctx.lineWidth = 2;
+  mctx.beginPath(); mctx.moveTo(p.px, p.py);
+  mctx.lineTo(p.px + Math.sin(yaw) * 17, p.py + Math.cos(yaw) * 17); mctx.stroke();
+  mctx.fillStyle = '#9d5f3f'; mctx.beginPath(); mctx.arc(p.px, p.py, 4.2, 0, 7); mctx.fill();
+  mctx.strokeStyle = '#fff'; mctx.lineWidth = 1.4; mctx.stroke();
+}
+
+// ---- loop --------------------------------------------------------------------------------
+const posEl = document.getElementById('pos');
+let last = performance.now(), acc = 0;
+
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+
+  if (stickR.x || stickR.y) { yaw -= stickR.x * dt * 2.3; pitch -= stickR.y * dt * 1.7;
+                              pitch = Math.max(-1.52, Math.min(1.52, pitch)); }
+
+  running = !!(keys['ShiftLeft'] || keys['ShiftRight']);
+  const speed = (fly ? 7.5 : 2.6) * (running ? 2.6 : 1) * dt;
+
+  let f = (keys['KeyW']?1:0) - (keys['KeyS']?1:0) - stickL.y;
+  let s = (keys['KeyD']?1:0) - (keys['KeyA']?1:0) + stickL.x;
+  const m = Math.hypot(f, s); if (m > 1) { f /= m; s /= m; }
+
+  const sinY = Math.sin(yaw), cosY = Math.cos(yaw);
+  const dx = (-sinY * f + cosY * s) * speed;
+  const dz = (-cosY * f - sinY * s) * speed;
+
+  if (fly) {
+    pos.x += dx; pos.z += dz;
+    pos.y += ((keys['KeyE']?1:0) - (keys['KeyQ']?1:0)) * speed;
+  } else if (colliders.length) {
+    const before = pos.clone();
+    moveWithCollision(dx, dz);
+    if (!snapFloor(false)) { pos.copy(before); }      // step too tall - refuse the move
+  }
+
+  camera.position.copy(pos);
+  camera.rotation.set(pitch, yaw, 0, 'YXZ');
+  sun.target.position.set(pos.x, 0, pos.z);
+  sun.position.set(pos.x + 14, 26, pos.z + 10);
+
+  acc += dt;
+  if (acc > 0.1) {
+    acc = 0;
+    const b = T2B(pos);
+    posEl.textContent = `X ${b.x.toFixed(1)}  Y ${b.y.toFixed(1)}  eye ${b.z.toFixed(2)} m`;
+    drawMini();
+  }
+  renderer.render(scene, camera);
+}
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+// expose a tiny API so the headless test can drive it deterministically
+window.__walk = {
+  get ready() { return !!building; },
+  pos: () => T2B(pos),
+  teleportTo: n => { const r = ROOMS.find(q => q.n === n); if (r) teleport(r); return T2B(pos); },
+  setYawTo: (bx, by) => { const t = B2T(bx, by, 0);
+                          yaw = Math.atan2(-(t.x - pos.x), -(t.z - pos.z)); },
+  setMode: f => setMode(f),
+  stepForward: (metres, steps = 40) => {       // deterministic walk, collision applied
+    for (let i = 0; i < steps; i++) {
+      const d = metres / steps;
+      const before = pos.clone();
+      moveWithCollision(-Math.sin(yaw) * d, -Math.cos(yaw) * d);
+      if (!snapFloor(false)) pos.copy(before);
+    }
+    return T2B(pos);
+  },
+  rooms: () => ROOMS.filter(r => !r.sep).map(r => r.n)
+};
+
+setMode(false);
+loadModel('./building.glb')
+  .then(() => { teleport(ROOMS[0]); frame(performance.now()); })
+  .catch(e => fail('Could not load building.glb: ' + e.message));
+</script>
+</body>
+</html>

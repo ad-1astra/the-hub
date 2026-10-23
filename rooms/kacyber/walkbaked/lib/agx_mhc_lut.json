@@ -1,0 +1,8 @@
+{
+ "N": 33,
+ "emin": -12.47393,
+ "emax": 4.026069,
+ "mid": 0.18,
+ "layout": "pixel x = r + N*b; PNG row y (top=0) holds g = N-1-y",
+ "source": "Blender 4.2 AgX + 'Medium High Contrast', exposure -0.22, sRGB display"
+}

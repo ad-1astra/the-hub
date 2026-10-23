@@ -1,0 +1,74 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Founder Space 1 Renders</title>
+<style>
+:root{--bg:#f7f6f4;--fg:#1b1b1e;--mut:#6d6d74;--line:#e2e0dd;--card:#fff;--accent:#9d5f3f;
+ --warn:#b2804f;--ok:#3f7d52;--err:#b2554f}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141416;--fg:#ececef;
+ --mut:#9a9aa2;--line:#2b2b30;--card:#1c1c20}}
+:root[data-theme=dark]{--bg:#141416;--fg:#ececef;--mut:#9a9aa2;--line:#2b2b30;--card:#1c1c20}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1500px;margin:0 auto;padding:52px 16px 80px}
+header{border-bottom:1px solid var(--line);padding-bottom:26px}
+h1{font-size:clamp(25px,4vw,38px);margin:0 0 10px;letter-spacing:-.02em}
+.sub{color:var(--mut);margin:0;max-width:76ch}
+.pill{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+ padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mut);margin-right:8px}
+.pill.draft{border-color:var(--warn);color:var(--warn)}
+.pill.ok{border-color:var(--ok);color:var(--ok)}
+.pill.err{border-color:var(--err);color:var(--err)}
+section{padding:40px 0;border-bottom:1px solid var(--line)}
+.ahead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.num{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+h2{font-size:21px;margin:0;letter-spacing:-.01em}
+.cap{color:var(--mut);margin:8px 0 18px;max-width:82ch}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:880px){.pair{grid-template-columns:1fr}}
+figure{margin:0}
+.shot{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+ background:var(--card)}
+.shot img{display:block;width:100%;height:auto}
+.tag{position:absolute;top:0;left:0;background:#1b1b1e;color:#fff;font-size:11px;
+ letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:0 0 8px 0}
+.dtag{position:absolute;top:0;right:0;background:var(--warn);color:#fff;font-size:11px;
+ letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:0 0 0 8px}
+.missing{aspect-ratio:16/9;display:grid;place-items:center;color:var(--mut);font-size:14px}
+model-viewer{width:100%;height:clamp(360px,54vh,580px);background:var(--card);
+ border:1px solid var(--line);border-radius:10px}
+.note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);
+ border-radius:8px;padding:14px 18px;margin-top:16px;color:var(--mut);font-size:14.5px;max-width:92ch}
+.note b{color:var(--fg)}
+.stat{font-size:14px;margin:12px 0 0;padding:9px 14px;border-radius:7px;border:1px solid var(--line);
+ background:var(--card);color:var(--mut)}
+.stat.ok{border-color:var(--ok);color:var(--ok)}
+.stat.err{border-color:var(--err);color:var(--err)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
+th{text-align:left;color:var(--mut);font-weight:500;border-bottom:1px solid var(--line);
+ padding:8px 10px 8px 0}
+td{border-bottom:1px solid var(--line);padding:7px 10px 7px 0;vertical-align:top}
+td.n{font-variant-numeric:tabular-nums;color:var(--mut);white-space:nowrap}
+dl{margin:18px 0 0;border-top:1px solid var(--line)}
+.srow{display:grid;grid-template-columns:230px 1fr;gap:16px;padding:10px 0;
+ border-bottom:1px solid var(--line)}
+@media(max-width:640px){.srow{grid-template-columns:1fr;gap:2px}}
+dt{color:var(--mut);font-size:14px}
+dd{margin:0;font-size:14.5px}
+footer{color:var(--mut);font-size:13.5px;padding-top:28px}
+a{color:var(--accent)}
+ .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:980px){.trio{grid-template-columns:1fr}} ol li,ul li{margin:4px 0}</style></head>
+<body><div class="wrap"><header><p><a href="../../index.html">&larr; all rooms</a></p>
+<h1>Founder Space 1 &mdash; National ICT Innovation Hub</h1><p class="sub">Ground floor, east of the Reception. A large open-plan co-working hall: rows of mahogany desks with black executive chairs, a lounge of curved beige leather sofas with two marble tables, grey columns, glazing with vertical blinds on both long sides (north and south), the dog-leg stair to the mezzanine in the east, and the Reception doorway in the mint mural wall to the west. Furniture at real scale; what does not fit is listed below.</p>
+<p class="sub" style="margin-top:8px">Zone: X +3.80..+18.82, Y -3.28..+7.86 (clear 14.82 x 10.93 m between the faces), soffit 2.14 m, open void X 10.12..13.04 Y 0.56..4.21 and stair well to the upper floor. Each angle: the reference photo, the <b>shell</b> (model
+with materials and light only) and the <b>furnished</b> scene. The original meshes are untouched; no
+render contains people.</p><p style="margin-top:14px"><span class="pill draft">3 draft</span><span class="pill ok">1 final</span></p></header><section><div class="ahead"><span class="num">ZONE</span><h2>Zone check and photo mapping</h2><span class="pill ok">high confidence - matches the plan within 0.3 m</span></div><p class="cap">Ray casts on the GLB: west wall X +3.90 (shared with the Reception, open doorway Y +2.30..+3.94, head 2.07 m, no leaf), east wall X +18.72, north glazing Y +7.75 and south glazing Y -3.18 (dado to 0.87 m, glass 0.97 m to above the soffit, on both long sides), soffit 2.14 m, a dog-leg stair against the east wall X +14.9..+18.7 Y +1.4..+4.5 rising to the upper floor, an open void X +10.1..+13.0 Y +0.6..+4.2, and the &#x27;Meeting Podium 1&#x27; booth X +4.85..+7.0 Y -2.55..+0.05. The plan&#x27;s &#x27;Founder Space 1&#x27; box agrees within 0.1 m on every side. The old box (X +3.55..+18.9, Y -3.45..+8.05) reached into the wall thickness on three sides and was tightened. Known differences in the photos: the real mezzanine void is larger than the model&#x27;s, and the teal booth stands north of the doorway, not south of it as in the model. The model is kept as it is.</p><div class="trio" style="grid-template-columns:1fr 1fr"><figure><div class="shot"><a href="zone_plan.png"><img src="zone_plan.png" alt="zone on the floor plan"></a></div></figure><div><table><thead><tr><th>Photo</th><th>Where it looks</th><th>Angle</th></tr></thead><tbody><tr><td>87</td><td>Down the central aisle to the east: columns, desks, lounge, stair, yellow end wall</td><td>01</td></tr><tr><td>94 / 99 / 103</td><td>West: mint mural wall, Reception door, teal booth, lockers (99 from the south desks, 103 telephoto)</td><td>02</td></tr><tr><td>96</td><td>From the lounge looking west over the sofas and marble tables</td><td>02</td></tr><tr><td>97 / 98</td><td>North-west: desk field, executive chairs, windows with vertical blinds, banners</td><td>03</td></tr><tr><td>61</td><td>Not this room: white training desks, Dell PCs, low ceiling with split ACs, no mezzanine</td><td>not used</td></tr><tr><td>-</td><td>From the Reception doorway, toward the south-east</td><td>04 (no photo)</td></tr></tbody></table></div></div></section><section><div class="ahead"><span class="num">01</span><h2>Down the central aisle, looking east</h2><span class="pill">photo Hub Space-87.jpg</span></div><p class="cap">From inside the Reception doorway: two grey columns, the desk fields left and right, the lounge and the stair at the far end.</p><div class="trio"><figure><div class="shot"><img src="ref/Hub Space-87.jpg" alt="reference photo" loading="lazy"><span class="tag">Photo Hub Space-87.jpg</span></div></figure><figure><div class="shot"><div class="missing">not rendered yet</div><span class="tag">Shell</span></div></figure><figure><div class="shot"><img src="01_aisle_east_furnished.png" alt="Down the central aisle, looking east Furnished" loading="lazy"><span class="tag">Furnished</span></div></figure></div></section><section><div class="ahead"><span class="num">02</span><h2>From the lounge toward the mural wall</h2><span class="pill">photo Hub Space-94.jpg, Hub Space-96.jpg, Hub Space-99.jpg, Hub Space-103.jpg</span></div><p class="cap">Looking west past the curved sofas and the marble tables to the mint mural wall, the teal meeting booth and the Reception doorway.</p><div class="trio"><figure><div class="shot"><img src="ref/Hub Space-94.jpg" alt="reference photo" loading="lazy"><span class="tag">Photo Hub Space-94.jpg</span></div></figure><figure><div class="shot"><div class="missing">not rendered yet</div><span class="tag">Shell</span></div></figure><figure><div class="shot"><img src="02_mural_west_furnished.png" alt="From the lounge toward the mural wall Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section><section><div class="ahead"><span class="num">03</span><h2>The north desk field and windows</h2><span class="pill">photo Hub Space-97.jpg, Hub Space-98.jpg</span></div><p class="cap">Looking north-east across the desks and black executive chairs to the window wall with vertical blinds and roll-up banners.</p><div class="trio"><figure><div class="shot"><img src="ref/Hub Space-97.jpg" alt="reference photo" loading="lazy"><span class="tag">Photo Hub Space-97.jpg</span></div></figure><figure><div class="shot"><div class="missing">not rendered yet</div><span class="tag">Shell</span></div></figure><figure><div class="shot"><img src="03_windows_north_furnished.png" alt="The north desk field and windows Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section><section><div class="ahead"><span class="num">04</span><h2>From the Reception doorway (no matching photo)</h2><span class="pill">photo no matching photo</span></div><p class="cap">Standing in the doorway from the Reception, looking south-east across the room.</p><div class="trio"><figure><div class="shot"><div class="missing">no matching photo</div><span class="tag">Photo</span></div></figure><figure><div class="shot"><div class="missing">not rendered yet</div><span class="tag">Shell</span></div></figure><figure><div class="shot"><img src="04_from_doorway_furnished.png" alt="From the Reception doorway (no matching photo) Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section>
+<section><div class="ahead"><span class="num">DIFF</span><h2>What differs from the photos (ranked)</h2></div>
+<ol><li>Not reviewed yet.</li></ol></section>
+<section><div class="ahead"><span class="num">DROP</span><h2>Dropped at real scale</h2></div>
+<table><thead><tr><th>Item</th><th>Why</th></tr></thead><tbody><tr><td>Photocopier beside the doorway (photo 103, about 0.60 x 0.65 x 1.0 m)</td><td>the gaps beside the Reception doorway are 0.41 m (to the server rack) and 0.65 m (to the blue board); it does not fit at real scale</td></tr><tr><td>Wooden display cabinet with a glass door, right of the door (photo 94, about 1.0 x 0.5 x 1.9 m)</td><td>the mural wall north of the doorway is taken by the server rack and the lockers; the model&#x27;s booth fills the south side</td></tr><tr><td>Extra desks beside the aisle columns (photo 94)</td><td>they would block the aisle from the Reception doorway to the lounge and stair, which the walk needs</td></tr><tr><td>Mezzanine gallery, its railing and the pitched roof (photos 87/94)</td><td>above the model&#x27;s 2.14 m soffit; the model&#x27;s void is only 2.9 x 3.65 m and geometry is never changed (a grey fascia and the clock are added at the void edge)</td></tr><tr><td>Globe, water bottles, bags, jackets and desk clutter</td><td>personal items; they would only add noise</td></tr></tbody></table></section>
+<section><div class="ahead"><span class="num">WALK</span><h2>Free camera</h2></div><p class="stat ok"><a href="walkbaked/index.html">Walk the photoreal Founder Space 1 (baked, free camera) &rarr;</a></p><p class="stat ok"><a href="tour/index.html">360° tour of Founder Space 1 (Cycles panoramas) &rarr;</a></p></section>
+<section><div class="ahead"><span class="num">FILES</span><h2>Files and last updated</h2></div>
+<table><thead><tr><th>File</th><th>Kind</th><th>Size</th><th>Modified</th></tr></thead><tbody><tr><td>01_aisle_east_furnished.png</td><td class='n'>final</td><td class='n'>1.3 MB</td><td class='n'>2026-10-03 08:13</td></tr><tr><td>02_mural_west_furnished.png</td><td class='n'>DRAFT</td><td class='n'>965.1 KB</td><td class='n'>2026-10-03 07:23</td></tr><tr><td>03_windows_north_furnished.png</td><td class='n'>DRAFT</td><td class='n'>903.5 KB</td><td class='n'>2026-10-03 07:24</td></tr><tr><td>04_from_doorway_furnished.png</td><td class='n'>DRAFT</td><td class='n'>898.9 KB</td><td class='n'>2026-10-03 07:25</td></tr><tr><td>tour/index.html</td><td class='n'>free-camera page</td><td class='n'>16.2 KB</td><td class='n'>2026-10-03 08:30</td></tr><tr><td>walkbaked/index.html</td><td class='n'>free-camera page</td><td class='n'>47.7 KB</td><td class='n'>2026-10-03 07:07</td></tr></tbody></table></section>
+<section style="border-bottom:none"><div class="ahead"><span class="num">&#9881;</span><h2>Render settings</h2></div>
+<dl><div class="srow"><dt>Room</dt><dd>Founder Space 1 - X +3.80..+18.82, Y -3.28..+7.86, soffit 2.14 m</dd></div><div class="srow"><dt>Renderer</dt><dd>Blender 4.2 LTS, Cycles, CPU only (i5-10505)</dd></div><div class="srow"><dt>Draft settings</dt><dd>1280 x 720, 32 samples, OIDN (finals 1600 x 900, 192 samples)</dd></div><div class="srow"><dt>Daylight</dt><dd>Both long sides: two soft panels 4 m outside the north and south glazing, white balanced, plus sky; louvres and vertical blinds</dd></div><div class="srow"><dt>Ceiling lights</dt><dd>LED panels 600 x 600 on a 3 m grid, 5000 K, plus a soft ceiling fill</dd></div><div class="srow"><dt>Tone mapping</dt><dd>AgX, Medium High Contrast, exposure -0.22 (same as the other rooms)</dd></div><div class="srow"><dt>Furniture</dt><dd>Real scale, nothing shrunk</dd></div><div class="srow"><dt>People</dt><dd>None, by design</dd></div></dl></section><footer>Page built 2026-10-23 03:03:55 &middot; nothing uploaded anywhere</footer></div></body></html>

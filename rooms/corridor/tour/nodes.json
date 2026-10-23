@@ -1,0 +1,127 @@
+{
+ "meta": {
+  "room": "Corridor",
+  "eye": 1.6,
+  "image_centre": "+X (east)",
+  "count": 9,
+  "links": [
+   [
+    "c00",
+    "p04"
+   ],
+   [
+    "c07",
+    "vs:p00"
+   ]
+  ]
+ },
+ "nodes": [
+  {
+   "id": "c00",
+   "x": -4.05,
+   "y": 2.35,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Lobby (from the Reception)",
+   "neighbours": [
+    "c01",
+    "p04"
+   ]
+  },
+  {
+   "id": "c01",
+   "x": -6.9,
+   "y": 2.3,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Lobby door",
+   "neighbours": [
+    "c00",
+    "c02"
+   ]
+  },
+  {
+   "id": "c02",
+   "x": -7.75,
+   "y": 2.3,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Smart Ideas / Cloud Centre doors",
+   "neighbours": [
+    "c01",
+    "c03"
+   ]
+  },
+  {
+   "id": "c03",
+   "x": -10.2,
+   "y": 2.3,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Office Space 1 door",
+   "neighbours": [
+    "c02",
+    "c04"
+   ]
+  },
+  {
+   "id": "c04",
+   "x": -12.1,
+   "y": 2.3,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Under the void",
+   "neighbours": [
+    "c03",
+    "c05"
+   ]
+  },
+  {
+   "id": "c05",
+   "x": -13.65,
+   "y": 2.3,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "KaCyber / IoT Lab doors",
+   "neighbours": [
+    "c04",
+    "c06"
+   ]
+  },
+  {
+   "id": "c06",
+   "x": -15.5,
+   "y": 2.3,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "West corridor",
+   "neighbours": [
+    "c05",
+    "c07"
+   ]
+  },
+  {
+   "id": "c07",
+   "x": -17.1,
+   "y": 2.8,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Visual Space / The Pod doors",
+   "neighbours": [
+    "c06",
+    "c08"
+   ]
+  },
+  {
+   "id": "c08",
+   "x": -18.15,
+   "y": 2.3,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "West end (exit door)",
+   "neighbours": [
+    "c07"
+   ]
+  }
+ ]
+}

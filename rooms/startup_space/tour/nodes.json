@@ -1,0 +1,54 @@
+{
+ "meta": {
+  "room": "Startup Space",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 3,
+  "links": [
+   [
+    "a00",
+    "u00"
+   ]
+  ],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "a00",
+   "x": -7.05,
+   "y": 0.7,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Startup Space, inside the door",
+   "neighbours": [
+    "a01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "a01",
+   "x": -7.8,
+   "y": -0.3,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Startup Space, by the sofa",
+   "neighbours": [
+    "a00",
+    "a02"
+   ],
+   "order": 1
+  },
+  {
+   "id": "a02",
+   "x": -6.95,
+   "y": -2.75,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Startup Space, by the window",
+   "neighbours": [
+    "a01"
+   ],
+   "order": 2
+  }
+ ]
+}

@@ -1,0 +1,211 @@
+{
+ "meta": {
+  "room": {
+   "x0": -5.45,
+   "x1": 3.95,
+   "y0": 1.25,
+   "y1": 7.9
+  },
+  "eye": 1.6,
+  "spacing": 1.5,
+  "count": 13,
+  "generated": "2026-10-01T23:28:14"
+ },
+ "nodes": [
+  {
+   "x": 4.75,
+   "y": 3.1,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 1.19,
+   "zone": "founder",
+   "order": 0,
+   "id": "p00",
+   "neighbours": [
+    "p12",
+    "p03"
+   ]
+  },
+  {
+   "x": 1.15,
+   "y": 6.35,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 1.04,
+   "zone": "reception",
+   "order": 1,
+   "id": "p01",
+   "neighbours": [
+    "p10",
+    "p11"
+   ]
+  },
+  {
+   "x": -1.85,
+   "y": 4.85,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 0.72,
+   "zone": "reception",
+   "order": 2,
+   "id": "p02",
+   "neighbours": [
+    "p08",
+    "p05",
+    "p06",
+    "p10"
+   ]
+  },
+  {
+   "x": 2.65,
+   "y": 3.35,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 0.64,
+   "zone": "reception",
+   "order": 3,
+   "id": "p03",
+   "neighbours": [
+    "p11",
+    "p00"
+   ]
+  },
+  {
+   "x": -3.35,
+   "y": 1.85,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 0.56,
+   "zone": "reception",
+   "order": 4,
+   "id": "p04",
+   "neighbours": [
+    "p07",
+    "p08",
+    "p09"
+   ]
+  },
+  {
+   "x": -3.35,
+   "y": 4.85,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 1.43,
+   "zone": "reception",
+   "order": 5,
+   "id": "p05",
+   "neighbours": [
+    "p02",
+    "p06",
+    "p08"
+   ]
+  },
+  {
+   "x": -3.35,
+   "y": 6.35,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 1.13,
+   "zone": "reception",
+   "order": 6,
+   "id": "p06",
+   "neighbours": [
+    "p05",
+    "p02",
+    "p10"
+   ]
+  },
+  {
+   "x": -1.85,
+   "y": 1.85,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 0.56,
+   "zone": "reception",
+   "order": 7,
+   "id": "p07",
+   "neighbours": [
+    "p04",
+    "p08",
+    "p09",
+    "p02"
+   ]
+  },
+  {
+   "x": -1.85,
+   "y": 3.35,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 1.19,
+   "zone": "reception",
+   "order": 8,
+   "id": "p08",
+   "neighbours": [
+    "p02",
+    "p07",
+    "p04",
+    "p05"
+   ]
+  },
+  {
+   "x": -0.35,
+   "y": 1.85,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 1.51,
+   "zone": "reception",
+   "order": 9,
+   "id": "p09",
+   "neighbours": [
+    "p07",
+    "p08",
+    "p11",
+    "p04"
+   ]
+  },
+  {
+   "x": -0.35,
+   "y": 6.35,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 0.77,
+   "zone": "reception",
+   "order": 10,
+   "id": "p10",
+   "neighbours": [
+    "p01",
+    "p02",
+    "p06"
+   ]
+  },
+  {
+   "x": 1.15,
+   "y": 3.35,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 0.67,
+   "zone": "reception",
+   "order": 11,
+   "id": "p11",
+   "neighbours": [
+    "p03",
+    "p09",
+    "p01",
+    "p08"
+   ]
+  },
+  {
+   "x": 6.3,
+   "y": 3.1,
+   "z": 1.6,
+   "floor": 0.0,
+   "clear": 2.6,
+   "zone": "founder",
+   "order": 12,
+   "id": "p12",
+   "neighbours": [
+    "p00"
+   ]
+  }
+ ]
+}

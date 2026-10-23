@@ -1,0 +1,332 @@
+{
+ "note": "DERIVED COPY of output/final/scene_furnished.blend - not the original model",
+ "zone": [
+  -5.45,
+  3.95,
+  -0.2,
+  7.9
+ ],
+ "groups": {
+  "floor": {
+   "object": "BAKE_floor",
+   "polys": 3,
+   "materials": [
+    "SOURCE_SLAB__floor"
+   ],
+   "src_materials": [
+    "SOURCE_SLAB"
+   ],
+   "combined_res": 2048,
+   "extra": {
+    "ROUGHNESS": 1024,
+    "NORMAL": 1024,
+    "AO": 1024
+   },
+   "files": {}
+  },
+  "ceiling": {
+   "object": "BAKE_ceiling",
+   "polys": 8,
+   "materials": [
+    "SOURCE_SLAB__ceiling"
+   ],
+   "src_materials": [
+    "SOURCE_SLAB"
+   ],
+   "combined_res": 2048,
+   "extra": {},
+   "files": {}
+  },
+  "wall_east": {
+   "object": "BAKE_wall_east",
+   "polys": 9,
+   "materials": [
+    "SOURCE_WALL__wall_east"
+   ],
+   "src_materials": [
+    "SOURCE_WALL"
+   ],
+   "combined_res": 2048,
+   "extra": {
+    "NORMAL": 1024
+   },
+   "files": {}
+  },
+  "wall_west": {
+   "object": "BAKE_wall_west",
+   "polys": 8,
+   "materials": [
+    "SOURCE_WALL__wall_west"
+   ],
+   "src_materials": [
+    "SOURCE_WALL"
+   ],
+   "combined_res": 2048,
+   "extra": {},
+   "files": {}
+  },
+  "wall_north": {
+   "object": "BAKE_wall_north",
+   "polys": 155,
+   "materials": [
+    "SOURCE_FRAME__wall_north",
+    "SOURCE_WALL__wall_north"
+   ],
+   "src_materials": [
+    "SOURCE_FRAME",
+    "SOURCE_WALL"
+   ],
+   "combined_res": 2048,
+   "extra": {},
+   "files": {}
+  },
+  "wall_south": {
+   "object": "BAKE_wall_south",
+   "polys": 16,
+   "materials": [
+    "SOURCE_WALL__wall_south"
+   ],
+   "src_materials": [
+    "SOURCE_WALL"
+   ],
+   "combined_res": 2048,
+   "extra": {},
+   "files": {}
+  },
+  "wall_other": {
+   "object": "BAKE_wall_other",
+   "polys": 256,
+   "materials": [
+    "SOURCE_WALL__wall_other"
+   ],
+   "src_materials": [
+    "SOURCE_WALL"
+   ],
+   "combined_res": 2048,
+   "extra": {},
+   "files": {}
+  },
+  "stair": {
+   "object": "BAKE_stair",
+   "polys": 2096,
+   "materials": [
+    "SOURCE_OTHER__stair",
+    "SOURCE_STAIR__stair"
+   ],
+   "src_materials": [
+    "SOURCE_OTHER",
+    "SOURCE_STAIR"
+   ],
+   "combined_res": 2048,
+   "extra": {
+    "ROUGHNESS": 1024
+   },
+   "files": {}
+  },
+  "joinery": {
+   "object": "BAKE_joinery",
+   "polys": 1225,
+   "materials": [
+    "SOURCE_OTHER__joinery"
+   ],
+   "src_materials": [
+    "SOURCE_OTHER"
+   ],
+   "combined_res": 2048,
+   "extra": {},
+   "files": {}
+  },
+  "furn_desk": {
+   "object": "BAKE_furn_desk",
+   "polys": 8963,
+   "materials": [
+    "FURN_cert_frame__furn_desk",
+    "FURN_cert_paper__furn_desk",
+    "FURN_black_plastic__furn_desk",
+    "FURN_clock_face__furn_desk",
+    "FURN_desk_white__furn_desk",
+    "FURN_desk_reed__furn_desk",
+    "FURN_sign_white__furn_desk",
+    "FURN_screen__furn_desk",
+    "FURN_pendant_wood__furn_desk"
+   ],
+   "src_materials": [
+    "FURN_black_plastic",
+    "FURN_cert_frame",
+    "FURN_cert_paper",
+    "FURN_clock_face",
+    "FURN_desk_reed",
+    "FURN_desk_white",
+    "FURN_pendant_wood",
+    "FURN_screen",
+    "FURN_sign_white"
+   ],
+   "combined_res": 2048,
+   "extra": {
+    "ROUGHNESS": 1024,
+    "AO": 1024
+   },
+   "files": {}
+  },
+  "furn_lounge": {
+   "object": "BAKE_furn_lounge",
+   "polys": 14580,
+   "materials": [
+    "FURN_cream__furn_lounge",
+    "FURN_white_metal__furn_lounge",
+    "FURN_teal__furn_lounge",
+    "FURN_coral__furn_lounge",
+    "FURN_plant__furn_lounge",
+    "FURN_pot__furn_lounge",
+    "FURN_leather__furn_lounge",
+    "FURN_black_plastic__furn_lounge",
+    "FURN_tablewood__furn_lounge"
+   ],
+   "src_materials": [
+    "FURN_black_plastic",
+    "FURN_coral",
+    "FURN_cream",
+    "FURN_leather",
+    "FURN_plant",
+    "FURN_pot",
+    "FURN_tablewood",
+    "FURN_teal",
+    "FURN_white_metal"
+   ],
+   "combined_res": 2048,
+   "extra": {
+    "ROUGHNESS": 1024,
+    "AO": 1024
+   },
+   "files": {}
+  }
+ },
+ "unbaked": {
+  "BEYOND_L0_COL": "beyond",
+  "BEYOND_L0_FRAME": "beyond",
+  "BEYOND_L0_GLASS": "beyond",
+  "GLASS_reception": "glass",
+  "UPPER_in_zone": "upper",
+  "BEYOND_L0_OTHER": "beyond",
+  "BEYOND_L0_SLAB": "beyond",
+  "BEYOND_L0_STAIR": "beyond",
+  "BEYOND_L0_WALL": "beyond",
+  "BEYOND_L1_COL": "beyond",
+  "BEYOND_L1_FRAME": "beyond",
+  "BEYOND_L1_GLASS": "beyond",
+  "BEYOND_L1_OTHER": "beyond",
+  "BEYOND_L1_SLAB": "beyond",
+  "BEYOND_L1_STAIR": "beyond",
+  "BEYOND_L1_WALL": "beyond",
+  "BEYOND_L2_SLAB": "beyond",
+  "EMIT_pendants": "emissive"
+ },
+ "export": {
+  "glb": "reception_walk.glb",
+  "bytes": 6447684,
+  "written": "2026-10-21 06:09:55",
+  "max_res": 4096,
+  "lighting_encoding": "8-bit sRGB of x/(1+x); decode x = y/(1-y)",
+  "groups": {
+   "wall_north": {
+    "object": "BAKE_wall_north",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/wall_north_lighting.png"
+    }
+   },
+   "stair": {
+    "object": "BAKE_stair",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/stair_lighting.png"
+    }
+   },
+   "joinery": {
+    "object": "BAKE_joinery",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/joinery_lighting.png"
+    }
+   },
+   "floor": {
+    "object": "BAKE_floor",
+    "state": "baked",
+    "bake_res": 4096,
+    "res_in_glb": 4096,
+    "files": {
+     "lighting": "textures/floor_lighting.png"
+    }
+   },
+   "wall_other": {
+    "object": "BAKE_wall_other",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/wall_other_lighting.png"
+    }
+   },
+   "wall_east": {
+    "object": "BAKE_wall_east",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/wall_east_lighting.png"
+    }
+   },
+   "wall_west": {
+    "object": "BAKE_wall_west",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/wall_west_lighting.png"
+    }
+   },
+   "wall_south": {
+    "object": "BAKE_wall_south",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/wall_south_lighting.png"
+    }
+   },
+   "ceiling": {
+    "object": "BAKE_ceiling",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/ceiling_lighting.png"
+    }
+   },
+   "furn_desk": {
+    "object": "BAKE_furn_desk",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/furn_desk_lighting.png"
+    }
+   },
+   "furn_lounge": {
+    "object": "BAKE_furn_lounge",
+    "state": "baked",
+    "bake_res": 2048,
+    "res_in_glb": 2048,
+    "files": {
+     "lighting": "textures/furn_lounge_lighting.png"
+    }
+   }
+  }
+ }
+}

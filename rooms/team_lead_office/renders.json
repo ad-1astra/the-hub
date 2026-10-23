@@ -1,0 +1,38 @@
+{
+ "cams": [
+  {
+   "id": "01_tl_boards",
+   "title": "Chalkboards and the clock",
+   "where": "from the east side looking plan-west: chalkboards, clock, sofa, desk, 20 mm",
+   "photo": "Hub Space-176.jpg",
+   "draft": 1792421542,
+   "final": 1792422646
+  },
+  {
+   "id": "02_tl_window",
+   "title": "From the door to the windows",
+   "where": "doorway looking plan-north-west: sofa, lead desk, boards, blinds, 20 mm",
+   "photo": "Hub Space-171.jpg",
+   "draft": 1792421641,
+   "final": 1792423600
+  },
+  {
+   "id": "03_tl_door",
+   "title": "Back to the door",
+   "where": "north-west corner looking plan-south-east: bookcases, visitor chairs, the glazed front, 20 mm",
+   "photo": "Hub Space-172.jpg",
+   "draft": 1792422740,
+   "final": 1792424370
+  },
+  {
+   "id": "01b_tl_boards",
+   "title": "Chalkboards and the clock (with the 08:00 fixes)",
+   "where": "as 01, re-rendered: mesh chairs, desk items, chalk writing, the building outside, 20 mm",
+   "photo": "Hub Space-176.jpg",
+   "draft": null,
+   "final": 1792426285
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> First-floor plan calibration of the balcony / cafeteria / Upper Founder Space work (X = &minus;18.8 + px&middot;0.029984, Y = 7.83 &minus; (py&minus;187)&middot;0.030273); ray casts into the original GLB (upper_offices/probe_offices.py): wall faces, floor 2.44, soffit 5.00 at 5 points, door and window scans.</p><p><b>Photos.</b> 171&ndash;180 (29 Sep, 15:59&ndash;16:00, right after the west-wing corridor photos). The &ldquo;team lead office&rdquo; and &ldquo;hub personal&rdquo; folders hold the same files; they show one office with six desks, larger than either cell. 56 and 58 in those folders were taken at 15:23 between the IoT Lab and Smart Ideas photos (ground floor) and are not used. People in the photos are ignored.</p><p><b>Built as new objects.</b> Chalkboards and the wall clock on the west wall (176), the lead desk with an executive chair by the window and two red visitor chairs, a navy two-seat sofa beside the door, two glass-door bookcases with binders and a drawer unit with a printer on the east wall, vertical blinds, glazed office front on the corridor side, the door leaf standing open into the room.</p><p><b>Dropped (real scale, no shrinking).</b></p><ul><li>3 of the 6 mahogany desks in the photos (with their chairs): the two cells hold 3 desks with 0.4 m+ clear paths</li><li>one of the two navy sofas, two of the four glass-door bookcases, the copier (a desktop printer stands in for it)</li></ul><p><b>Differences from the photos.</b> (1) The photographed office is bigger than this cell, so fewer desks. (2) The model has no suspended ceiling: a 600 mm grid with LED panels is built at 2.51 m above the floor, as in the other upper rooms. (3) The wall above the chalkboards is solid in the model; the photos show a glazed clerestory there.</p>",
+ "updated": "2026-10-19 10:47:03"
+}

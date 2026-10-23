@@ -1,0 +1,86 @@
+{
+ "meta": {
+  "room": "Balcony",
+  "eye": 1.6,
+  "floor": 2.44,
+  "image_centre": "+X (plan)",
+  "count": 5,
+  "entry": "b00 links to the building page's first-floor entrance (Cafeteria, X 0.0 Y 5.0): no Cafeteria tour exists",
+  "links": [
+   [
+    "b00",
+    "floor1"
+   ]
+  ],
+  "generated": "2026-10-12T00:37:22"
+ },
+ "nodes": [
+  {
+   "id": "b00",
+   "x": -0.8,
+   "y": 6.9,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Cafeteria, just inside the balcony door",
+   "neighbours": [
+    "b01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "b01",
+   "x": -0.8,
+   "y": 8.75,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Balcony, outside the Cafeteria door",
+   "neighbours": [
+    "b00",
+    "b02",
+    "b03",
+    "b04"
+   ],
+   "order": 1
+  },
+  {
+   "id": "b02",
+   "x": -4.0,
+   "y": 12.1,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Balcony, west end by the railing",
+   "neighbours": [
+    "b01",
+    "b03"
+   ],
+   "order": 2
+  },
+  {
+   "id": "b03",
+   "x": 0.45,
+   "y": 11.9,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Balcony, by the planters",
+   "neighbours": [
+    "b01",
+    "b02",
+    "b04"
+   ],
+   "order": 3
+  },
+  {
+   "id": "b04",
+   "x": 3.0,
+   "y": 11.0,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Balcony, east end",
+   "neighbours": [
+    "b01",
+    "b03"
+   ],
+   "order": 4
+  }
+ ]
+}

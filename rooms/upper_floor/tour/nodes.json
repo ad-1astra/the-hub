@@ -1,0 +1,162 @@
+{
+ "meta": {
+  "room": "Upper floor",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 11,
+  "links": [
+   [
+    "u00",
+    "c06"
+   ],
+   [
+    "u09",
+    "c05"
+   ]
+  ],
+  "generated": "2026-10-19T00:19:50"
+ },
+ "nodes": [
+  {
+   "id": "u00",
+   "x": -6.9,
+   "y": 2.3,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "East arm, by the Cafeteria",
+   "neighbours": [
+    "u01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "u01",
+   "x": -8.95,
+   "y": 2.3,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Glass doors at the void's east end",
+   "neighbours": [
+    "u00",
+    "u02",
+    "u08"
+   ],
+   "order": 1
+  },
+  {
+   "id": "u02",
+   "x": -9.38,
+   "y": 3.71,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "North-east corner of the ring",
+   "neighbours": [
+    "u01",
+    "u03"
+   ],
+   "order": 2
+  },
+  {
+   "id": "u03",
+   "x": -12.1,
+   "y": 3.71,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "North corridor (Team Lead, Hub Personnel)",
+   "neighbours": [
+    "u02",
+    "u04"
+   ],
+   "order": 3
+  },
+  {
+   "id": "u04",
+   "x": -14.9,
+   "y": 3.71,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "North-west corner of the ring",
+   "neighbours": [
+    "u03",
+    "u05"
+   ],
+   "order": 4
+  },
+  {
+   "id": "u05",
+   "x": -16.9,
+   "y": 2.33,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "West arm (VIP Suite, Board Room)",
+   "neighbours": [
+    "u04",
+    "u06"
+   ],
+   "order": 5
+  },
+  {
+   "id": "u06",
+   "x": -14.9,
+   "y": 0.88,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "South-west corner of the ring",
+   "neighbours": [
+    "u05",
+    "u07"
+   ],
+   "order": 6
+  },
+  {
+   "id": "u07",
+   "x": -12.1,
+   "y": 0.88,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "South corridor (Board Room, IoTec)",
+   "neighbours": [
+    "u06",
+    "u08"
+   ],
+   "order": 7
+  },
+  {
+   "id": "u08",
+   "x": -9.38,
+   "y": 0.88,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "South-east corner of the ring",
+   "neighbours": [
+    "u07",
+    "u01"
+   ],
+   "order": 8
+  },
+  {
+   "id": "u09",
+   "x": -0.6,
+   "y": -0.55,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Lobby, north end",
+   "neighbours": [
+    "u10"
+   ],
+   "order": 9
+  },
+  {
+   "id": "u10",
+   "x": -0.6,
+   "y": -2.35,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Lobby, south end",
+   "neighbours": [
+    "u09"
+   ],
+   "order": 10
+  }
+ ]
+}

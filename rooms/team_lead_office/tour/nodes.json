@@ -1,0 +1,41 @@
+{
+ "meta": {
+  "room": "Team Lead Office",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 2,
+  "links": [
+   [
+    "t00",
+    "u03"
+   ]
+  ],
+  "generated": "2026-10-19T07:16:29"
+ },
+ "nodes": [
+  {
+   "id": "t00",
+   "x": -13.4,
+   "y": 4.8,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Team Lead Office, inside the door",
+   "neighbours": [
+    "t01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "t01",
+   "x": -14.75,
+   "y": 5.9,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Team Lead Office, by the chalkboards",
+   "neighbours": [
+    "t00"
+   ],
+   "order": 1
+  }
+ ]
+}

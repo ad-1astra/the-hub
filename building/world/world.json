@@ -1,0 +1,99 @@
+{
+ "chunks": {
+  "shell0": {
+   "glb": "world_shell0.glb",
+   "level": 0,
+   "version": 1792543163,
+   "glass": false,
+   "orm": "world_shell0_orm.png",
+   "orm_version": 1792570519
+  },
+  "shell1": {
+   "glb": "world_shell1.glb",
+   "level": 1,
+   "version": 1792545254,
+   "glass": false,
+   "orm": "world_shell1_orm.png",
+   "orm_version": 1792570524
+  },
+  "ext0": {
+   "glb": "world_ext0.glb",
+   "level": 0,
+   "version": 1792546238,
+   "glass": false,
+   "orm": "world_ext0_orm.png",
+   "orm_version": 1792570544
+  },
+  "in1c": {
+   "glb": "world_in1c.glb",
+   "level": 1,
+   "version": 1792548777,
+   "glass": false,
+   "orm": "world_in1c_orm.png",
+   "orm_version": 1792570460
+  },
+  "in1w": {
+   "glb": "world_in1w.glb",
+   "level": 1,
+   "version": 1792550989,
+   "glass": false,
+   "orm": "world_in1w_orm.png",
+   "orm_version": 1792570493
+  },
+  "trees": {
+   "glb": "world_trees.glb",
+   "level": 0,
+   "version": 1792554363,
+   "glass": false,
+   "orm": "world_trees_orm.png",
+   "orm_version": 1792570549
+  },
+  "ext2": {
+   "glb": "world_ext2.glb",
+   "level": 2,
+   "version": 1792555635,
+   "glass": false,
+   "orm": "world_ext2_orm.png",
+   "orm_version": 1792570539
+  },
+  "in1e": {
+   "glb": "world_in1e.glb",
+   "level": 1,
+   "version": 1792553572,
+   "glass": false,
+   "orm": "world_in1e_orm.png",
+   "orm_version": 1792570476
+  },
+  "in0": {
+   "glb": "world_in0.glb",
+   "level": 0,
+   "version": 1792597306,
+   "glass": false,
+   "orm": "world_in0_orm.png",
+   "orm_version": 1792570510
+  },
+  "roof": {
+   "glb": "world_roof.glb",
+   "level": 2,
+   "version": 1792555249,
+   "glass": false,
+   "orm": "world_roof_orm.png",
+   "orm_version": 1792570529
+  },
+  "ext1": {
+   "glb": "world_ext1.glb",
+   "level": 1,
+   "version": 1792554853,
+   "glass": false,
+   "orm": "world_ext1_orm.png",
+   "orm_version": 1792570534
+  },
+  "glass": {
+   "glb": "world_glass.glb",
+   "level": 0,
+   "version": 1792555637,
+   "glass": true
+  }
+ },
+ "updated": "2026-10-21 08:41:46"
+}

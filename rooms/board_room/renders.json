@@ -1,0 +1,30 @@
+{
+ "cams": [
+  {
+   "id": "01_br_screen",
+   "title": "Down the table to the screen wall",
+   "where": "east end looking plan-west: table, red chairs, screen, flags, banners, ACs, 20 mm",
+   "photo": "Hub Space-183.jpg",
+   "draft": 1792428425,
+   "final": 1792429597
+  },
+  {
+   "id": "02_br_east",
+   "title": "To the glazed end partition",
+   "where": "screen end looking plan-east: table, chairs, the end partition with screens, curtained windows, 20 mm",
+   "photo": "Hub Space-186.jpg",
+   "draft": 1792428757,
+   "final": 1792430434
+  },
+  {
+   "id": "03_br_window",
+   "title": "Across the table",
+   "where": "window corner looking plan-north-west: table, chairs, the glazed corridor front, 20 mm",
+   "photo": "Hub Space-189.jpg",
+   "draft": 1792428630,
+   "final": null
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> First-floor plan calibration of the balcony / cafeteria / Upper Founder Space work (X = &minus;18.8 + px&middot;0.029984, Y = 7.83 &minus; (py&minus;187)&middot;0.030273); ray casts into the original GLB (upper_offices/probe_offices.py): wall faces, floor 2.44, soffit 5.00 at 5 points, door and window scans.</p><p><b>Photos.</b> 181&ndash;190 (29 Sep, 16:02&ndash;16:04), all of them this room (board table, flags, PDM banners). People in the photos are ignored.</p><p><b>Built as new objects.</b> A mahogany boardroom table with rounded ends and 12 wooden armchairs upholstered in red (two in lime), the screen on a stand between the Uganda and East African Community flags, two PDM roll-up banners, the clock, the coat of arms and two air-conditioners on the west wall, sage-green walls, sheer curtains at the south windows, glazed fronts on the corridor side and at the east end with three dark screen panels, a 600 mm grid ceiling with six LED panels, both doors standing open.</p><p><b>Dropped (real scale, no shrinking).</b></p><ul><li>the U-shaped table for about 60 (about 14 m of table): one 4.4 &times; 1.2 m table with 12 seats fits with 1.2 m at both ends and about 0.75 m behind every chair</li><li>about 47 of the 60 chairs, and the second row along the windows</li><li>the lectern beside the screen; the bottles, cables, bags and papers on the table (two laptops and note pads stand in)</li><li>the potted plant in the window corner (it stood where the east 360 node needs its clearance)</li></ul><p><b>Differences from the photos.</b> (1) The photographed board room is about three times longer than the model's room, so one table for 12 instead of the U-table for about 60. (2) The model has no suspended ceiling: a 600 mm grid with LED panels is built at 2.51 m above the floor, as in the other upper rooms. (3) The corridor side is a solid wall in the model; the glazed fronts are built in front of it.</p>",
+ "updated": "2026-10-19 11:08:16"
+}

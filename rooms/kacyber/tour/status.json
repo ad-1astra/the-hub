@@ -1,0 +1,10 @@
+{
+ "state": "queued",
+ "done": 1,
+ "total": 7,
+ "avg_s": 312,
+ "started": "03:38",
+ "updated": "03:57",
+ "first_ready": null,
+ "eta_all": "06:25"
+}

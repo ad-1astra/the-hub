@@ -1,0 +1,468 @@
+{
+ "meta": {
+  "room": "Outside",
+  "eye": 1.6,
+  "image_centre": "+X (plan; real west)",
+  "count": 34,
+  "compass": "plan top = real south (shadows in the photos); names use the real compass",
+  "links": [
+   [
+    "o00",
+    "p10"
+   ],
+   [
+    "o16",
+    "p09"
+   ]
+  ],
+  "generated": "2026-10-08T01:34:17"
+ },
+ "nodes": [
+  {
+   "id": "o00",
+   "x": -0.35,
+   "y": 10.2,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Porch, at the front doors",
+   "neighbours": [
+    "o01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "o01",
+   "x": -0.35,
+   "y": 16.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Forecourt, foot of the porch steps",
+   "neighbours": [
+    "o00",
+    "o02",
+    "o06",
+    "o26"
+   ],
+   "order": 1
+  },
+  {
+   "id": "o02",
+   "x": -0.35,
+   "y": 22.5,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Forecourt (photo Hub Space-6)",
+   "neighbours": [
+    "o01",
+    "o03"
+   ],
+   "order": 2
+  },
+  {
+   "id": "o03",
+   "x": -0.35,
+   "y": 29.5,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Approach road",
+   "neighbours": [
+    "o02",
+    "o04"
+   ],
+   "order": 3
+  },
+  {
+   "id": "o04",
+   "x": -0.7,
+   "y": 37.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Approach road",
+   "neighbours": [
+    "o03",
+    "o05"
+   ],
+   "order": 4
+  },
+  {
+   "id": "o05",
+   "x": -0.7,
+   "y": 44.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Approach road (photo Hub Space)",
+   "neighbours": [
+    "o04"
+   ],
+   "order": 5
+  },
+  {
+   "id": "o06",
+   "x": 6.8,
+   "y": 12.2,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Front parking, west wing",
+   "neighbours": [
+    "o01",
+    "o07"
+   ],
+   "order": 6
+  },
+  {
+   "id": "o07",
+   "x": 13.3,
+   "y": 12.2,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Front parking, west wing",
+   "neighbours": [
+    "o06",
+    "o08"
+   ],
+   "order": 7
+  },
+  {
+   "id": "o08",
+   "x": 19.6,
+   "y": 13.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Front parking, west corner",
+   "neighbours": [
+    "o07",
+    "o09"
+   ],
+   "order": 8
+  },
+  {
+   "id": "o09",
+   "x": 23.6,
+   "y": 7.5,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "West end",
+   "neighbours": [
+    "o08",
+    "o10"
+   ],
+   "order": 9
+  },
+  {
+   "id": "o10",
+   "x": 23.6,
+   "y": 1.5,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "West end",
+   "neighbours": [
+    "o09",
+    "o11"
+   ],
+   "order": 10
+  },
+  {
+   "id": "o11",
+   "x": 23.6,
+   "y": -5.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "North-west corner",
+   "neighbours": [
+    "o10",
+    "o12"
+   ],
+   "order": 11
+  },
+  {
+   "id": "o12",
+   "x": 17.0,
+   "y": -8.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "North lawn, west (photo 209)",
+   "neighbours": [
+    "o11",
+    "o13"
+   ],
+   "order": 12
+  },
+  {
+   "id": "o13",
+   "x": 10.4,
+   "y": -8.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "North lawn, by the terrace steps",
+   "neighbours": [
+    "o12",
+    "o14",
+    "o27"
+   ],
+   "order": 13
+  },
+  {
+   "id": "o14",
+   "x": 10.4,
+   "y": -4.25,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "North terrace, top of the steps",
+   "neighbours": [
+    "o13",
+    "o15"
+   ],
+   "order": 14
+  },
+  {
+   "id": "o15",
+   "x": 4.8,
+   "y": -4.15,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Covered passage, west mouth",
+   "neighbours": [
+    "o14",
+    "o16"
+   ],
+   "order": 15
+  },
+  {
+   "id": "o16",
+   "x": -0.4,
+   "y": -4.15,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Covered passage, rear door to the Reception",
+   "neighbours": [
+    "o15",
+    "o17"
+   ],
+   "order": 16
+  },
+  {
+   "id": "o17",
+   "x": -5.6,
+   "y": -4.15,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Covered passage, east end",
+   "neighbours": [
+    "o16",
+    "o18"
+   ],
+   "order": 17
+  },
+  {
+   "id": "o18",
+   "x": -12.8,
+   "y": -4.25,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "North terrace, east",
+   "neighbours": [
+    "o17",
+    "o19"
+   ],
+   "order": 18
+  },
+  {
+   "id": "o19",
+   "x": -12.8,
+   "y": -8.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "North lawn, east (photo 227)",
+   "neighbours": [
+    "o18",
+    "o20",
+    "o32"
+   ],
+   "order": 19
+  },
+  {
+   "id": "o20",
+   "x": -18.6,
+   "y": -8.0,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "North lawn, east corner",
+   "neighbours": [
+    "o19",
+    "o21",
+    "o33"
+   ],
+   "order": 20
+  },
+  {
+   "id": "o21",
+   "x": -21.9,
+   "y": -3.0,
+   "z": 2.308,
+   "floor": 0.708,
+   "name": "East end",
+   "neighbours": [
+    "o20",
+    "o22"
+   ],
+   "order": 21
+  },
+  {
+   "id": "o22",
+   "x": -21.9,
+   "y": 2.5,
+   "z": 2.308,
+   "floor": 0.708,
+   "name": "East end",
+   "neighbours": [
+    "o21",
+    "o23"
+   ],
+   "order": 22
+  },
+  {
+   "id": "o23",
+   "x": -21.9,
+   "y": 8.5,
+   "z": 2.308,
+   "floor": 0.708,
+   "name": "South-east corner",
+   "neighbours": [
+    "o22",
+    "o24"
+   ],
+   "order": 23
+  },
+  {
+   "id": "o24",
+   "x": -19.0,
+   "y": 12.5,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Front parking, east corner",
+   "neighbours": [
+    "o23",
+    "o25"
+   ],
+   "order": 24
+  },
+  {
+   "id": "o25",
+   "x": -12.8,
+   "y": 12.2,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Front parking, east wing",
+   "neighbours": [
+    "o24",
+    "o26"
+   ],
+   "order": 25
+  },
+  {
+   "id": "o26",
+   "x": -6.8,
+   "y": 12.2,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Front parking, east wing",
+   "neighbours": [
+    "o25",
+    "o01"
+   ],
+   "order": 26
+  },
+  {
+   "id": "o27",
+   "x": 10.2,
+   "y": -11.2,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Auditorium, sunlit west glazing (photo 213)",
+   "neighbours": [
+    "o13",
+    "o28"
+   ],
+   "order": 27
+  },
+  {
+   "id": "o28",
+   "x": 8.0,
+   "y": -17.2,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Behind the Auditorium, west",
+   "neighbours": [
+    "o27",
+    "o29"
+   ],
+   "order": 28
+  },
+  {
+   "id": "o29",
+   "x": 1.5,
+   "y": -17.5,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Behind the Auditorium",
+   "neighbours": [
+    "o28",
+    "o30"
+   ],
+   "order": 29
+  },
+  {
+   "id": "o30",
+   "x": -5.0,
+   "y": -17.5,
+   "z": 1.326,
+   "floor": -0.274,
+   "name": "Behind the Auditorium, east",
+   "neighbours": [
+    "o29",
+    "o31"
+   ],
+   "order": 30
+  },
+  {
+   "id": "o31",
+   "x": -11.2,
+   "y": -14.8,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Auditorium, north-east corner",
+   "neighbours": [
+    "o30",
+    "o32",
+    "o33"
+   ],
+   "order": 31
+  },
+  {
+   "id": "o32",
+   "x": -11.4,
+   "y": -9.6,
+   "z": 1.3,
+   "floor": -0.3,
+   "name": "Auditorium, east glazing (photo 226)",
+   "neighbours": [
+    "o31",
+    "o19"
+   ],
+   "order": 32
+  },
+  {
+   "id": "o33",
+   "x": -23.45,
+   "y": -21.1,
+   "z": 3.691,
+   "floor": 2.091,
+   "name": "On the bank (photo 221)",
+   "neighbours": [
+    "o31",
+    "o20"
+   ],
+   "order": 33
+  }
+ ]
+}

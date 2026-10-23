@@ -1,0 +1,41 @@
+{
+ "meta": {
+  "room": "Meeting Podium 2 (first floor)",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 2,
+  "links": [
+   [
+    "n00",
+    "f05"
+   ]
+  ],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "n00",
+   "x": 5.57,
+   "y": -0.52,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Meeting Podium 2, inside the door",
+   "neighbours": [
+    "n01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "n01",
+   "x": 6.32,
+   "y": -0.7,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Meeting Podium 2, by the table",
+   "neighbours": [
+    "n00"
+   ],
+   "order": 1
+  }
+ ]
+}

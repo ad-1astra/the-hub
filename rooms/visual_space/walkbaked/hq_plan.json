@@ -1,0 +1,21 @@
+{
+ "why": "floor measured 261 s/Mtexel at 256 spp (52.9 min): full spec fits in ~1.85 h, so ceiling/east/south are back at 2048",
+ "groups": [
+  "floor",
+  "furn_a",
+  "furn_b",
+  "wall_north",
+  "ceiling",
+  "wall_east",
+  "wall_south"
+ ],
+ "res": {
+  "floor": 4096,
+  "furn_a": 2048,
+  "furn_b": 2048,
+  "wall_north": 2048,
+  "ceiling": 2048,
+  "wall_east": 2048,
+  "wall_south": 2048
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "meta": {
+  "room": "UJ Connect",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 2,
+  "links": [
+   [
+    "j00",
+    "u09"
+   ],
+   [
+    "j01",
+    "c06"
+   ]
+  ],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "j00",
+   "x": -2.25,
+   "y": 0.2,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "UJ Connect, inside the lobby door",
+   "neighbours": [
+    "j01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "j01",
+   "x": -3.65,
+   "y": 0.45,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "UJ Connect, by the Cafeteria door",
+   "neighbours": [
+    "j00"
+   ],
+   "order": 1
+  }
+ ]
+}

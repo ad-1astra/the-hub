@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IoT Lab 360 Tour</title>
+<link rel="stylesheet" href="lib/pannellum.css">
+<style>
+:root{--bg:#16181b;--panel:rgba(250,249,246,.94);--line:#d8d3cb;--fg:#1d1f22;--mut:#676259;--accent:#9d5f3f}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);
+ font:14px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#pano{position:absolute;inset:0}
+.panel{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+ box-shadow:0 2px 14px rgba(0,0,0,.25);z-index:5}
+#info{top:14px;left:14px;padding:10px 13px;width:250px}
+#info h1{font-size:15px;margin:0 0 2px}
+#info .where{font-size:17px;font-weight:600;margin-top:6px}
+#info .sub{font-size:12px;color:var(--mut)}
+#status{font-size:12px;color:var(--mut);margin-top:8px}
+#keys{font-size:11.5px;color:var(--mut);margin-top:6px}
+#mini{bottom:14px;left:14px;padding:8px}
+#mini canvas{display:block;border-radius:5px;cursor:pointer}
+#mini .cap{font-size:11px;color:var(--mut);text-align:center;margin-top:3px}
+/* floor arrows between nodes */
+.arrowspot{width:58px;height:58px;margin:-29px 0 0 -29px;cursor:pointer}
+.arrowspot .ring{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,.22);
+ border:2px solid rgba(255,255,255,.85);box-shadow:0 0 10px rgba(0,0,0,.35);transform:scaleY(.55);
+ transition:background .15s}
+.arrowspot:hover .ring{background:rgba(157,95,63,.75)}
+.arrowspot .chev{position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-12px 0 0 -8px;
+ border-top:4px solid #fff;border-left:4px solid #fff;transform:rotate(45deg);filter:drop-shadow(0 0 2px #000)}
+.arrowspot .lbl{position:absolute;top:56px;left:50%;transform:translateX(-50%);white-space:nowrap;
+ font-size:12px;color:#fff;background:rgba(0,0,0,.55);padding:1px 7px;border-radius:4px;opacity:0;transition:opacity .15s}
+.arrowspot:hover .lbl{opacity:1}
+#err{display:none;top:50%;left:50%;transform:translate(-50%,-50%);padding:16px 20px;color:#7d3b36;
+ border-left:4px solid #b2554f;max-width:520px}
+</style>
+</head>
+<body>
+<div id="pano"></div>
+<div class="panel" id="info">
+  <h1>IoT Lab &middot; 360&deg; tour</h1>
+  <div class="sub">Cycles panoramas of the approved IoT Lab furnished scene, eye height 1.6 m</div>
+  <div class="where" id="where">&mdash;</div>
+  <div class="sub" id="coords"></div>
+  <div id="status">Loading&hellip;</div>
+  <div id="keys">Drag to look &middot; click a floor ring to move &middot; <b>W</b> forward / <b>S</b> back
+    &middot; <b>A D</b> or arrows turn &middot; minimap click jumps</div>
+</div>
+<div class="panel" id="mini"><canvas id="map" width="320" height="230"></canvas>
+  <div class="cap">filled = rendered &middot; grey = not rendered yet</div></div>
+<div class="panel" id="err"></div>
+
+<script src="lib/pannellum.js"></script>
+<script>
+"use strict";
+const EYE = 1.6;
+const NAMES = { p00:'Corridor, outside the doorway', p01:'Doorway', p02:'Lab shelving',
+                p03:'Room centre', p04:'Printer corner', p05:'By the TV' };
+let nodes = [], byId = {}, rendered = new Set(), viewer = null, current = null;
+const errEl = document.getElementById('err');
+function fail(m) { errEl.style.display = 'block'; errEl.textContent = m; console.error(m); }
+
+// image centre looks +X (east); yaw grows clockwise seen from above, i.e. toward -Y
+const yawTo = (a, b) => -Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+const dist = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
+const label = n => NAMES[n.id] || ('Node ' + n.id);
+
+function arrow(div, n) {
+  div.classList.add('arrowspot');
+  div.innerHTML = '<div class="ring"></div><div class="chev"></div><div class="lbl">' + label(n) + '</div>';
+  div.dataset.target = n.id;
+}
+function hotspotsFor(n) {
+  return n.neighbours.filter(id => rendered.has(id)).map(id => {
+    const m = byId[id], d = dist(n, m);
+    return { id: 'to_' + id, type: 'scene', sceneId: id, targetYaw: 'sameAzimuth',
+             yaw: yawTo(n, m), pitch: -Math.atan2(EYE, d) * 180 / Math.PI,
+             cssClass: 'arrowspot-host', createTooltipFunc: arrow, createTooltipArgs: m };
+  });
+}
+function sceneCfg(n) {
+  return { type: 'equirectangular', panorama: n.id + '.png', title: '', hfov: 100,
+           yaw: 0, pitch: -4, hotSpots: hotspotsFor(n) };
+}
+
+async function exists(id) {
+  try { const r = await fetch(id + '.png', { method: 'HEAD', cache: 'no-store' }); return r.ok; }
+  catch (e) { return false; }
+}
+async function scan() {
+  // rendered.json is written by build_gallery.py (the watcher refreshes it every minute)
+  let list = null;
+  try { const r = await fetch('rendered.json', { cache: 'no-store' }); if (r.ok) list = await r.json(); } catch (e) {}
+  const fresh = [];
+  for (const n of nodes) {
+    if (rendered.has(n.id)) continue;
+    if (list ? list.includes(n.id) : await exists(n.id)) { rendered.add(n.id); fresh.push(n); }
+  }
+  return fresh;
+}
+
+function addFresh(fresh) {
+  for (const n of fresh) viewer.addScene(n.id, sceneCfg(n));
+  // existing scenes gain arrows toward the newly rendered nodes
+  for (const n of fresh) for (const m of nodes) {
+    if (m.id === n.id || !rendered.has(m.id) || fresh.includes(m)) continue;
+    if (m.neighbours.includes(n.id)) {
+      const d = dist(m, n);
+      viewer.addHotSpot({ id: 'to_' + n.id, type: 'scene', sceneId: n.id, targetYaw: 'sameAzimuth',
+        yaw: yawTo(m, n), pitch: -Math.atan2(EYE, d) * 180 / Math.PI, cssClass: 'arrowspot-host',
+        createTooltipFunc: arrow, createTooltipArgs: n }, m.id);
+    }
+  }
+}
+function setStatus() {
+  const s = document.getElementById('status');
+  s.textContent = rendered.size + ' of ' + nodes.length + ' panoramas rendered' +
+    (rendered.size < nodes.length ? ' - the batch is still running, new ones appear automatically.' : '.');
+}
+
+// ---- movement --------------------------------------------------------------------------------
+function go(id) {
+  if (!rendered.has(id) || !viewer || id === current) return false;
+  viewer.loadScene(id, 'same', 'sameAzimuth', 'same');
+  return true;
+}
+function stepDir(back) {
+  if (!current) return null;
+  const n = byId[current], view = viewer.getYaw() + (back ? 180 : 0);
+  let best = null, bestA = 55;
+  for (const id of n.neighbours) {
+    if (!rendered.has(id)) continue;
+    let a = Math.abs(((yawTo(n, byId[id]) - view) % 360 + 540) % 360 - 180);
+    if (a < bestA) { bestA = a; best = id; }
+  }
+  if (best) go(best);
+  return best;
+}
+addEventListener('keydown', e => {
+  if (!viewer) return;
+  const k = e.key.toLowerCase();
+  if (k === 'w' || e.key === 'ArrowUp') stepDir(false);
+  else if (k === 's' || e.key === 'ArrowDown') stepDir(true);
+  else if (k === 'a' || e.key === 'ArrowLeft') viewer.setYaw(viewer.getYaw() - 15, 250);
+  else if (k === 'd' || e.key === 'ArrowRight') viewer.setYaw(viewer.getYaw() + 15, 250);
+});
+
+// ---- minimap ---------------------------------------------------------------------------------
+// plan.jpg calibration (same as the walk page): px 1 -> X -18.8, 0.0400853 m/px; py 135 -> Y +7.8, 0.040288 m/px
+const PLAN = { x0:1, mx0:-18.8, sx:0.0400853, y0:135, my0:7.8, sy:0.040288 };
+const VIEW = { bx0:-17.4, bx1:-9.9, by0:-3.40, by1:2.00 };      // 7.5 x 5.4 m around the IoT Lab
+const map = document.getElementById('map'), ctx = map.getContext('2d');
+const plan = new Image(); plan.src = 'lib/plan.jpg';
+const m2p = (bx, by) => ({ x: (bx - VIEW.bx0) / (VIEW.bx1 - VIEW.bx0) * map.width,
+                           y: (VIEW.by1 - by) / (VIEW.by1 - VIEW.by0) * map.height });
+const planPx = (bx, by) => ({ x: PLAN.x0 + (bx - PLAN.mx0) / PLAN.sx, y: PLAN.y0 + (PLAN.my0 - by) / PLAN.sy });
+function drawMap() {
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, map.width, map.height);
+  if (plan.complete && plan.naturalWidth) {
+    const a = planPx(VIEW.bx0, VIEW.by1), b = planPx(VIEW.bx1, VIEW.by0);
+    ctx.globalAlpha = .9; ctx.drawImage(plan, a.x, a.y, b.x - a.x, b.y - a.y, 0, 0, map.width, map.height);
+    ctx.globalAlpha = 1;
+  }
+  ctx.strokeStyle = 'rgba(157,95,63,.35)'; ctx.lineWidth = 1;
+  for (const n of nodes) for (const id of n.neighbours) if (id > n.id) {
+    const a = m2p(n.x, n.y), b = m2p(byId[id].x, byId[id].y);
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+  if (current && viewer) {               // view cone
+    const n = byId[current], p = m2p(n.x, n.y), yaw = viewer.getYaw() * Math.PI / 180;
+    const hf = (viewer.getHfov() / 2) * Math.PI / 180;
+    // plan direction for a yaw: east = +x on screen, yaw clockwise -> screen angle = yaw (y down)
+    ctx.fillStyle = 'rgba(157,95,63,.28)'; ctx.beginPath(); ctx.moveTo(p.x, p.y);
+    ctx.arc(p.x, p.y, 34, yaw - hf, yaw + hf); ctx.closePath(); ctx.fill();
+  }
+  for (const n of nodes) {
+    const p = m2p(n.x, n.y), on = rendered.has(n.id);
+    ctx.beginPath(); ctx.arc(p.x, p.y, n.id === current ? 7 : 5, 0, 7);
+    ctx.fillStyle = n.id === current ? '#9d5f3f' : (on ? 'rgba(157,95,63,.85)' : '#c9c6c1');
+    ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = on ? '#fff' : '#8f8b85'; ctx.stroke();
+  }
+}
+map.addEventListener('click', e => {
+  const r = map.getBoundingClientRect(), x = (e.clientX - r.left) * map.width / r.width,
+        y = (e.clientY - r.top) * map.height / r.height;
+  let best = null, bd = 18;
+  for (const n of nodes) { const p = m2p(n.x, n.y), d = Math.hypot(p.x - x, p.y - y);
+    if (d < bd && rendered.has(n.id)) { bd = d; best = n.id; } }
+  if (best) go(best);
+});
+
+function onScene(id) {
+  current = id;
+  const n = byId[id];
+  document.getElementById('where').textContent = label(n);
+  document.getElementById('coords').textContent = id + ' · X ' + n.x.toFixed(2) + '  Y ' + n.y.toFixed(2) +
+    ' · eye ' + EYE.toFixed(1) + ' m';
+}
+
+// ---- start -----------------------------------------------------------------------------------
+(async () => {
+  let data;
+  try { data = await (await fetch('nodes.json', { cache: 'no-store' })).json(); }
+  catch (e) { return fail('Could not load nodes.json: ' + e.message); }
+  nodes = data.nodes; nodes.forEach(n => byId[n.id] = n);
+  await scan(); setStatus();
+  if (!rendered.size) {
+    document.getElementById('status').textContent = '0 of ' + nodes.length +
+      ' panoramas rendered yet - this page will start by itself when the first one is ready.';
+    drawMap();
+    const wait = setInterval(async () => { if ((await scan()).length) { clearInterval(wait); location.reload(); } }, 20000);
+    return;
+  }
+  const first = ['p01', 'p03', 'p04'].find(id => rendered.has(id)) || [...rendered][0];
+  const scenes = {};
+  for (const id of rendered) scenes[id] = sceneCfg(byId[id]);
+  // first view from the doorway looks into the room (south, toward the window)
+  scenes[first].yaw = yawTo(byId[first], { x: byId[first].x, y: byId[first].y - 5 });
+  viewer = pannellum.viewer('pano', {
+    default: { firstScene: first, sceneFadeDuration: 650, autoLoad: true, showFullscreenCtrl: true,
+               keyboardZoom: false, disableKeyboardCtrl: true, compass: false, hfov: 100, minHfov: 50, maxHfov: 120 },
+    scenes });
+  viewer.on('scenechange', onScene);
+  viewer.on('load', () => { onScene(viewer.getScene()); window.__tour.loads++; });
+  viewer.on('error', m => fail('Panorama error: ' + m));
+  onScene(first);
+  (function loop() { drawMap(); requestAnimationFrame(loop); })();
+  setInterval(async () => { const f = await scan(); if (f.length) { addFresh(f); setStatus(); } }, 30000);
+})();
+
+window.__tour = {
+  loads: 0,
+  get ready() { return !!viewer && this.loads > 0; },
+  current: () => current, rendered: () => [...rendered], nodes: () => nodes.length,
+  go: id => go(id), forward: () => stepDir(false), back: () => stepDir(true),
+  hotspots: () => [...document.querySelectorAll('.arrowspot')].filter(d => d.offsetParent).map(d => d.dataset.target),
+  look: (yaw, pitch = -4) => viewer.lookAt(pitch, yaw, 100, false),
+};
+</script>
+</body>
+</html>

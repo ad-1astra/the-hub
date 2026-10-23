@@ -1,0 +1,247 @@
+{
+ "rooms": {
+  "upper_washroom_gents": {
+   "title": "Gents Room (first floor)",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "2 of 2 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": false,
+   "tour": true,
+   "panoramas": 2,
+   "nodes": 2,
+   "finals": 2,
+   "drafts": 1
+  },
+  "upper_washroom_ladies": {
+   "title": "Ladies Room (first floor)",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "2 of 2 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": false,
+   "tour": true,
+   "panoramas": 2,
+   "nodes": 2,
+   "finals": 2,
+   "drafts": 1
+  },
+  "uj_connect": {
+   "title": "UJ Connect",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "2 of 2 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 2,
+   "nodes": 2,
+   "finals": 2,
+   "drafts": 1
+  },
+  "kitchen": {
+   "title": "Kitchen",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "3 of 3 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 3,
+   "nodes": 3,
+   "finals": 2,
+   "drafts": 1
+  },
+  "meeting_podium_1": {
+   "title": "Meeting Podium 1 (ground floor)",
+   "floor": 0,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "2 of 2 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 2,
+   "nodes": 2,
+   "finals": 2,
+   "drafts": 1
+  },
+  "meeting_podium_2": {
+   "title": "Meeting Podium 2 (first floor)",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "2 of 2 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 2,
+   "nodes": 2,
+   "finals": 2,
+   "drafts": 1
+  },
+  "servers_room": {
+   "title": "Servers Room (Cloud Centre)",
+   "floor": 0,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "2 of 2 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 2,
+   "nodes": 2,
+   "finals": 2,
+   "drafts": 1
+  },
+  "startup_space": {
+   "title": "Startup Space",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "3 of 3 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 3,
+   "nodes": 3,
+   "finals": 2,
+   "drafts": 1
+  },
+  "janitors_room": {
+   "title": "Janitor's Room",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "1 of 1 finals"
+   ],
+   "typical": true,
+   "tour": false,
+   "panoramas": 0,
+   "nodes": 0,
+   "finals": 1,
+   "drafts": 1
+  },
+  "office_space_1": {
+   "title": "Office Space 1",
+   "floor": 0,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "2 of 2 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 2,
+   "nodes": 2,
+   "finals": 2,
+   "drafts": 1
+  },
+  "io_tech": {
+   "title": "Io Tech",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "2 of 2 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 2,
+   "nodes": 2,
+   "finals": 2,
+   "drafts": 1
+  },
+  "podcast_room": {
+   "title": "Podcast Room (The Pod)",
+   "floor": 0,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "3 of 3 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 3,
+   "nodes": 3,
+   "finals": 2,
+   "drafts": 1
+  },
+  "vip_suite": {
+   "title": "VIP Suite",
+   "floor": 1,
+   "step": "complete",
+   "frac": 1.0,
+   "done": [
+    "fast draft",
+    "2 of 2 finals",
+    "3 of 3 panoramas",
+    "tour 2048 pass"
+   ],
+   "typical": true,
+   "tour": true,
+   "panoramas": 3,
+   "nodes": 3,
+   "finals": 2,
+   "drafts": 1
+  }
+ },
+ "now": {
+  "room": "VIP Suite",
+  "step": "tour 2048",
+  "n": 3,
+  "N": 3
+ },
+ "eta": "2026-10-20 17:07",
+ "running": false,
+ "final": "COMPLETE",
+ "skipped": [],
+ "updated": "2026-10-20 17:07:27"
+}

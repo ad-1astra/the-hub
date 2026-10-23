@@ -1,0 +1,103 @@
+{
+ "meta": {
+  "room": "Stairs",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 6,
+  "links": [
+   [
+    "s00",
+    "p09"
+   ],
+   [
+    "s01",
+    "c05"
+   ],
+   [
+    "s01",
+    "u09"
+   ],
+   [
+    "s05",
+    "f03"
+   ]
+  ],
+  "generated": "2026-10-19T00:19:50"
+ },
+ "nodes": [
+  {
+   "id": "s00",
+   "x": 3.35,
+   "y": 0.75,
+   "z": 3.2,
+   "floor": 1.6,
+   "name": "Reception stair, landing",
+   "neighbours": [
+    "s01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "s01",
+   "x": 0.75,
+   "y": 0.75,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Reception stair, top (lobby)",
+   "neighbours": [
+    "s00"
+   ],
+   "order": 1
+  },
+  {
+   "id": "s02",
+   "x": 14.55,
+   "y": 4.27,
+   "z": 1.6,
+   "floor": 0.0,
+   "name": "Founder Space stair, bottom (Founder Space 1)",
+   "neighbours": [
+    "s03"
+   ],
+   "order": 2
+  },
+  {
+   "id": "s03",
+   "x": 17.7,
+   "y": 4.3,
+   "z": 2.54,
+   "floor": 0.94,
+   "name": "Founder Space stair, first landing",
+   "neighbours": [
+    "s02",
+    "s04"
+   ],
+   "order": 3
+  },
+  {
+   "id": "s04",
+   "x": 18.15,
+   "y": 2.07,
+   "z": 3.18,
+   "floor": 1.58,
+   "name": "Founder Space stair, second landing",
+   "neighbours": [
+    "s03",
+    "s05"
+   ],
+   "order": 4
+  },
+  {
+   "id": "s05",
+   "x": 14.5,
+   "y": 2.07,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Founder Space stair, top (Founder Space 2)",
+   "neighbours": [
+    "s04"
+   ],
+   "order": 5
+  }
+ ]
+}

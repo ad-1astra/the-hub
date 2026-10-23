@@ -1,0 +1,30 @@
+{
+ "cams": [
+  {
+   "id": "04_ring",
+   "title": "The ring round the Opening to ground level",
+   "where": "at the open glass doors, looking plan-west across the opening to the teal end wall, 24 mm",
+   "photo": "Hub Space-163.jpg",
+   "draft": 1792394867,
+   "final": 1792404114
+  },
+  {
+   "id": "05_lobby",
+   "title": "The lobby into the Cafeteria",
+   "where": "south end of the lobby looking plan-north: office fronts, doors, the Cafeteria beyond, 24 mm",
+   "photo": "Hub Space-156.jpg",
+   "draft": 1792394972,
+   "final": 1792405149
+  },
+  {
+   "id": "06_ring_n",
+   "title": "North ring corridor",
+   "where": "east end of the north corridor, the railing and the opening on the left, 24 mm",
+   "photo": "Hub Space-167.jpg",
+   "draft": 1792395067,
+   "final": null
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> Ring faces N y 4.14, S y 0.49, W x &minus;15.42; arms Y 1.27..3.34; lobby faces x &minus;1.78 / +0.50.\nDoor openings (scripts/probe_doors.py): Team Lead &minus;14.05..&minus;12.75, Hub Personnel &minus;10.95..&minus;9.85, Board Room &minus;13.90..&minus;12.85 and\n&minus;17.60..&minus;16.60, IoTec &minus;11.00..&minus;9.80, VIP Suite &minus;17.65..&minus;16.60, east arm &minus;6.90..&minus;5.85 / &minus;7.70..&minus;6.40; lobby: two doors on each side.</p>\n<p><b>Photos.</b> 160&ndash;170 and 191&ndash;196 show the ring and its arms. 154&ndash;157 show the lobby.</p>\n<p><b>Built as new objects.</b> 500 mm floor tiles; pale aqua walls and a deep teal end wall (&ldquo;Dream big&rdquo; poster, notices, a display case with a 3D printer);\na ceiling with a foil coffer over the opening; glazed office fronts (white aluminium, frosted lower band, dark glass, louvres); doors closing every model\nopening; an open glass double door at the ring's east end; signs (VIP SUITE, TEAM LEAD, HUB PERSONNEL, BOARD ROOM, IoTec); posters; IoTec banners;\na red chair; rusty concrete planters with plants at both ends of the void; railings and fascia round the void; fire alarm, CCTV, smoke detectors.\nLobby: doors, office front, extinguishers, a fire-exit sign, the end window with a ladder and a plant. The ground floor below the opening has a bench and plants.</p>\n<p><b>Differences from the photos.</b> (1) The model corridors are about 0.8 m wide (about 1.5 m real), so the views are tighter. (2) Ceiling 2.51 m in the\nmodel against about 3 m real. (3) The rooms behind the office glass are not modelled (dark glass).</p>",
+ "updated": "2026-10-19 07:45:36"
+}

@@ -1,0 +1,36 @@
+{
+ "version": "20261002-070543",
+ "glb": "visual_space_walk.glb",
+ "bytes": 11255612,
+ "baked": [
+  "ceiling",
+  "floor",
+  "furn_a",
+  "furn_b",
+  "wall_east",
+  "wall_north",
+  "wall_south",
+  "wall_west"
+ ],
+ "placeholder": [],
+ "atlas_res": {
+  "wall_south": 1024,
+  "wall_west": 1024,
+  "wall_east": 1024,
+  "wall_north": 1024,
+  "floor": 4096,
+  "ceiling": 1024,
+  "furn_b": 1024,
+  "furn_a": 2048
+ },
+ "atlas_spp": {
+  "wall_south": 64,
+  "wall_west": 64,
+  "wall_east": 64,
+  "wall_north": 64,
+  "floor": 256,
+  "ceiling": 64,
+  "furn_b": 64,
+  "furn_a": 256
+ }
+}

@@ -1,0 +1,41 @@
+{
+ "meta": {
+  "room": "Ladies Room (first floor)",
+  "eye": 1.6,
+  "image_centre": "+X (plan)",
+  "count": 2,
+  "links": [
+   [
+    "l00",
+    "u10"
+   ]
+  ],
+  "generated": "2026-10-20T04:40:10"
+ },
+ "nodes": [
+  {
+   "id": "l00",
+   "x": -2.45,
+   "y": -2.55,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Ladies (first floor), inside the door",
+   "neighbours": [
+    "l01"
+   ],
+   "order": 0
+  },
+  {
+   "id": "l01",
+   "x": -3.35,
+   "y": -2.62,
+   "z": 4.04,
+   "floor": 2.44,
+   "name": "Ladies (first floor), by the cubicles",
+   "neighbours": [
+    "l00"
+   ],
+   "order": 1
+  }
+ ]
+}

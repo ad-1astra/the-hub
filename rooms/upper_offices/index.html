@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upper Offices — National ICT Innovation Hub</title>
+<style>
+:root{--bg:#f6f4f0;--panel:#fff;--line:#ded8cf;--fg:#1d1f22;--mut:#6b665d;--accent:#9d5f3f;--ok:#3f7d5a;--warn:#a0632a;--bar:#ece8e1}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#17181a;--panel:#212226;--line:#34353a;--fg:#ececef;--mut:#a09d97;--bar:#2c2d31}}
+:root[data-theme="dark"]{--bg:#17181a;--panel:#212226;--line:#34353a;--fg:#ececef;--mut:#a09d97;--bar:#2c2d31}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 16px 60px}
+a{color:var(--accent)}
+h1{font-size:26px;margin:6px 0 6px}
+.sub{color:var(--mut);max-width:980px;margin:0 0 18px}
+.btns a{display:inline-block;margin:0 8px 8px 0;padding:8px 15px;border-radius:8px;border:2px solid var(--accent);text-decoration:none;font-weight:700}
+.btns a.main{background:var(--accent);color:#fff}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:10px}
+@media (max-width:980px){.cards{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.card .img{aspect-ratio:16/9;background:var(--bar);display:grid;place-items:center;color:var(--mut);font-size:13px;overflow:hidden}
+.card .img img{width:100%;height:100%;object-fit:cover;display:block}
+.card .body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h2{font-size:18px;margin:0}
+.meta{font-size:12.5px;color:var(--mut)}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff;background:var(--mut)}
+.pill.ok{background:var(--ok)}.pill.run{background:var(--accent)}.pill.hold{background:var(--warn)}
+.bar{height:8px;background:var(--bar);border-radius:5px;overflow:hidden}.bar div{height:100%;width:0;background:var(--ok);transition:width .6s}
+.links{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+.links a{font-weight:700;text-decoration:none;padding:6px 12px;border-radius:7px;border:2px solid var(--accent)}
+.links a.p{background:var(--accent);color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="btns"><a class="main" href="../../upper-floor/index.html">Upper floor (whole first floor) &rarr;</a><a href="../../building/index.html">Whole building</a><a href="../../index.html">Gallery</a></div>
+  <h1>Upper offices &middot; first floor</h1>
+  <p class="sub">The three offices on the west wing of the first floor, rendered from their photos in the same pipeline and colour management as the
+  Reception, the corridors, the Cafeteria and the Upper Founder Space. Each card shows the best render so far and its live status; each room page has
+  the 360 walk at the top and the renders beside their photos. This page updates by itself.</p>
+  <div class="cards" id="cards"></div>
+</div>
+<script>
+"use strict";
+const ROOMS = [
+  { slug: 'team_lead_office', n: 'Team Lead Office', cam: '01_tl_boards', size: '12.2 m² · 3.46 × 3.52 m' },
+  { slug: 'hub_personel', n: 'Hub Personel', cam: '01_hp_mint', size: '10.2 m² · 2.89 × 3.53 m' },
+  { slug: 'board_room', n: 'Board Room', cam: '01_br_screen', size: '26.9 m² · 6.8 × 3.6 m (L-shaped) · one table for 12 at real scale' },
+];
+const box = document.getElementById('cards');
+for (const r of ROOMS) {
+  const c = document.createElement('div'); c.className = 'card'; c.id = 'card_' + r.slug;
+  c.innerHTML = `<div class="img">${r.hold ? 'on hold' : 'not rendered yet'}</div><div class="body"><h2>${r.n}</h2>
+    <div class="meta">${r.size}</div><div class="st"></div><div class="bar"><div></div></div><div class="meta done"></div>
+    <div class="links">${r.hold ? '' : `<a class="p" href="../${r.slug}/index.html#walk">360 walk</a><a href="../${r.slug}/index.html">Room page</a>`}</div></div>`;
+  box.appendChild(c);
+}
+async function j(u) { try { const r = await fetch(u, { cache: 'no-store' }); return r.ok ? await r.json() : null; } catch (e) { return null; } }
+async function update() {
+  for (const r of ROOMS) {
+    const c = document.getElementById('card_' + r.slug), st = c.querySelector('.st'), bar = c.querySelector('.bar div'), done = c.querySelector('.done');
+    if (r.hold) {
+      st.innerHTML = '<span class="pill hold">on hold</span>';
+      done.textContent = 'Waiting for your go-ahead: photos 181–190 show a board room for about 60 people; the model\'s room is 6.8 × 3.6 m.';
+      continue;
+    }
+    const [P, Rn] = await Promise.all([j(`../${r.slug}/progress.json`), j(`../${r.slug}/renders.json`)]);
+    if (Rn && Rn.cams && Rn.cams.length) {
+      const best = Rn.cams.find(k => k.final) || Rn.cams.find(k => k.id === r.cam && k.draft) || Rn.cams[0];
+      const q = best.final ? 'final' : 'draft', src = `../${r.slug}/renders/${q}/${best.id}.jpg?v=${best[q]}`;
+      const im = c.querySelector('.img img');
+      if (!im || im.dataset.src !== src) c.querySelector('.img').innerHTML = `<img alt="${r.n}: ${best.title} (${q})" src="${src}" data-src="${src}">`;
+    }
+    if (P) {
+      const complete = P.step === 'complete';
+      st.innerHTML = `<span class="pill ${complete ? 'ok' : 'run'}">${complete ? 'complete' : 'rendering'}</span> <span class="meta">${complete ? '' : P.step + (P.N ? ` (${P.n} of ${P.N})` : '') + (P.eta ? ` · done by ~${P.eta}` : '')}</span>`;
+      bar.style.width = Math.round(100 * (P.frac || 0)) + '%';
+      done.textContent = 'Finished: ' + ((P.done || []).join(' · ') || 'nothing yet');
+    } else { st.innerHTML = '<span class="pill">queued</span>'; }
+  }
+}
+update(); setInterval(update, 20000);
+</script>
+</body>
+</html>

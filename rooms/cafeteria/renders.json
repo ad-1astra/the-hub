@@ -1,0 +1,38 @@
+{
+ "cams": [
+  {
+   "id": "01_hall",
+   "title": "The hall from the plan-east side",
+   "where": "east part of the hall looking plan-west along the glazing, 24 mm",
+   "photo": "Hub Space-138.jpg",
+   "draft": 1791797833,
+   "final": 1791799036
+  },
+  {
+   "id": "02_serving",
+   "title": "Serving counter and wood feature wall",
+   "where": "centre aisle looking at the plan-west end: counter, display case, 'A' shelf, 24 mm",
+   "photo": "Hub Space-142.jpg",
+   "draft": 1791797931,
+   "final": 1791799907
+  },
+  {
+   "id": "03_south",
+   "title": "Looking plan-south from the glazing",
+   "where": "by the glazing, coloured seating tiers left, glazed office partition, stair beyond, 24 mm",
+   "photo": "Hub Space-140.jpg",
+   "draft": 1791798035,
+   "final": 1791800913
+  },
+  {
+   "id": "04_stair",
+   "title": "The stair opening",
+   "where": "lobby side looking at the stair opening, the wall art and the cluster pendant, 24 mm",
+   "photo": "Hub Space-197.jpg",
+   "draft": 1791798134,
+   "final": null
+  }
+ ],
+ "notes": "<p><b>Zone (verified in the model).</b> First-floor plan, the balcony's calibration (X = &minus;18.8 + px&middot;0.029984,\nY = 7.83 &minus; (py&minus;187)&middot;0.030273). Ray casts and horizontal sections of the GLB (survey.png): hall X &minus;5.28..+3.82, Y +1.24..+7.80\n(9.1 &times; 6.6 m) and the lobby X &minus;1.80..+0.55 to Y &minus;3.16; floor 2.44 m; soffit 5.00 m everywhere (tile ceiling here at 4.95, 2.51 m clear);\nthe four small rooms to the south are excluded. Doors and openings: balcony door X &minus;2.40..+0.80 in the north glazing; west wall Y 1.9..2.9 and\n5.25..6.55 (the Kitchen, behind the counter); east wall Y 1.9..3.6 (Founder Space 2 side); UJ Connect X &minus;3.90..&minus;2.70; the lobby leads south.\nStair opening X 1.0..3.4, Y 0.3..1.35: the upper flight rises plan-west from the 1.60 m landing and arrives in the lobby at about (0.7, 0.75) &mdash;\nthe orange block on the plan.</p>\n<p><b>Photos.</b> 137&ndash;139 the hall looking plan-west, 140/141 looking plan-south (tiers, partition, stair), 142/143 serving counter and\nfeature wall, 145 behind the counter, 147 the SparkLab wall, 150/151 the partition and buffet, 152/153 the stair opening with planters,\n197/200 the stair with the wall art. 112 is NOT the Cafeteria (it looks down another stair into a ground-floor office) &mdash; not used. People ignored.</p>\n<p><b>Built as new objects.</b> 400 mm glazed floor tiles; salmon paint (grey on the SparkLab wall) with tile skirting; 600 mm lay-in ceiling with grey grid;\n16 teal cone pendants, two black track lines with spots, a black-and-brass cluster pendant over the stair, camera-invisible room fill; 4 dining tables and\n24 slatted chairs as collection instances; a counter with a quartz top, corrugated front and glass display case; wood feature wall with an &lsquo;A&rsquo; shelf\nand menu board; coffee station; bins; buffet table with an orange pleated skirt and purple runner; three coloured seating tiers; SparkLab doodle board,\nwheels and lettering; glazed office partition and door on UJ Connect; doors in the model openings; stair balustrade (steel + wood rail); painted\ntroughs with snake plants; wall art; clock, posters, fire exit sign, extinguisher cabinet.</p>\n<p><b>Differences from the photos.</b> (1) The real hall is larger and denser (about 10 tables); the model hall is 9.1 &times; 6.6 m, so 4 tables with 1.4 m\naisles fit &mdash; the rest were dropped rather than squeezed. (2) The model's stair opening is 2.4 &times; 1.05 m; the photographed one is much larger, so the stair\nviews are tighter. (3) Ceiling 2.51 m in the model vs about 3 m real. (4) The view through the glazing is the Balcony + Outside scenes.</p>",
+ "updated": "2026-10-12 04:25:24"
+}

@@ -1,0 +1,93 @@
+{
+ "meta": {
+  "room": "IoT Lab",
+  "eye": 1.6,
+  "spacing": 0.9,
+  "clearance": 0.5,
+  "count": 6,
+  "image_centre": "+X (east)",
+  "generated": "2026-10-02T01:28:47"
+ },
+ "nodes": [
+  {
+   "x": -13.66,
+   "y": 1.95,
+   "z": 1.6,
+   "clear": 0.92,
+   "zone": "corridor",
+   "id": "p00",
+   "neighbours": [
+    "p01",
+    "p02",
+    "p03"
+   ]
+  },
+  {
+   "x": -13.53,
+   "y": 0.82,
+   "z": 1.6,
+   "clear": 1.12,
+   "zone": "iot",
+   "id": "p01",
+   "neighbours": [
+    "p02",
+    "p00",
+    "p03"
+   ]
+  },
+  {
+   "x": -14.28,
+   "y": 0.22,
+   "z": 1.6,
+   "clear": 0.58,
+   "zone": "iot",
+   "id": "p02",
+   "neighbours": [
+    "p01",
+    "p03",
+    "p00",
+    "p04"
+   ]
+  },
+  {
+   "x": -13.38,
+   "y": -0.38,
+   "z": 1.6,
+   "clear": 1.46,
+   "zone": "iot",
+   "id": "p03",
+   "neighbours": [
+    "p02",
+    "p01",
+    "p05",
+    "p04"
+   ]
+  },
+  {
+   "x": -14.58,
+   "y": -1.88,
+   "z": 1.6,
+   "clear": 0.8,
+   "zone": "iot",
+   "id": "p04",
+   "neighbours": [
+    "p05",
+    "p03",
+    "p02"
+   ]
+  },
+  {
+   "x": -13.68,
+   "y": -2.18,
+   "z": 1.6,
+   "clear": 0.63,
+   "zone": "iot",
+   "id": "p05",
+   "neighbours": [
+    "p04",
+    "p03",
+    "p02"
+   ]
+  }
+ ]
+}

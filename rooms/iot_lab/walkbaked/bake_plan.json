@@ -1,0 +1,15 @@
+{
+ "res": {
+  "floor": 2048,
+  "wall_east": 2048,
+  "furn_a": 2048,
+  "furn_b": 2048,
+  "wall_west": 2048,
+  "wall_south": 2048,
+  "ceiling": 2048,
+  "wall_north": 2048
+ },
+ "decided": true,
+ "estimate_h": 1.14,
+ "s_per_mtexel": 190.32
+}

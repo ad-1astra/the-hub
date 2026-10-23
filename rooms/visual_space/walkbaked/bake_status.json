@@ -1,0 +1,127 @@
+{
+ "jobs": {
+  "floor": {
+   "res": 4096,
+   "coverage": 0.707,
+   "combined_s": 3100.6,
+   "s_per_mtexel": 261.42,
+   "prep_s": 72.2,
+   "files": {
+    "albedo": "bake_raw\\floor_4096_albedo.exr",
+    "normal_obj": "bake_raw\\floor_4096_nrmobj.exr",
+    "combined_raw": "bake_raw\\floor_4096_256spp_combined_raw.exr",
+    "lighting": "bake\\floor_4096_256spp_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\floor_4096_256spp_lighting.exr",
+   "spp": 256
+  },
+  "furn_a": {
+   "res": 2048,
+   "coverage": 0.54,
+   "combined_s": 623.4,
+   "s_per_mtexel": 275.32,
+   "prep_s": 62.4,
+   "files": {
+    "albedo": "bake_raw\\furn_a_2048_albedo.exr",
+    "normal_obj": "bake_raw\\furn_a_2048_nrmobj.exr",
+    "combined_raw": "bake_raw\\furn_a_2048_256spp_combined_raw.exr",
+    "lighting": "bake\\furn_a_2048_256spp_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\furn_a_2048_256spp_lighting.exr",
+   "spp": 256
+  },
+  "furn_b": {
+   "res": 1024,
+   "coverage": 0.481,
+   "combined_s": 38.7,
+   "s_per_mtexel": 76.72,
+   "prep_s": 4.1,
+   "files": {
+    "albedo": "bake_raw\\furn_b_1024_albedo.exr",
+    "normal_obj": "bake_raw\\furn_b_1024_nrmobj.exr",
+    "combined_raw": "bake_raw\\furn_b_1024_combined_raw.exr",
+    "lighting": "bake\\furn_b_1024_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\furn_b_1024_lighting.exr",
+   "spp": 64
+  },
+  "wall_north": {
+   "res": 1024,
+   "coverage": 0.256,
+   "combined_s": 25.6,
+   "s_per_mtexel": 95.12,
+   "prep_s": 7.3,
+   "files": {
+    "albedo": "bake_raw\\wall_north_1024_albedo.exr",
+    "normal_obj": "bake_raw\\wall_north_1024_nrmobj.exr",
+    "combined_raw": "bake_raw\\wall_north_1024_combined_raw.exr",
+    "lighting": "bake\\wall_north_1024_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\wall_north_1024_lighting.exr"
+  },
+  "ceiling": {
+   "res": 1024,
+   "coverage": 0.756,
+   "combined_s": 89.2,
+   "s_per_mtexel": 112.42,
+   "prep_s": 14.3,
+   "files": {
+    "albedo": "bake_raw\\ceiling_1024_albedo.exr",
+    "normal_obj": "bake_raw\\ceiling_1024_nrmobj.exr",
+    "combined_raw": "bake_raw\\ceiling_1024_combined_raw.exr",
+    "lighting": "bake\\ceiling_1024_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\ceiling_1024_lighting.exr"
+  },
+  "wall_east": {
+   "res": 1024,
+   "coverage": 0.575,
+   "combined_s": 58.5,
+   "s_per_mtexel": 96.97,
+   "prep_s": 10.8,
+   "files": {
+    "albedo": "bake_raw\\wall_east_1024_albedo.exr",
+    "normal_obj": "bake_raw\\wall_east_1024_nrmobj.exr",
+    "combined_raw": "bake_raw\\wall_east_1024_combined_raw.exr",
+    "lighting": "bake\\wall_east_1024_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\wall_east_1024_lighting.exr"
+  },
+  "wall_south": {
+   "res": 1024,
+   "coverage": 0.18,
+   "combined_s": 20.5,
+   "s_per_mtexel": 108.21,
+   "prep_s": 7.4,
+   "files": {
+    "albedo": "bake_raw\\wall_south_1024_albedo.exr",
+    "normal_obj": "bake_raw\\wall_south_1024_nrmobj.exr",
+    "combined_raw": "bake_raw\\wall_south_1024_combined_raw.exr",
+    "lighting": "bake\\wall_south_1024_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\wall_south_1024_lighting.exr"
+  },
+  "wall_west": {
+   "res": 1024,
+   "coverage": 0.136,
+   "combined_s": 16.7,
+   "s_per_mtexel": 117.44,
+   "prep_s": 7.2,
+   "files": {
+    "albedo": "bake_raw\\wall_west_1024_albedo.exr",
+    "normal_obj": "bake_raw\\wall_west_1024_nrmobj.exr",
+    "combined_raw": "bake_raw\\wall_west_1024_combined_raw.exr",
+    "lighting": "bake\\wall_west_1024_lighting.exr"
+   },
+   "done": true,
+   "lighting": "bake\\wall_west_1024_lighting.exr"
+  }
+ }
+}
