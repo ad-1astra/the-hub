@@ -651,7 +651,7 @@ async function pumpRooms() {
   if (roomBusy || !roomQueue.length) { showLoading(); return; }
   // phones / tablets / the panel: the rooms wait while the loading screen is up, so the outside of the building (what the page opens
   // on) gets the whole line first; they follow, nearest first, the moment it lifts (FAST START in the world block below)
-  if (DEVICE.on && typeof UPV === 'undefined' && loadEl.style.display !== 'none') { setTimeout(pumpRooms, 250); return; }
+  if (typeof UPV === 'undefined' && loadEl.style.display !== 'none') { setTimeout(pumpRooms, 250); return; }   // (desktops too since 2026-10-28)
   const b = T2B(pos);
   roomQueue.sort((a, c) => distToZone(a, b.x, b.y) - distToZone(c, b.x, b.y));
   const r = roomQueue.shift();
@@ -1721,7 +1721,9 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
   // internet"): on phones, tablets and the panel (the lighter tiers) the page opens on the aerial view, so the outside of the building
   // loads first and the loading screen lifts once it is in (or after FAST_CAP on a slow line), exactly as 'start walking now' does;
   // trees, interiors and rooms keep loading behind it (rooms nearest first). Before: 34-52 MB had to arrive first. Desktops as they were.
-  const FAST = DEVICE.on && typeof UPV === 'undefined', FAST_CAP = 8000;
+  // (2026-10-28, the live site: "you are seeing how slow it is to load so fix it" - a desktop waited for all ~170 MB: desktops start the same way now,
+  // with their full-quality files)
+  const FAST = typeof UPV === 'undefined', FAST_CAP = 8000;
   const FAST_GATE = ['shell0', 'shell1', 'roof', 'ext0', 'ext1', 'ext2', 'glass'], FAST_NEXT = ['trees', 'in0'];
   const WORDER = !FAST ? [...PARTS, 'glass'] : [...FAST_GATE, ...FAST_NEXT, ...[...PARTS, 'glass'].filter(g => !FAST_GATE.includes(g) && !FAST_NEXT.includes(g))];
   if (FAST) { const f0 = performance.now(), fastT = setInterval(() => {
@@ -1732,6 +1734,10 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
       clearInterval(fastT); DEVICE.fastStart = window.__device.fastStart = Math.round(performance.now() - T0); b.click(); }, 150); }
   // the interior extras (the *_props.glb files, the corridor murals) wait like the rooms while the loading screen is up (FAST only)
   DEVICE.whenOpen = fn => { if (!FAST) return fn(); const w = () => loadEl.style.display === 'none' ? fn() : setTimeout(w, 250); w(); };
+  if (FAST && !DEVICE.on) { const gl0 = GLTFLoader.prototype.load;   // desktops: the *_props.glb wait too (phones: in the DEVICE block's loader)
+    GLTFLoader.prototype.load = function (url, onLoad, onProgress, onError) {
+      if (/\/world\/[a-z0-9]+_props\.glb/.test(url) && !this.__held) { const v = Object.create(this); v.__held = true; return DEVICE.whenOpen(() => v.load(url, onLoad, onProgress, onError)); }
+      return gl0.call(this, url, onLoad, onProgress, onError); }; }
   async function wPoll() {
     if (wBusy) return; wBusy = true;
     try {
