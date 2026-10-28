@@ -47,6 +47,12 @@ h3{margin:2px 0 8px;font-size:11px;letter-spacing:.09em;text-transform:uppercase
 #click span{color:var(--mut);font-size:13px}
 #load{position:absolute;inset:0;display:grid;place-items:center;pointer-events:auto;background:var(--bg);color:#ddd}
 #load b{display:block;font-size:16px;margin-bottom:6px;color:#fff}
+/* (user 2026-10-28: "use a circle loading icon ... i don't want to see the words") the words stay in the page (read and clicked by script), hidden */
+#load b,#load #loadpct,#load #loadskip{display:none !important}
+#load>div::before{content:'';display:block;width:56px;height:56px;border-radius:50%;animation:hubspin .85s linear infinite;
+  background:conic-gradient(from 0deg,rgba(243,236,226,0) 0deg,rgba(243,236,226,.18) 90deg,rgba(243,236,226,.95) 330deg,rgba(243,236,226,0) 360deg);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 3px))}
+@keyframes hubspin{to{transform:rotate(360deg)}}
 #err{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;max-width:560px;background:#fff;border-left:4px solid #b2554f;border-radius:10px;padding:16px 20px;pointer-events:auto;color:#7d3b36}
 #pbar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:30;transition:width .3s,opacity .6s}
 #entering{top:62px;left:50%;transform:translateX(-50%);padding:8px 16px;font-size:13px;display:none;border-left:4px solid var(--accent);z-index:22}
@@ -82,7 +88,7 @@ h3{margin:2px 0 8px;font-size:11px;letter-spacing:.09em;text-transform:uppercase
 </div>
 <script type="importmap">{ "imports": { "three": "./lib/three.module.js" } }</script>
 <script type="module">
-import * as THREE from 'three';
+import * as THREE from './lib/three.module.js';      // a path, not the import map's bare 'three': Safari before iOS 16.4 has no import maps (the page never started there)
 import { GLTFLoader } from './lib/GLTFLoader.js';
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from './lib/three-mesh-bvh.js';
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
@@ -126,7 +132,11 @@ const DEVICE = (() => {
   const weak = /PowerVR|Mali-(4\d\d|T[67]\d\d|G31|G51)\b|Adreno \(TM\) ([34]\d\d|5[01]\d|60\d|61\d)\b|SwiftShader|llvmpipe|Software/i.test(gpu);
   let saved = null; try { saved = sessionStorage.getItem('hubTier'); } catch (e) {}
   let q = qs.get('q'); if (q === 'panel') q = 'mid';
-  const picked = !mobile ? (mem && mem <= 2 ? 'mid' : 'full') : ((mem && mem <= 3) || weak ? 'low' : 'mid');
+  // (2026-10-27) the low copies also on a slow line or Data Saver (Android Chrome tells: navigator.connection), and on the small
+  // iPhones (6s / 7 / 8 / SE: 2-3 GB, 375 x 667 points or less; Safari tells neither memory nor GPU)
+  const cn = navigator.connection, slow = !!(cn && (cn.saveData || /(^|-)2g$|^3g$/.test(cn.effectiveType || '')));
+  const smallIos = ios && Math.max(screen.width, screen.height) <= 667;
+  const picked = !mobile ? (mem && mem <= 2 ? 'mid' : 'full') : ((mem && mem <= 3) || weak || slow || smallIos ? 'low' : 'mid');
   const tier = ['full', 'mid', 'low'].includes(q) ? q : ['mid', 'low'].includes(saved) ? saved : picked;
   const CFG = { mid: { texWorld: 2048, texRoom: 1024, texOrm: 1024, pr: 0.85, prMin: 0.55, prMax: 1.25 },
                 low: { texWorld: 1024, texRoom: 512, texOrm: 512, pr: 0.7, prMin: 0.5, prMax: 1.0 } };
@@ -172,7 +182,11 @@ if (DEVICE.on) {
         const enc = r.headers.get('content-encoding'); return r.ok && (!enc || enc === 'identity') ? +(r.headers.get('content-length') || 0) : 0; }).catch(() => 0);
       HEADS.set(rel, len); }
     if (len && len !== e.size) { DEVICE.lite.stale.push(rel); return null; }
-    DEVICE.lite.used++; return new URL('lite/' + DEVICE.tier + '/' + rel, ROOT).href + '?s=' + e.size; };
+    DEVICE.lite.used++; return new URL('lite/' + DEVICE.tier + '/' + rel, ROOT).href + '?s=' + e.size + '.' + (e.tiers[DEVICE.tier].bytes || 0); };   // (the copy's own size too: a re-packed copy is fetched anew)
+  // the copies are meshopt-packed (../rooms/mobile_fast/meshopt_lite.mjs, 2026-10-27: about half the bytes, same triangles): the
+  // decoder (meshoptimizer's own, wasm) is read once, in parallel with the first files; without it a copy fails and the original loads
+  const meshoptP = import(new URL('lib/meshopt_decoder.module.js', document.baseURI).href)
+    .then(m => m.MeshoptDecoder.ready.then(() => m.MeshoptDecoder)).catch(e => { console.warn('meshopt decoder not available', e); return null; });
   // ---- textures are decoded two at a time and resized while decoding when still over the tier's size (an original after a re-bake)
   const dims = u8 => {                                      // width, height from a PNG / JPEG header (no decode)
     if (u8[0] === 0x89 && u8[1] === 0x50) { const v = new DataView(u8.buffer, u8.byteOffset); return [v.getUint32(16), v.getUint32(20)]; }
@@ -194,8 +208,12 @@ if (DEVICE.on) {
   // GLB files: the copy for this tier when it is current; each load gets a manager view carrying the texture size for its file
   const gLoad = GLTFLoader.prototype.load;
   GLTFLoader.prototype.load = function (url, onLoad, onProgress, onError) {
+    // the building's interior props (corridor_props, fix4_props, ...) wait for the loading screen to lift (FAST START, world block)
+    if (/\/world\/[a-z0-9]+_props\.glb/.test(url) && DEVICE.whenOpen && !this.__held) { const v = Object.create(this); v.__held = true;
+      return DEVICE.whenOpen(() => v.load(url, onLoad, onProgress, onError)); }
     const self = this, cap = /\/world\//.test(url) ? DEVICE.texWorld : DEVICE.texRoom;
-    DEVICE.liteFor(url).then(lu => { const v = Object.create(self); v.manager = Object.create(self.manager); v.manager.__panelCap = cap;
+    Promise.all([DEVICE.liteFor(url), meshoptP]).then(([lu, dec]) => { const v = Object.create(self); v.manager = Object.create(self.manager); v.manager.__panelCap = cap;
+      if (dec) v.setMeshoptDecoder(dec);
       gLoad.call(v, lu || url, onLoad, onProgress, e => { if (lu) { console.warn('lite copy failed, loading the original', lu); gLoad.call(v, url, onLoad, onProgress, onError); } else if (onError) onError(e); }); }); };
   const ibLoad = THREE.ImageBitmapLoader.prototype.load;
   THREE.ImageBitmapLoader.prototype.load = function (url, onLoad, onProgress, onError) {
@@ -271,15 +289,28 @@ if (DEVICE.on) {
   requestAnimationFrame(vo); }
 // ---- QR code (user 2026-10-21: "add a QR code"): the hub's card, top right - scan to open this page on a phone. The code is this page's
 // address (on the hosted site: its public link); lib/qrcode.min.js is the hub's QR generator (qrcode.js, MIT), nothing online
+// (user 2026-10-27: "the QR code is not working for some iPhones and androids") the code is drawn module by module on the screen's
+// own pixels (a whole number of device pixels a module, no smoothing: it was an 80/124 px bitmap stretched by the pixel ratio, with
+// uneven, blurred modules), inside the standard 4-module light margin, and it carries the folder address (\u2026/building/, not
+// \u2026/building/index.html: 29 modules instead of 33, so each is bigger). Simulated phone-camera reads (rooms/mobile_fast/tests/qr_score.py, 6 screens x 20 distance / focus cases): ZXing 41 -> 65 %, OpenCV 5 -> 42 %
 { const addQR = () => { const ov = document.getElementById('hub-overlay'); if (!ov) return setTimeout(addQR, 300);
     if (document.getElementById('qrcard')) return;
-    const local = /^(127\.|localhost$|\[?::1)/.test(location.hostname), url = location.origin + location.pathname;
+    const h = location.hostname, local = /^(127\.|localhost$|\[?::1)/.test(h), lan = /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(h);
+    const url = location.origin + location.pathname.replace(/index\.html$/, '');
     ov.insertAdjacentHTML('beforeend', '<div class="qrcard" id="qrcard"><div class="lbl">Open on your phone</div><div id="qrbox"></div>' +
-      '<div class="qrnote" id="qrnote">' + (local ? 'This PC\u2019s own address: phones can scan it once the site is online' : 'Scan to walk the building on your phone') + '</div></div>');
+      '<div class="qrnote" id="qrnote">' + (local ? 'This PC\u2019s own address: phones can scan it once the site is online' : lan ? 'Phones on this Wi-Fi: scan to walk the building' : 'Scan to walk the building on your phone') + '</div></div>');
+    const draw = () => { const box = document.getElementById('qrbox'); if (!box || typeof QRCode === 'undefined') return;
+      const q = new QRCode(document.createElement('div'), { text: url, correctLevel: QRCode.CorrectLevel.M })._oQRCode, n = q.getModuleCount(), N = n + 8;
+      const dpr = window.devicePixelRatio || 1, css = innerWidth > 720 ? 190 : 140, m = Math.max(2, Math.floor(css * dpr / N));
+      const cv = document.createElement('canvas'); cv.width = cv.height = N * m; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'QR code: ' + url);
+      cv.style.cssText = `width:${N * m / dpr}px;height:${N * m / dpr}px;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:10px`;
+      const g = cv.getContext('2d'); g.fillStyle = '#F3ECE2'; g.fillRect(0, 0, N * m, N * m); g.fillStyle = '#16120E';
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) g.fillRect((c + 4) * m, (r + 4) * m, m, m);
+      box.style.padding = '0'; box.replaceChildren(cv); window.__qrText = url; };
     const sc = document.createElement('script'); sc.src = new URL('lib/qrcode.min.js', document.baseURI).href;
-    sc.onload = () => { const box = document.getElementById('qrbox'), z = innerWidth > 720 ? 124 : 80;
-      try { new QRCode(box, { text: url, width: z, height: z, colorDark: '#16120E', colorLight: '#F3ECE2', correctLevel: QRCode.CorrectLevel.M }); } catch (e) { document.getElementById('qrnote').textContent = url; } };
+    sc.onload = () => { try { draw(); } catch (e) { document.getElementById('qrnote').textContent = url; } };
     sc.onerror = () => { document.getElementById('qrnote').textContent = url; };
+    let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { try { draw(); } catch (e) {} }, 300); });   // pixel ratio / layout changed
     document.head.appendChild(sc); };
   addQR(); }
 { const st = document.createElement('style'); st.id = 'device-css'; st.textContent = `
@@ -410,6 +441,7 @@ function zoneClip(m) {
         if (vWP.x > 2.90 && vWP.x < 3.84 && vWP.z > -1.27 && vWP.z < -0.24 && vWP.y > 2.05 && vWP.y < 2.50) discard;  // over the landing (open well)
         if (vWP.x > 17.80 && vWP.x < 18.75 && vWP.z > -2.66 && vWP.z < -2.50 && vWP.y > 2.44 && vWP.y < 3.70) discard; // balustrade over E2`);
   };
+  m.userData.zoneClip = true;                          // (the guide's camera reads the same cut-outs: camCut)
   return m;
 }
 const BASECOL = { SOURCE_WALL:[0.80,0.79,0.76], SOURCE_SLAB:[0.62,0.61,0.58], SOURCE_FRAME:[0.30,0.31,0.32],
@@ -617,6 +649,9 @@ function loadRoom(r) {                               // enqueue (the list / lazy
 }
 async function pumpRooms() {
   if (roomBusy || !roomQueue.length) { showLoading(); return; }
+  // phones / tablets / the panel: the rooms wait while the loading screen is up, so the outside of the building (what the page opens
+  // on) gets the whole line first; they follow, nearest first, the moment it lifts (FAST START in the world block below)
+  if (DEVICE.on && typeof UPV === 'undefined' && loadEl.style.display !== 'none') { setTimeout(pumpRooms, 250); return; }
   const b = T2B(pos);
   roomQueue.sort((a, c) => distToZone(a, b.x, b.y) - distToZone(c, b.x, b.y));
   const r = roomQueue.shift();
@@ -693,7 +728,7 @@ function castAll(origin, d, far) {
     if (h && !upIgnore(h) && (!best || h.distance < best.distance)) best = h; }
   for (const r of roomState) for (const m of r.colliders) {
     const h = ray.intersectObject(m, false)[0];
-    if (h && !inDoor(T2B(h.point)) && (!best || h.distance < best.distance)) best = h;
+    if (h && !inDoor(T2B(h.point)) && !upIgnore(h) && (!best || h.distance < best.distance)) best = h;   // fix4: the stair well is open for the rooms' bakes too
   }
   return best;
 }
@@ -948,6 +983,7 @@ function stairTick(dt) {
     if (A.t >= 1) { pos.copy(A.path[n]); yaw = A.endYaw; STAIR.anim = null; STAIR.last = performance.now(); snapFloor(true); }
     return;
   }
+  if (window.__fix4 && window.__fix4.realStairs) return;       // fix4 (2026-10-27): the stair is walked on its ramps, no glide
   if (fly || PANO.mode || !keys.KeyW || performance.now() - STAIR.last < 800) return;
   const b = T2B(pos), feet = b.z - EYE, fx = -Math.sin(yaw);
   if (fx < 0.5) return;                                   // only when facing plan +X (into either flight)
@@ -1520,9 +1556,10 @@ function renderPano() {
 // its glass once the glass part is in ----
 // doors the guide walks through fade open (dithered), as the guide nears them and shut again behind the camera: up to 4 door boxes
 // (three x0, z0, x1, z1 + y0, y1, open 0..1) set by the guide block, read by every world and baked-room shader
-const WORLD_DOORS = { b: { value: Array.from({ length: 4 }, () => new THREE.Vector4(1e5, 1e5, -1e5, -1e5)) },
-  y: { value: Array.from({ length: 4 }, () => new THREE.Vector3(1e5, -1e5, 0)) } };
-const DOOR_DECL = 'uniform vec4 doorB[4]; uniform vec3 doorY[4];';
+// (fix4, 2026-10-27: 10 boxes - the guide's 4 + 6 fixed ones of the FOUR-AREA FIX block: the open stair well, the replaced Cafeteria door)
+const WORLD_DOORS = { b: { value: Array.from({ length: 10 }, () => new THREE.Vector4(1e5, 1e5, -1e5, -1e5)) },
+  y: { value: Array.from({ length: 10 }, () => new THREE.Vector3(1e5, -1e5, 0)) } };
+const DOOR_DECL = 'uniform vec4 doorB[10]; uniform vec3 doorY[10];';
 const LOBBY_DOOR = { k: 0, want: 0 };                      // the lobby's live glazed double door (pano_project.js): 0 shut .. 1 open; the guide sets want
 // the bakes hold sRGB-ENCODED light (measured 2026-10-21: a mahogany desk front baked 0.443 / 0.215 / 0.101 where Cycles' own albedo
 // pass gives 0.146 / 0.034 / 0.009 = exactly their sRGB encoding; the white wall 1.062 -> 1.147 vs Cycles 1.155): decoded as linear
@@ -1531,7 +1568,7 @@ const LOBBY_DOOR = { k: 0, want: 0 };                      // the lobby's live g
 const BAKE_LIN = { value: 1 };
 const LIN_GLSL = 'uniform float bakeLinOn; vec3 bakeLin(vec3 v){ vec3 l = mix(v / 12.92, pow((max(v, 0.) + 0.055) / 1.055, vec3(2.4)), step(0.04045, v)); return mix(v, l, bakeLinOn); }';
 // (the dither hash only for fragments inside a leaf's box: && short-circuits, the sine is skipped everywhere else)
-const DOOR_GLSL = 'for (int i = 0; i < 4; i++) { vec4 b = doorB[i]; vec3 dy = doorY[i]; ' +
+const DOOR_GLSL = 'for (int i = 0; i < 10; i++) { vec4 b = doorB[i]; vec3 dy = doorY[i]; ' +
   'if (vWorld.x > b.x && vWorld.x < b.z && vWorld.z > b.y && vWorld.z < b.w && vWorld.y > dy.x && vWorld.y < dy.y && ' +
   'fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) < dy.z) discard; }';
 // ---- the Cycles 360 renders ON the model (user 2026-10-21: "very high quality render like the video ... put it where it is meant to
@@ -1680,12 +1717,29 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
     });
   }
   let wBusy = false, wInfo = {}, wFirst = null;          // wFirst: the parts world.json listed when the page opened
+  // ---- FAST START (user 2026-10-27: "the model is too slow when its on all mobile phones ... make it load very fast ... even on slow
+  // internet"): on phones, tablets and the panel (the lighter tiers) the page opens on the aerial view, so the outside of the building
+  // loads first and the loading screen lifts once it is in (or after FAST_CAP on a slow line), exactly as 'start walking now' does;
+  // trees, interiors and rooms keep loading behind it (rooms nearest first). Before: 34-52 MB had to arrive first. Desktops as they were.
+  const FAST = DEVICE.on && typeof UPV === 'undefined', FAST_CAP = 8000;
+  const FAST_GATE = ['shell0', 'shell1', 'roof', 'ext0', 'ext1', 'ext2', 'glass'], FAST_NEXT = ['trees', 'in0'];
+  const WORDER = !FAST ? [...PARTS, 'glass'] : [...FAST_GATE, ...FAST_NEXT, ...[...PARTS, 'glass'].filter(g => !FAST_GATE.includes(g) && !FAST_NEXT.includes(g))];
+  if (FAST) { const f0 = performance.now(), fastT = setInterval(() => {
+      if (loadEl.style.display === 'none') return clearInterval(fastT);          // already open ('start walking now', or all in)
+      const done = g => isIn(g) || (WSTATE[g] && WSTATE[g].state === 'failed') || (wFirst !== null && !wInfo[g]);
+      if (!FAST_GATE.every(done) && performance.now() - f0 < FAST_CAP) return;
+      const b = document.getElementById('skipbtn'); if (!b || !b.onclick) return;  // (its handler is set by the loading loop)
+      clearInterval(fastT); DEVICE.fastStart = window.__device.fastStart = Math.round(performance.now() - T0); b.click(); }, 150); }
+  // the interior extras (the *_props.glb files, the corridor murals) wait like the rooms while the loading screen is up (FAST only)
+  DEVICE.whenOpen = fn => { if (!FAST) return fn(); const w = () => loadEl.style.display === 'none' ? fn() : setTimeout(w, 250); w(); };
   async function wPoll() {
     if (wBusy) return; wBusy = true;
     try {
       const r = await fetch(WURL + 'world.json', { cache: 'no-store' });
       if (r.ok) { const W = await r.json(); wInfo = W.chunks || {}; if (!wFirst) wFirst = [...PARTS, 'glass'].filter(g => wInfo[g]);
-        for (const g of [...PARTS, 'glass']) { const info = wInfo[g], s = WSTATE[g]; if (!info) continue;
+        if (FAST) await Promise.all(FAST_GATE.map(g => { const info = wInfo[g], s = WSTATE[g];          // the outside: all at once
+          return !info || (s && ((s.nodes && +s.version >= +info.version) || s.loading === info.version)) ? null : wLoad(g, info); }));
+        for (const g of WORDER) { const info = wInfo[g], s = WSTATE[g]; if (!info) continue;
           if (s && ((s.nodes && +s.version >= +info.version) || s.loading === info.version)) continue;
           await wLoad(g, info); await new Promise(res => setTimeout(res, 50)); } }
       else if (!wFirst) wFirst = [];
@@ -1717,7 +1771,7 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
   // small progress line while the bake is still running (whole-building page only): how many parts are baked
   let wEl = null;
   function wStatus() {
-    if (typeof UPV !== 'undefined') return;
+    if (typeof UPV !== 'undefined' || FAST) return;      // (phones: the page opens before the interiors are in; the line sat on the Map button)
     const n = PARTS.filter(isIn).length;
     if (!wEl) { wEl = document.createElement('div'); wEl.id = 'world-progress';
       wEl.style.cssText = 'position:fixed;left:24px;bottom:22px;z-index:21;pointer-events:none;font:500 11px/1.5 ui-monospace,"Space Mono",monospace;' +
@@ -2008,6 +2062,135 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
   };
 })();
 // ---- REALTIME WORLD END ----
+// ---- FOUR-AREA FIX (user 2026-10-27, rooms/fix4): as in the photos / videos of the Cafeteria passage, the Reception -> corridor,
+// the Reception and its stair. The Cafeteria's west door W1 (Y 1.85-2.91) is the way to the offices: a glazed double door that
+// opens as you come near (the old baked leaf is not drawn); the kitchen door W2 behind the counter (Y 5.25-6.55) is shut
+// (collider); the lobby door opens for the walker too; the Reception stair is walked on its ramps (no glide) with the slab,
+// ceiling and overshoot treads over the open well no longer drawn; the new objects (world/fix4_props.glb, fix4_scene.py) ----
+(function () {
+  const FX = { realStairs: true, w1: { k: 0 }, props: 0, w1i: -1, fireHidden: 0, clipOn: true };
+  window.__fix4 = FX;
+  // colliders: the shut kitchen door, the new furniture (Blender boxes)
+  upBox('FIX4_W2_SHUT', UPH.guards, -5.34, -5.22, 5.25, 6.55, 2.44, 4.60);
+  for (const b of [[-0.93, -0.27, 3.02, 3.68], [-4.83, -3.98, 4.78, 6.32], [-4.50, -3.80, 3.76, 4.44], [-3.34, -2.66, 6.81, 7.49],
+                   [-5.27, -4.85, 3.75, 7.55], [1.42, 1.78, 2.18, 2.54]])
+    upBox('FIX4_PROP', UPH.guards, b[0], b[1], b[2], b[3], 0.0, 1.9);
+  // fixed clip boxes, slots 4.. (three x0, z0, x1, z1 / y0, y1): slab + Reception ceiling over W1 and the landing, W2's overshoot treads,
+  // the replaced Cafeteria door W1 (its baked leaf, jambs and head)
+  const CLIP = [[0.87, -1.985, 3.80, -1.27, 1.98, 2.50], [2.92, -1.27, 3.80, -0.30, 1.98, 2.50],
+                [0.85, -1.22, 1.30, -0.26, 2.447, 2.70], [-5.45, -2.915, -5.12, -1.845, 2.47, 4.66],
+                [-5.95, -3.30, -5.82, -2.22, 2.447, 4.50]];   // + a stray baked panel just west of W1, in the walkway (not in the renders)
+  // ---- the Cafeteria west door: white aluminium frame, two clear glazed leaves with a mid rail, black levers, glazed fanlight
+  const X = -5.28, Y0 = 1.846, Y1 = 2.913, FZ = 2.44;
+  const alu = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.80, 0.80, 0.78) });
+  const blk = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.012, 0.012, 0.013) });
+  const glass = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, side: THREE.DoubleSide, vertexShader: BAKED_VS,
+    fragmentShader: `varying vec3 vWorld; varying vec3 vNormalW; void main(){ vec3 V = normalize(cameraPosition - vWorld);
+      float Fr = min(0.04 + 0.96 * pow(1. - abs(dot(V, normalize(vNormalW))), 5.), 0.42); gl_FragColor = vec4(vec3(2.6, 2.55, 2.45) * Fr + vec3(0.8, 0.86, 0.86) * 0.08, 0.05 + Fr); }` });
+  const bx = (g, x0, x1, y0, y1, z0, z1, m, hx, hy) => {       // Blender box, relative to the hinge (hx, hy)
+    const b = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, z1 - z0, y1 - y0), m);
+    b.position.set((x0 + x1) / 2 - hx, (z0 + z1) / 2, -((y0 + y1) / 2 - hy)); b.frustumCulled = false; b.name = 'FIX4_CAFDOOR';
+    if (m === glass) b.renderOrder = 2; g.add(b); };
+  const frame = new THREE.Group(); frame.name = 'FIX4_CAFDOOR_frame'; scene.add(frame);
+  bx(frame, X - 0.05, X + 0.05, Y0, Y0 + 0.05, FZ, FZ + 2.56, alu, 0, 0); bx(frame, X - 0.05, X + 0.05, Y1 - 0.05, Y1, FZ, FZ + 2.56, alu, 0, 0);
+  bx(frame, X - 0.05, X + 0.05, Y0, Y1, FZ + 2.09, FZ + 2.14, alu, 0, 0); bx(frame, X - 0.05, X + 0.05, Y0, Y1, FZ + 2.51, FZ + 2.56, alu, 0, 0);
+  bx(frame, X - 0.03, X + 0.03, 2.36, 2.40, FZ + 2.14, FZ + 2.51, alu, 0, 0);
+  bx(frame, X - 0.004, X + 0.004, Y0 + 0.05, Y1 - 0.05, FZ + 2.14, FZ + 2.51, glass, 0, 0);
+  const LW = (Y1 - Y0 - 0.10) / 2;
+  function leaf(a0, hingeY, side) {                            // side -1: handle at its +Y edge, +1: at its -Y edge
+    const g = new THREE.Group(); g.position.set(X, 0, -hingeY); g.name = 'FIX4_CAFDOOR_leaf'; const a1 = a0 + LW;
+    for (const [z0, z1] of [[0, 0.10], [0.95, 1.05], [2.03, 2.09]]) bx(g, X - 0.025, X + 0.025, a0, a1, FZ + z0, FZ + z1, alu, X, hingeY);
+    bx(g, X - 0.025, X + 0.025, a0, a0 + 0.06, FZ, FZ + 2.09, alu, X, hingeY); bx(g, X - 0.025, X + 0.025, a1 - 0.06, a1, FZ, FZ + 2.09, alu, X, hingeY);
+    for (const [z0, z1] of [[0.10, 0.95], [1.05, 2.03]]) bx(g, X - 0.004, X + 0.004, a0 + 0.06, a1 - 0.06, FZ + z0, FZ + z1, glass, X, hingeY);
+    const hy = side < 0 ? a1 - 0.075 : a0 + 0.075;
+    for (const s of [-1, 1]) {
+      bx(g, X + s * 0.05, X + s * 0.07, hy + (side < 0 ? -0.11 : -0.01), hy + (side < 0 ? 0.01 : 0.11), FZ + 0.99, FZ + 1.01, blk, X, hingeY);
+      bx(g, X + s * 0.027, X + s * 0.033, hy - 0.018, hy + 0.018, FZ + 0.86, FZ + 1.06, blk, X, hingeY); }
+    scene.add(g); return g; }
+  const leafA = leaf(Y0 + 0.05, Y0 + 0.05, -1), leafB = leaf(Y0 + 0.05 + LW, Y1 - 0.05, 1);
+  // ---- props of the four areas (Blender objects exported as rendered; the re-rendered panoramas paint them like the rest)
+  const PM = {};
+  const pmat = src => { const mn = (src && src.name) || 'x'; if (PM[mn]) return PM[mn];
+    if (/glass/.test(mn)) return (PM[mn] = glass);
+    const map = (src && src.map) || null, emis = /downlight/.test(mn), alpha = !!(map && src.transparent);
+    const c = src && src.color ? src.color.clone().multiplyScalar(0.85) : new THREE.Color(0.6, 0.6, 0.6);
+    return (PM[mn] = new THREE.ShaderMaterial({ transparent: alpha, depthWrite: !alpha, side: THREE.DoubleSide, vertexShader: BAKED_VS,
+      uniforms: { ...PROJ_U, base: { value: emis ? new THREE.Color(4.0, 3.7, 3.2) : c }, map: { value: map }, hasMap: { value: map ? 1 : 0 } },
+      fragmentShader: `uniform vec3 base; uniform sampler2D map; uniform float hasMap; varying vec2 vUv; varying vec3 vWorld; varying vec3 vNormalW; ${PROJ_GLSL}
+        void main(){ vec4 t = hasMap > 0.5 ? texture2D(map, vUv) : vec4(1.); vec3 c = hasMap > 0.5 ? pow(t.rgb, vec3(2.2)) * 0.85 : base;
+          gl_FragColor = vec4(${emis ? 'base' : 'prApply(c, vWorld, normalize(vNormalW))'}, hasMap > 0.5 ? t.a : 1.); }` })); };
+  new GLTFLoader().load('./world/fix4_props.glb', g => {
+    g.scene.traverse(o => { if (!o.isMesh) return;
+      if (/CAFDOOR/.test(o.name) || /CAFDOOR/.test((o.parent && o.parent.name) || '')) { o.visible = false; return; }   // the live door above
+      if (o.material && o.material.map) o.material.map.colorSpace = THREE.NoColorSpace;
+      o.material = pmat(o.material); if (o.material.transparent) o.renderOrder = 2; o.frustumCulled = false; FX.props++; });
+    g.scene.name = 'FIX4_PROPS'; scene.add(g.scene);
+  }, undefined, e => console.warn('fix4 props not loaded', e));
+  // ---- every frame (from the guide's door tick): doors near the walker open, the fixed clip boxes fill slots 4..7
+  window.__fix4DoorHook = (D3, guiding, dt) => {
+    const b = T2B(pos), feet = b.z - EYE;
+    if (FX.w1i < 0) FX.w1i = D3.findIndex(d => d.lv === 1 && d.a === 'y' && Math.abs(d.c + 5.31) < 0.1);
+    const near1 = !fly && feet > 2.1 && feet < 2.9 && Math.hypot(b.x - X, b.y - 2.38) < 2.1;
+    const want = near1 || (FX.w1i >= 0 && D3[FX.w1i].k > 0.05) ? 1 : 0;
+    FX.w1.k += Math.sign(want - FX.w1.k) * Math.min(Math.abs(want - FX.w1.k), (dt || 0.016) / 0.9);
+    const a = (FX.w1.k * FX.w1.k * (3 - 2 * FX.w1.k)) * 1.55; leafA.rotation.y = a; leafB.rotation.y = -a;
+    if (!guiding && !fly && feet < 1.0 && Math.hypot(b.x + 6.24, b.y - 2.32) < 2.2) LOBBY_DOOR.want = 1;   // the lobby door, walking
+    for (let j = 0; j < CLIP.length; j++) { const c = CLIP[j];
+      if (FX.clipOn) { WORLD_DOORS.b.value[4 + j].set(c[0], c[1], c[2], c[3]); WORLD_DOORS.y.value[4 + j].set(c[4], c[5], 1.0); }
+      else { WORLD_DOORS.b.value[4 + j].set(1e5, 1e5, -1e5, -1e5); WORLD_DOORS.y.value[4 + j].set(1e5, -1e5, 0); } }
+    if (FX.fireHidden < 3 && (FX.tries = (FX.tries || 0) + 1) % 30 === 0 && FX.tries < 3000) scene.traverse(o => { if (o.isMesh && /^FIRE_ext/.test(o.name) && o.visible) { o.visible = false; FX.fireHidden++; } });   // replaced by the two wall extinguishers
+  };
+  FX.state = () => ({ w1: +FX.w1.k.toFixed(2), lobby: +LOBBY_DOOR.k.toFixed(2), props: FX.props, fire: FX.fireHidden, w1i: FX.w1i });
+  FX.pick = (bx, by, bz, dx, dy, dz) => {                     // test hook: visible meshes along a ray (Blender coords)
+    const rc = new THREE.Raycaster(B2T(bx, by, bz), B2T(dx, dy, dz).normalize(), 0, 6);
+    return rc.intersectObjects(scene.children, true).filter(h => h.object.visible && h.object.isMesh).slice(0, 5)
+      .map(h => { const q = T2B(h.point); return [h.object.name, h.object.material && (h.object.material.name || h.object.material.type), +q.x.toFixed(2), +q.y.toFixed(2), +q.z.toFixed(2)]; }); };
+})();
+// ---- FOUR-AREA FIX END ----
+// ---- WALL MURALS: the painted walls of the corridor Reception -> rear door and the Auditorium wall it faces (user 2026-10-26: "render
+// the two sides of the corridor ... the images are how those walls look exactly"; "the wall on the auditorium that you face after coming
+// from the reception, put that image on the wall"). Three planes 3 mm in front of the walls (rooms/rear_corridor/render_rear_corridor.py
+// MURALS): the user's photo (sRGB -> linear) x the light on that wall, baked in the scene the building was baked from
+// (bake_mural_light.py, world_bake_fix.blend, DIFFUSE direct + indirect) = the painted wall as a COMBINED bake would give it, at the
+// photo's resolution. No panorama is projected onto the murals (the Reception's projection stops at Y -0.35, which would cut a
+// seam across both walls): they always show this baked look. The tour panoramas that see them were re-rendered with the murals ----
+(() => {
+  const MURALS = [   // id, photo, light (float16 RGBA w x h), Blender left end, right end (seen facing the wall), z0, z1
+    ['west', 'west_typewriter.jpg', 'light_MURAL_WEST_typewriter.bin', 256, 123, [-1.7825, -3.155], [-1.7459, 1.275], 0.002, 2.138],
+    ['east', 'east_cyborg.jpg', 'light_MURAL_EAST_cyborg.bin', 256, 165, [0.608, 0.165], [0.608, -3.155], 0.002, 2.138],
+    ['aud', 'aud_mural.jpg', 'light_MURAL_AUD_north.bin', 256, 144, [1.7355, -5.026], [-2.5955, -5.026], 0.002, 2.438] ];
+  const BASE = './world/murals/';
+  const G = new THREE.Group(); G.name = 'WALL_MURALS'; scene.add(G);
+  const FS = `uniform sampler2D photo; uniform sampler2D light; uniform float ready; varying vec2 vUv;
+    vec3 s2l(vec3 c){ return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c)); }
+    void main(){ if (ready < 0.5) discard;
+      gl_FragColor = vec4(s2l(texture2D(photo, vUv).rgb) * texture2D(light, vUv).rgb, 1.); }`;
+  const state = {};
+  for (const [id, img, bin, w, h, a, b, z0, z1] of MURALS) {
+    const P = [B2T(a[0], a[1], z0), B2T(b[0], b[1], z0), B2T(b[0], b[1], z1), B2T(a[0], a[1], z1)];
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(P.flatMap(v => [v.x, v.y, v.z]), 3));
+    geo.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2));
+    geo.setIndex([0, 1, 2, 0, 2, 3]); geo.computeVertexNormals();
+    const u = { photo: { value: null }, light: { value: null }, ready: { value: 0 } };
+    const mesh = new THREE.Mesh(geo, new THREE.ShaderMaterial({ uniforms: u, vertexShader: BAKED_VS, fragmentShader: FS, side: THREE.FrontSide }));
+    mesh.name = 'MURAL_' + id; mesh.frustumCulled = false; mesh.userData.mural = id; G.add(mesh);
+    const st = state[id] = { photo: false, light: false };
+    const done = () => { if (st.photo && st.light) u.ready.value = 1; };
+    (DEVICE.whenOpen || (f => f()))(() => {             // phones: once the loading screen has lifted (FAST START)
+    new THREE.TextureLoader().load(BASE + img, t => {
+      t.colorSpace = THREE.NoColorSpace; t.anisotropy = MAX_ANISO; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter;
+      try { renderer.initTexture(t); } catch (e) {} u.photo.value = t; st.photo = true; done(); }, undefined, e => console.warn('mural photo missing', id, e));
+    fetch(BASE + bin).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); }).then(buf => {
+      const t = new THREE.DataTexture(new Uint16Array(buf), w, h, THREE.RGBAFormat, THREE.HalfFloatType);
+      t.minFilter = t.magFilter = THREE.LinearFilter; t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; t.needsUpdate = true;
+      u.light.value = t; st.light = true; done(); }).catch(e => console.warn('mural light missing', id, e));
+    });
+  }
+  window.__murals = { state: () => JSON.parse(JSON.stringify(state)), group: G,
+    show: v => { if (v !== undefined) G.visible = !!v; return G.visible; } };
+})();
+// ---- WALL MURALS END ----
 // ---- GUIDE: "find a room" on the map, the guide character walks you there with the camera behind it, as in the hub tour
 // (C:\Users\PEARL LABS\hub, copied to ../guide/): its walkable grid + A*, turn-by-turn steps, character (size, pace), route trail,
 // Map panel, walk HUD, opening orbit view and level rail (its own markup and styles). Here: a third-person camera close behind the
@@ -2322,14 +2505,18 @@ function setMapExpanded(on) { const w = $g('ex-map-wrap'); w.classList.toggle('e
 $g('ex-map-expand').onclick = () => setMapExpanded(!$g('ex-map-wrap').classList.contains('expanded'));
 $g('ex-map-backdrop').onclick = () => setMapExpanded(false);
 
-// ------------------------------------------------------------------ the guide character (the hub's rigged figure and size: Idle / Walk)
-const CHAR_URL = '../guide/models/character.glb', CHAR_H = 0.55;          // the hub's size (CHAR_SCALE = 0.55 / 2.6615 there)
+// ------------------------------------------------------------------ the guide character (the hub's size; Idle / Walk clips when the figure has them)
+// (user 2026-10-28: the new figure characterhub.glb in place of the hub's character.glb: same 0.55 m, feet on the floor, faces +Z as the
+// old one did; it has no clips, so it is not animated. Phones get its lite copy, made by rooms/mobile_fast/make_char_lite.mjs)
+const CHAR_URL = '../guide/models/characterhub.glb', CHAR_H = 1.1;        // 2 x the hub's 0.55 m (user 2026-10-28: 4 x, then "reduce his size 2 times")
 const gScene = new THREE.Scene();                                       // the guide + its trail, drawn after the frame (always visible)
 gScene.add(new THREE.HemisphereLight(0xfff7ee, 0x8a8070, 2.2));
 { const gd = new THREE.DirectionalLight(0xfff1e2, 1.3); gd.position.set(6, 12, -8); gScene.add(gd); }
 let charGroup = null, charMixer = null, charIdle = null, charWalk = null, charAction = null;
 new GLTFLoader().load(CHAR_URL, gltf => {
-  const root = gltf.scene; const bb = new THREE.Box3().setFromObject(root), h = Math.max(0.1, bb.max.y - bb.min.y);
+  const root = gltf.scene; root.updateMatrixWorld(true);                 // a rigged figure measures right only with its skeleton posed (bind pose)
+  root.traverse(o => { if (o.isSkinnedMesh) { o.skeleton.update(); o.boundingBox = null; } });
+  const bb = new THREE.Box3().setFromObject(root, true), h = Math.max(0.1, bb.max.y - bb.min.y);
   charGroup = new THREE.Group(); charGroup.add(root); charGroup.scale.setScalar(CHAR_H / h); charGroup.visible = false;
   root.traverse(o => { if (o.isMesh) { o.frustumCulled = false; o.userData.guide = true; } });
   gScene.add(charGroup);
@@ -2395,6 +2582,7 @@ function doorTick(dt) {
     if (walk && walk.lobby) for (const s of walk.lobby) { const acc = walk.access.find(a => ACCESS[a.i].x === -6.24 && Math.abs(a.s - s) < 1.2);
       if ((!acc || (acc.done && !walk.hold)) && walk.s > s - 1.7 && walk.s < s + CAM_DIST + 1.0) lw = 1; }
     LOBBY_DOOR.want = lw; }
+  if (window.__fix4DoorHook) window.__fix4DoorHook(DOOR3, !!walk, dt);   // fix4: walker-opened doors + the fixed clip boxes
   if (typeof WORLD_DOORS === 'undefined') return;
   const act = DOOR3.filter(d => d.k > 0.001).sort((a, b) => b.k - a.k).slice(0, 4);
   for (let j = 0; j < 4; j++) { const d = act[j];
@@ -2475,6 +2663,72 @@ let WALK_SPEED_LEVEL = 1.0;
 let CAM_DIST = 3.0; const CAM_H = 1.45, LOOK_AHEAD = 1.6, LOOK_H = 0.45;
 let walk = null, lastT = null, prev360 = true;
 const camP = new THREE.Vector3(), camL = new THREE.Vector3();
+// ---- the chase camera never passes through what is drawn (user 2026-10-28: "the camera let it not go through a wall like how the
+// character does not go through physical things ... on the stairs the camera hits the top"). It went by the walker's collision set
+// (the plain base + room furniture, with the stair well cut open for the walker), not by the baked building on screen: on a stair it rose
+// into the upper slab (W_shell1) and showed the building cut open; upstairs it stood behind the interior walls (W_in1c). Now it is tested
+// against the visible solid geometry (building, rooms, props, base while shown; not glass, trees, the invisible helpers), with each
+// shader's own cut-outs left open (camCut: open doors, removed leaves, the baked rooms' zones, the open wells), from the guide's head
+// both ways (the bakes are one-sided: a face turned to the guide hides the camera's side of it, a face turned to the camera hides the guide)
+const CAMC = { list: [], t: -1e9, todo: [], rc: new THREE.Raycaster() };
+const camBox = (p, x0, x1, z0, z1, y0, y1) => p.x > x0 && p.x < x1 && p.z > z0 && p.z < z1 && p.y > y0 && p.y < y1;
+function camCut(p, o) {                                         // true: o's shader discards this point (DOOR_GLSL / REMOVED_GLSL / zones / wells)
+  const m = Array.isArray(o.material) ? o.material[0] : o.material, u = m && m.uniforms, world = !!o.userData.worldPart, room = !!(u && u.excl), zc = !!(m && m.userData.zoneClip);
+  if (u && u.doorB) for (let i = 0; i < 10; i++) { const b = u.doorB.value[i], y = u.doorY.value[i];
+    if (y.z >= 0.5 && p.x > b.x && p.x < b.z && p.z > b.y && p.z < b.w && p.y > y.x && p.y < y.y) return true; }
+  if ((world || (room && m.userData.doors)) && REMOVED.some(([x0, x1, y0, y1, z0, z1]) => camBox(p, x0, x1, -y1, -y0, z0, z1))) return true;
+  if (world || zc) { for (let i = 0; i < 16; i++) { const z = ZONES.value[i]; if (p.x > z.x && p.x < z.z && p.z > z.y && p.z < z.w && p.y < ZTOP.value[i]) return true; }
+    if (camBox(p, 0.85, 3.80, -2.00, -1.25, 2.05, 2.50) || camBox(p, 2.90, 3.84, -1.27, -0.24, 2.05, 2.50)) return true; }
+  if (zc && camBox(p, 17.80, 18.75, -2.66, -2.50, 2.44, 3.70)) return true;
+  if (room) { for (const z of u.excl.value) if (p.x > z.x && p.x < z.z && p.z > z.y && p.z < z.w && p.y < 2.6) return true;
+    if (p.y > 1.95 && p.y < 2.6 && (camBox(p, 15.10, 18.72, -4.85, -1.58, -1e9, 1e9) || camBox(p, 10.15, 12.95, -4.15, -0.55, -1e9, 1e9) || camBox(p, 0.85, 3.80, -2.02, -0.26, -1e9, 1e9))) return true; }
+  return false;
+}
+function camColliders(center) {                                 // drawn, solid, near the guide; a BVH each (built in the background)
+  const now = performance.now(); if (now - CAMC.t < 500) return CAMC.list; CAMC.t = now; CAMC.list = [];
+  const shown = o => { for (let q = o; q; q = q.parent) if (!q.visible) return false; return true; }, sph = new THREE.Sphere();
+  scene.traverse(o => {
+    if (!o.isMesh || o === sky || o.userData.guide || !o.geometry || !o.geometry.attributes.position || o.userData.worldPart === 'trees' || o.userData.worldPart === 'glass') return;
+    const m = Array.isArray(o.material) ? o.material[0] : o.material;
+    if (!m || m.visible === false || m.colorWrite === false || (m.transparent && !(m.opacity >= 0.9)) || /glass/i.test(m.name || '') || !shown(o)) return;
+    if (!o.geometry.boundingSphere) o.geometry.computeBoundingSphere();
+    sph.copy(o.geometry.boundingSphere).applyMatrix4(o.matrixWorld); if (sph.distanceToPoint(center) > 7) return;
+    if (o.geometry.boundsTree) CAMC.list.push({ o, c: sph.center.clone(), r: sph.radius }); else if (!o.geometry.userData.camQueued) { o.geometry.userData.camQueued = true; CAMC.todo.push(o.geometry); } });
+  return CAMC.list;
+}
+(function camBvhStep() {                                        // one tree per step, so a walk never stalls on it
+  const g = CAMC.todo.shift(); if (g && !g.boundsTree) try { g.computeBoundsTree(); } catch (e) {}
+  setTimeout(camBvhStep, g ? 30 : 400); })();
+// distance from `from` toward `to` that is clear of drawn surfaces (both facings); `to`'s own distance when nothing is in the way
+function camClear(from, to) {
+  const d = to.clone().sub(from), L = d.length(); if (L < 1e-3) return L; d.divideScalar(L);
+  const rc = CAMC.rc, v = new THREE.Vector3(); let near = L;
+  const list = camColliders(from).filter(e => { const t = Math.max(0, Math.min(L, v.copy(e.c).sub(from).dot(d))); return v.copy(from).addScaledVector(d, t).distanceTo(e.c) <= e.r; }).map(e => e.o);
+  rc.set(from, d); rc.near = 0; rc.far = L;                     // faces turned to the guide
+  for (const o of list) for (const h of rc.intersectObject(o, false)) { if (h.distance >= near) break; if (!camCut(h.point, o)) { near = h.distance; break; } }
+  rc.set(to, d.clone().negate()); rc.far = L;                   // faces turned to the camera: the one nearest the guide
+  for (const o of list) { const hs = rc.intersectObject(o, false); for (let k = hs.length - 1; k >= 0; k--) { const h = hs[k];
+    if (L - h.distance >= near) break; if (!camCut(h.point, o)) { near = L - h.distance; break; } } }
+  return near;
+}
+// ... and room around the camera point itself: CAM_R off a drawn surface above, below, to either side and behind (along the line to the
+// guide alone it could slide in just under a slab: on the stair landing it sat 7 cm under the upper floor's underside, half the view dark)
+const CAM_R = 0.3, CAM_UP = new THREE.Vector3(0, 1, 0), CAM_DN = new THREE.Vector3(0, -1, 0);
+function camRoom(g, fwd) {
+  const side = new THREE.Vector3(fwd.z, 0, -fwd.x), dirs = [CAM_UP, CAM_DN, side, side.clone().negate(), fwd.clone().negate()];
+  for (let pass = 0; pass < 3; pass++) { let moved = false;     // again after a push: off the slab can mean onto a ceiling below it
+    for (const d of dirs) { const c = camClear(g, g.clone().addScaledVector(d, CAM_R)); if (c < CAM_R - 0.01) { g.addScaledVector(d, c - CAM_R); moved = true; } }
+    if (!moved) break; }
+  return g;
+}
+// the collision set as before (castAll, open leaves let through) and the drawn surfaces, 0.25 m past `to` (a wall just behind it keeps
+// the camera 0.22 m off, as before): keep = how far from the head toward `to` the camera may stand (short of a surface, never past it)
+function camFree(head, to, all) {                              // all: the collision set too (the target spot, as before)
+  const dv = to.clone().sub(head), L = dv.length(), dir = dv.clone().divideScalar(L || 1);
+  let h = camClear(head, to.clone().addScaledVector(dir, 0.25));
+  if (all) { const c = castAll(head, dir, L + 0.25); if (c && !openAt(c.point)) h = Math.min(h, c.distance); }
+  return { dir, L, h, keep: h >= L + 0.25 - 1e-3 ? L : Math.min(L, Math.max(Math.min(0.45, h * 0.6), h - 0.22)) };
+}
 function refreshSpeed() { $g('ex-speed-label').textContent = WALK_SPEED_LEVEL.toFixed(1) + '×';
   $g('ex-speed-down').disabled = WALK_SPEED_LEVEL <= 0.6; $g('ex-speed-up').disabled = WALK_SPEED_LEVEL >= 2.4; }
 // ------------------------------------------------------------------ the voice: warm and simple, the browser's own speech with a LOCAL voice
@@ -2548,6 +2802,29 @@ function selectRoom(id) {
   if (!route) { setRouteOpen(true); $g('ex-route-title').textContent = dest.name; renderSteps([{ t: 'No route found to this room from here.', at: 0 }]); return; }
   setPanel(false); startWalk(route, dest);
 }
+// ---- the room's name over its door (user 2026-10-28: "when the character is moving before he enters the room, let the camera show the
+// name of the room on the tag which is on top of the doors for each room ... for 2 seconds then the character enters and orbit the room").
+// A plate over the destination's own door (the walk's last door, near its end), flush on the wall face on the corridor side; it stays.
+const DOOR_TAGS = new Map();
+function doorTag(i, path, s, name) {
+  if (DOOR_TAGS.has(i)) return DOOR_TAGS.get(i);
+  const d = DOOR3[i], q = sampleAt(path, Math.max(0, s - 1.0)), alongX = d.a === 'x';
+  const side = Math.sign(alongX ? q.z - d.c : q.x - d.c) || 1, n = alongX ? new THREE.Vector3(0, 0, side) : new THREE.Vector3(side, 0, 0);
+  const w = alongX ? d.x1 - d.x0 : d.z1 - d.z0, c = new THREE.Vector3(alongX ? (d.x0 + d.x1) / 2 : d.c, d.y1 + 0.2, alongX ? d.c : (d.z0 + d.z1) / 2);
+  const from = c.clone().addScaledVector(n, 1.2), hit = camClear(from, c.clone().addScaledVector(n, -0.4));   // the wall over the door, seen from the corridor
+  const pos = hit < 1.6 ? from.addScaledVector(n, -hit + 0.015) : c.clone().addScaledVector(n, d.h + 0.05);
+  const W = Math.max(0.75, Math.min(1.5, w * 0.95)), H = 0.27, cv = document.createElement('canvas'); cv.width = 1024; cv.height = Math.round(1024 * H / W);
+  const g = cv.getContext('2d'), r = cv.height * 0.18;
+  g.fillStyle = 'rgba(22,18,14,0.94)'; g.beginPath(); g.roundRect(4, 4, cv.width - 8, cv.height - 8, r); g.fill();
+  g.strokeStyle = 'rgba(243,236,226,0.55)'; g.lineWidth = 5; g.beginPath(); g.roundRect(12, 12, cv.width - 24, cv.height - 24, r * 0.8); g.stroke();
+  let fs = cv.height * 0.5; g.font = `700 ${fs}px 'Bricolage Grotesque', system-ui, sans-serif`;
+  while (g.measureText(name).width > cv.width * 0.86 && fs > 20) { fs -= 4; g.font = `700 ${fs}px 'Bricolage Grotesque', system-ui, sans-serif`; }
+  g.fillStyle = '#F3ECE2'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(name, cv.width / 2, cv.height * 0.53);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = Math.min(8, MAX_ANISO);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(W, H), new THREE.MeshBasicMaterial({ map: tex, transparent: true, color: new THREE.Color(1.5, 1.5, 1.5) }));
+  m.position.copy(pos); m.rotation.y = alongX ? (side > 0 ? 0 : Math.PI) : (side > 0 ? Math.PI / 2 : -Math.PI / 2); m.name = 'DOOR_TAG_' + name; m.userData.doorTag = true;
+  scene.add(m); DOOR_TAGS.set(i, m); return m;
+}
 function startWalk(route, dest) {
   if (walk) stopWalk(true);
   if (document.body.classList.contains('hub-pano')) leave360();
@@ -2570,6 +2847,8 @@ function startWalk(route, dest) {
   walk.lobby = [];                                              // the lobby's glazed double door (X -6.24, Y 1.36..3.28): where the walk goes through it
   for (let k = 1; k < path.n; k++) if (path.L[k] === 0 && (path.X[k - 1] + 6.24) * (path.X[k] + 6.24) <= 0 && -path.Z[k] > 1.2 && -path.Z[k] < 3.45) walk.lobby.push(path.S[k]);
   const a = sampleAt(path, 0), b = sampleAt(path, 0.6); walk.yaw = Math.atan2(b.x - a.x, b.z - a.z);
+  { const last = walk.doors[walk.doors.length - 1];             // the room's own door: its name plate, a 2 s look 1.4 m before it
+    if (last && path.len - last.s < 6 && last.s > 1.9) walk.sign = { s: last.s - 1.4, at: doorTag(last.i, path, last.s, dest.name), done: false }; }
   prev360 = HUBUI ? OV.prev360 : use360.checked; use360.checked = false; PANO.anim = null; exitPano();
   if (document.pointerLockElement) document.exitPointerLock();
   document.body.classList.add('guiding'); document.body.classList.remove('hub-intro');
@@ -2625,9 +2904,10 @@ function walkTick(dt) {
   const w = walk, path = w.path; CAM_DIST = camera.aspect < 0.95 ? 3.4 : 3.0;
   if (w.fly && w.fly.t < 1) { w.fly.t = Math.min(1, w.fly.t + dt / 1.6); }                     // fly in from where the camera was
   else if (w.isoHold) { w.isoHold = false; isoT = 1.0; isolate(1e4, 0); }                      // landed behind the guide: every floor back
-  else if (!w.paused && w.hold) { w.hold.t += dt; if (w.hold.t >= 6 || (w.hold.t >= 2.2 && !talking())) w.hold = null; }   // at a card reader
+  else if (!w.paused && w.hold) { w.hold.t += dt; if (w.hold.sign ? w.hold.t >= 2.0 : (w.hold.t >= 6 || (w.hold.t >= 2.2 && !talking()))) w.hold = null; }   // at a card reader / the name plate
   else if (!w.paused) { w.s = Math.min(path.len, w.s + WALK_SPEED_BASE * WALK_SPEED_LEVEL * dt);
-    for (const a of w.access) if (!a.done && w.s >= a.s - 0.85) { a.done = true; w.s = a.s - 0.85; w.hold = { t: 0 }; break; } }
+    for (const a of w.access) if (!a.done && w.s >= a.s - 0.85) { a.done = true; w.s = a.s - 0.85; w.hold = { t: 0 }; break; }
+    if (!w.hold && w.sign && !w.sign.done && w.s >= w.sign.s) { w.sign.done = true; w.s = w.sign.s; w.hold = { t: 0, sign: true }; } }
   const p = sampleAt(path, w.s), q = sampleAt(path, Math.min(path.len, w.s + 0.35));
   w.level = p.lv;
   const moving = !w.paused && !w.hold && (!w.fly || w.fly.t >= 1) && w.s < path.len;
@@ -2644,20 +2924,34 @@ function walkTick(dt) {
   // third-person camera: behind and a little above the guide, looking a bit ahead of it; pulled in by walls, smoothed
   const fwd = new THREE.Vector3(Math.sin(w.yaw), 0, Math.cos(w.yaw)), head = new THREE.Vector3(p.x, p.f + 0.5, p.z);
   const goal = new THREE.Vector3(p.x, p.f + CAM_H, p.z).addScaledVector(fwd, -CAM_DIST), look = new THREE.Vector3(p.x, p.f + LOOK_H, p.z).addScaledVector(fwd, LOOK_AHEAD);
-  const dv = goal.clone().sub(head), dl = dv.length(); const hit = castAll(head, dv.clone().normalize(), dl + 0.25);
-  if (hit && hit.distance < dl + 0.2 && !openAt(hit.point)) goal.copy(head).addScaledVector(dv.normalize(), Math.max(0.45, hit.distance - 0.22));
+  const signing = !!(w.hold && w.hold.sign && w.sign && w.sign.at);   // at the name plate: the camera looks at it, from higher and to one side
+  if (signing) look.copy(w.sign.at.position);
+  { let best = null; const sideV = new THREE.Vector3(fwd.z, 0, -fwd.x);   // blocked (a slab over the stair, a door head): first lower at the same distance, then in
+    for (const [hh, so] of signing ? [[1.9, 0.9], [1.9, -0.9], [1.45, 0.9], [1.45, -0.9]] : [[CAM_H, 0], [1.1, 0], [0.8, 0]]) {
+      const g = camRoom(new THREE.Vector3(p.x, p.f + hh, p.z).addScaledVector(fwd, -CAM_DIST).addScaledVector(sideV, so), fwd), f = camFree(head, g, true);
+      if (!best || f.keep > best.f.keep + 0.05) best = { g, f }; if (f.keep >= f.L - 1e-3) break; }
+    goal.copy(head).addScaledVector(best.f.dir, best.f.keep); }
+  const signFrom = signing ? w.sign.at.position.clone().addScaledVector(new THREE.Vector3(0, 0, 1).applyQuaternion(w.sign.at.quaternion), 0.15) : null;
+  if (signing) {                                                // ... out in the corridor in front of the plate (straight or diagonal: the most room)
+    const n = new THREE.Vector3(0, 0, 1).applyQuaternion(w.sign.at.quaternion), t = new THREE.Vector3(n.z, 0, -n.x); let best = null;
+    for (const k of [0, 0.75, -0.75]) { const g = signFrom.clone().addScaledVector(n.clone().addScaledVector(t, k).normalize(), 3.0); g.y = w.sign.at.position.y - 0.45;
+      camRoom(g, n.clone().negate()); const f = camFree(signFrom, g, true); if (!best || f.keep > best.keep + 0.1) best = f; }
+    goal.copy(signFrom).addScaledVector(best.dir, best.keep); }
   const W = getWalk();                                          // ... and short of furniture / partitions (the walkable map's solid cells)
-  if (W.cam && Math.abs(p.f - levelY(p.lv)) < 0.15) {
+  if (W.cam && Math.abs(p.f - levelY(p.lv)) < 0.15 && !signing) {
     const hx = goal.x - p.x, hz = goal.z - p.z, hl = Math.hypot(hx, hz), n = Math.ceil(hl / 0.05);
     for (let k = 1; k <= n; k++) { const x = p.x + hx * k / n, z = p.z + hz * k / n, i = Math.floor((x - W.x0) / W.res), j = Math.floor((z - W.z0) / W.res);
       if (i < 0 || j < 0 || i >= W.nx || j >= W.nz || !W.cam[p.lv][j * W.nx + i]) { const t = Math.max(0.45, hl * (k - 1) / n - 0.12) / Math.max(hl, 1e-6);
         if (t < 1) { goal.x = p.x + hx * t; goal.z = p.z + hz * t; } break; } } }
   { const dh = Math.hypot(goal.x - p.x, goal.z - p.z), lack = Math.max(0, CAM_DIST * 0.85 - dh);   // pulled in: rise over the guide's head
-    if (lack > 0) { goal.y = Math.min(p.f + 1.95, goal.y + lack * 0.75); look.addScaledVector(fwd, lack * 0.6); } }
+    if (lack > 0 && !signing) for (const k of [1, 0.5]) { const up = goal.clone(); up.y = Math.min(p.f + 1.95, goal.y + lack * 0.75 * k); camRoom(up, fwd); const f = camFree(head, up);
+      if (f.keep >= f.L - 1e-3) { goal.copy(up); look.addScaledVector(fwd, lack * 0.6 * k); break; } } }   // ... only as far as it is clear (no ceiling)
+  { const o = signing ? signFrom : head, f = camFree(o, goal, true); if (f.keep < f.L - 1e-3) goal.copy(o).addScaledVector(f.dir, f.keep); }    // the goal as finally moved: clear
   camP.lerp(goal, 1 - Math.exp(-dt * 4.5)); camL.lerp(look, 1 - Math.exp(-dt * 7));
+  { const o = signing ? signFrom : head, f = camFree(o, camP); if (f.keep < f.L - 1e-3) camP.copy(o).addScaledVector(f.dir, f.keep); }    // the smoothing never trails it through a surface
   // camera squeezed in behind the guide: it fades. On a portrait screen (narrow view) the guide fills the middle sooner: fade from 2.1 m
   { const dc = Math.hypot(camP.x - p.x, camP.z - p.z), por = camera.aspect < 0.95;
-    charOpacity(Math.max(por ? 0.3 : 0.1, Math.min(1, por ? (dc - 0.9) / 1.2 : (dc - 0.7) / 0.7))); }
+    const op = Math.max(por ? 0.3 : 0.1, Math.min(1, por ? (dc - 0.9) / 1.2 : (dc - 0.7) / 0.7)); charOpacity(signing ? Math.min(op, 0.35) : op); }
   let C = camP, Lk = camL;
   if (w.fly && w.fly.t < 1) { const k = w.fly.t * w.fly.t * (3 - 2 * w.fly.t); C = w.fly.from.clone().lerp(camP, k); Lk = w.fly.fromLook.clone().lerp(camL, k); }
   pos.copy(C); const v = Lk.clone().sub(C); yaw = Math.atan2(-v.x, -v.z); pitch = Math.atan2(v.y, Math.hypot(v.x, v.z));
@@ -2805,7 +3099,11 @@ window.__guide = { dest: () => DEST.map(d => d.id), ready: () => DEST.filter(d =
   state: () => walk ? { s: +walk.s.toFixed(2), len: +walk.path.len.toFixed(2), level: walk.level, step: walk.stepNow,
     char: charGroup ? [+charGroup.position.x.toFixed(2), +charGroup.position.y.toFixed(2), +charGroup.position.z.toFixed(2)] : null,
     cam: [+pos.x.toFixed(2), +pos.y.toFixed(2), +pos.z.toFixed(2)] } : null,
-  speed: v => { WALK_SPEED_LEVEL = v; refreshSpeed(); }, stop: () => stopWalk(), charLoaded: () => !!charGroup, open: () => setPanel(true),
+  speed: v => { WALK_SPEED_LEVEL = v; refreshSpeed(); }, stop: () => stopWalk(),
+  camBench: n => { if (!walk || !charGroup) return null; const c = charGroup.position, head = new THREE.Vector3(c.x, c.y + 0.5, c.z), t0 = performance.now();   // ms a camera check takes here
+    for (let i = 0; i < n; i++) camFree(head, camP); const t1 = performance.now(); for (let i = 0; i < n; i++) camClear(head, camP); const t2 = performance.now();
+    const dir = camP.clone().sub(head), L = dir.length(); dir.divideScalar(L || 1); for (let i = 0; i < n; i++) castAll(head, dir, L + 0.25); const t3 = performance.now();
+    return { free: +((t1 - t0) / n).toFixed(3), drawn: +((t2 - t1) / n).toFixed(3), castAll: +((t3 - t2) / n).toFixed(3), list: CAMC.list.length }; }, charLoaded: () => !!charGroup, open: () => setPanel(true),
   pause: () => togglePause(), level: l => { const b = document.querySelector(`#rail .lvl[data-rail="${l}"]`); if (b) b.click(); },
   turns: id => { const r = computeRoute(fromNode(), D[id]); return r ? r.steps.filter(s => s.k === 'turn').length : null; },
   open360: () => $g('walk-hud-360').click(), back: () => $g('hub-back').click(),
