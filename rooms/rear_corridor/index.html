@@ -1,0 +1,74 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Rear Corridor and Auditorium Wall (murals) Renders</title>
+<style>
+:root{--bg:#f7f6f4;--fg:#1b1b1e;--mut:#6d6d74;--line:#e2e0dd;--card:#fff;--accent:#9d5f3f;
+ --warn:#b2804f;--ok:#3f7d52;--err:#b2554f}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141416;--fg:#ececef;
+ --mut:#9a9aa2;--line:#2b2b30;--card:#1c1c20}}
+:root[data-theme=dark]{--bg:#141416;--fg:#ececef;--mut:#9a9aa2;--line:#2b2b30;--card:#1c1c20}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1500px;margin:0 auto;padding:52px 16px 80px}
+header{border-bottom:1px solid var(--line);padding-bottom:26px}
+h1{font-size:clamp(25px,4vw,38px);margin:0 0 10px;letter-spacing:-.02em}
+.sub{color:var(--mut);margin:0;max-width:76ch}
+.pill{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+ padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mut);margin-right:8px}
+.pill.draft{border-color:var(--warn);color:var(--warn)}
+.pill.ok{border-color:var(--ok);color:var(--ok)}
+.pill.err{border-color:var(--err);color:var(--err)}
+section{padding:40px 0;border-bottom:1px solid var(--line)}
+.ahead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.num{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600}
+h2{font-size:21px;margin:0;letter-spacing:-.01em}
+.cap{color:var(--mut);margin:8px 0 18px;max-width:82ch}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:880px){.pair{grid-template-columns:1fr}}
+figure{margin:0}
+.shot{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+ background:var(--card)}
+.shot img{display:block;width:100%;height:auto}
+.tag{position:absolute;top:0;left:0;background:#1b1b1e;color:#fff;font-size:11px;
+ letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:0 0 8px 0}
+.dtag{position:absolute;top:0;right:0;background:var(--warn);color:#fff;font-size:11px;
+ letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:0 0 0 8px}
+.missing{aspect-ratio:16/9;display:grid;place-items:center;color:var(--mut);font-size:14px}
+model-viewer{width:100%;height:clamp(360px,54vh,580px);background:var(--card);
+ border:1px solid var(--line);border-radius:10px}
+.note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);
+ border-radius:8px;padding:14px 18px;margin-top:16px;color:var(--mut);font-size:14.5px;max-width:92ch}
+.note b{color:var(--fg)}
+.stat{font-size:14px;margin:12px 0 0;padding:9px 14px;border-radius:7px;border:1px solid var(--line);
+ background:var(--card);color:var(--mut)}
+.stat.ok{border-color:var(--ok);color:var(--ok)}
+.stat.err{border-color:var(--err);color:var(--err)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:14px}
+th{text-align:left;color:var(--mut);font-weight:500;border-bottom:1px solid var(--line);
+ padding:8px 10px 8px 0}
+td{border-bottom:1px solid var(--line);padding:7px 10px 7px 0;vertical-align:top}
+td.n{font-variant-numeric:tabular-nums;color:var(--mut);white-space:nowrap}
+dl{margin:18px 0 0;border-top:1px solid var(--line)}
+.srow{display:grid;grid-template-columns:230px 1fr;gap:16px;padding:10px 0;
+ border-bottom:1px solid var(--line)}
+@media(max-width:640px){.srow{grid-template-columns:1fr;gap:2px}}
+dt{color:var(--mut);font-size:14px}
+dd{margin:0;font-size:14.5px}
+footer{color:var(--mut);font-size:13.5px;padding-top:28px}
+a{color:var(--accent)}
+ .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:980px){.trio{grid-template-columns:1fr}} ol li,ul li{margin:4px 0}</style></head>
+<body><div class="wrap"><header><p><a href="../../index.html">&larr; all rooms</a></p>
+<h1>Rear Corridor and Auditorium Wall (murals) &mdash; National ICT Innovation Hub</h1><p class="sub">The corridor from the Reception, past the stair, to the rear door and the Auditorium: its two painted walls and the Auditorium wall you face when you come out, each carrying the user&#x27;s photo of that wall (folder &#x27;reception corner towards aditrium&#x27;). Walls only - the rest is the existing scene.</p>
+<p class="sub" style="margin-top:8px">Zone: corridor X -1.77..+0.61, Y -3.16..+1.28 between the ground-floor washrooms (Reception -&gt; rear door), soffit 2.14 m; Auditorium north face Y -5.03 opposite the rear door. Each angle: the reference photo (where there is one) and the <b>furnished</b> scene; shell frames
+are not rendered for this room. The original meshes are untouched; no
+render contains people.</p><p style="margin-top:14px"><span class="pill draft">5 draft</span><span class="pill ok">1 final</span></p></header><section><div class="ahead"><span class="num">ZONE</span><h2>Zone check and photo mapping</h2><span class="pill ok">high confidence - ray casts on the model</span></div><p class="cap">Plan: the passage between &#x27;Ladies Room&#x27; and &#x27;Gents Rooms&#x27;, south of the stair (plan px x 425..487). Ray casts on the GLB (scripts/probe_rear.py, probe_out.txt): west face X -1.750 (Y +1.15) .. -1.785 (Y -3.10), east face X +0.611 from Y +0.17 (the stair is north of it), rear wall Y -3.16 with the door X -1.23..+0.37, soffit 2.14, no openings in either side wall. Auditorium north face Y -5.029, wall to 2.44 under the roof slab. Which photo goes where: Hub Space-218 (outside/, from the passage through the open rear door) shows the typewriter keys on the WEST wall, so the cyborg is on the EAST wall.</p><div class="trio" style="grid-template-columns:1fr 1fr"><figure><div class="shot"><a href="zone_plan.png"><img src="zone_plan.png" alt="zone on the floor plan"></a></div></figure><div><table><thead><tr><th>Photo</th><th>Where it looks</th><th>Angle</th></tr></thead><tbody><tr><td>WhatsApp Image 2026-10-25 at 23.46.16.jpeg</td><td>West wall (typewriter &#x27;Evolve.&#x27;)</td><td>02, 01, 04</td></tr><tr><td>WhatsApp Image 2026-10-25 at 23.45.57.jpeg</td><td>East wall (cyborg + sunflowers)</td><td>03, 01, 04</td></tr><tr><td>aditorium wall.jpeg</td><td>Auditorium north face, opposite the rear door</td><td>05, 06, 01</td></tr></tbody></table></div></div></section><section><div class="ahead"><span class="num">01</span><h2>Down the corridor to the rear door</h2><span class="pill">photo no matching photo</span></div><p class="cap">From the Reception end, south of the stair: the cyborg and sunflower mural on the east wall (left), the typewriter &#x27;Evolve.&#x27; mural on the west wall (right), and through the rear door the Auditorium&#x27;s mural wall.</p><div class="trio" style="grid-template-columns:repeat(1,1fr);max-width:900px"><figure><div class="shot"><img src="01_corridor_to_auditorium_furnished.png" alt="Down the corridor to the rear door Furnished" loading="lazy"><span class="tag">Furnished</span></div></figure></div></section><section><div class="ahead"><span class="num">02</span><h2>West wall: the typewriter</h2><span class="pill">photo WhatsApp Image 2026-10-25 at 23.46.16.jpeg</span></div><p class="cap">The west wall (Ladies side) square on: the typewriter with the evolution strip, from the rear door end (left) toward the Reception.</p><div class="trio" style="grid-template-columns:repeat(2,1fr)"><figure><div class="shot"><img src="ref/WhatsApp Image 2026-10-25 at 23.46.16.jpeg" alt="reference photo" loading="lazy"><span class="tag">Photo WhatsApp Image 2026-10-25 at 23.46.16.jpeg</span></div></figure><figure><div class="shot"><img src="02_west_wall_typewriter_furnished.png" alt="West wall: the typewriter Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section><section><div class="ahead"><span class="num">03</span><h2>East wall: cyborg and sunflowers</h2><span class="pill">photo WhatsApp Image 2026-10-25 at 23.45.57.jpeg</span></div><p class="cap">The east wall (Gents side) square on: the sunflower field and the cyborg portrait; the rear door is to the right.</p><div class="trio" style="grid-template-columns:repeat(2,1fr)"><figure><div class="shot"><img src="ref/WhatsApp Image 2026-10-25 at 23.45.57.jpeg" alt="reference photo" loading="lazy"><span class="tag">Photo WhatsApp Image 2026-10-25 at 23.45.57.jpeg</span></div></figure><figure><div class="shot"><img src="03_east_wall_cyborg_furnished.png" alt="East wall: cyborg and sunflowers Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section><section><div class="ahead"><span class="num">04</span><h2>Back to the Reception</h2><span class="pill">photo no matching photo</span></div><p class="cap">From the rear door looking north: the typewriter on the left, the cyborg on the right, the Reception and its glazing ahead.</p><div class="trio" style="grid-template-columns:repeat(1,1fr);max-width:900px"><figure><div class="shot"><img src="04_corridor_to_reception_furnished.png" alt="Back to the Reception Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section><section><div class="ahead"><span class="num">05</span><h2>The Auditorium wall you face</h2><span class="pill">photo aditorium wall.jpeg</span></div><p class="cap">Leaving the corridor through the rear door: the Auditorium&#x27;s north wall with the robot, child and sunflower mural, framed by the door.</p><div class="trio" style="grid-template-columns:repeat(2,1fr)"><figure><div class="shot"><img src="ref/aditorium wall.jpeg" alt="reference photo" loading="lazy"><span class="tag">Photo aditorium wall.jpeg</span></div></figure><figure><div class="shot"><img src="05_auditorium_wall_from_door_furnished.png" alt="The Auditorium wall you face Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section><section><div class="ahead"><span class="num">06</span><h2>Auditorium wall, close</h2><span class="pill">photo aditorium wall.jpeg</span></div><p class="cap">From the rear-door threshold, 1.7 m from the wall (the model&#x27;s passage is 1.78 m wide): the middle of the mural.</p><div class="trio" style="grid-template-columns:repeat(2,1fr)"><figure><div class="shot"><img src="ref/aditorium wall.jpeg" alt="reference photo" loading="lazy"><span class="tag">Photo aditorium wall.jpeg</span></div></figure><figure><div class="shot"><img src="06_auditorium_wall_passage_furnished.png" alt="Auditorium wall, close Furnished" loading="lazy"><span class="tag">Furnished</span><span class="dtag">draft</span></div></figure></div></section>
+<section><div class="ahead"><span class="num">DIFF</span><h2>What differs from the photos (ranked)</h2></div>
+<ol><li>Corridor light: the existing Reception scene has no ceiling lights south of the Reception, so the corridor and its murals read darker than the phone photos (no light was added: walls only).</li><li>The Auditorium wall is rendered from the corridor scene, through the rear door: the existing outside scene renders the covered passage almost black (the model&#x27;s passage is 1.78 m wide under a canopy; the real one ~4 m).</li><li>The dark grey pilasters in the Auditorium photo are part of the picture (flat), not raised from the wall.</li><li>Each photo fills its wall&#x27;s full height: the model&#x27;s corridor soffit is 2.14 m (real ~3 m). Typewriter photo extended 0.41 m at the north end with its own grey wall; cyborg photo trimmed 0.47 m of plain wall at the south end; the black floor strip cut off the typewriter photo.</li><li>The photos&#x27; own lighting is part of the texture (the bright patch on the plain wall right of the cyborg).</li></ol></section>
+<section><div class="ahead"><span class="num">DROP</span><h2>Dropped at real scale</h2></div>
+<table><thead><tr><th>Item</th><th>Why</th></tr></thead><tbody></tbody></table></section>
+<section><div class="ahead"><span class="num">WALK</span><h2>Free camera</h2></div><p class="stat">Free-camera page: not built yet.</p></section>
+<section><div class="ahead"><span class="num">FILES</span><h2>Files and last updated</h2></div>
+<table><thead><tr><th>File</th><th>Kind</th><th>Size</th><th>Modified</th></tr></thead><tbody><tr><td>01_corridor_to_auditorium_furnished.png</td><td class='n'>final</td><td class='n'>1.5 MB</td><td class='n'>2026-10-26 09:09</td></tr><tr><td>02_west_wall_typewriter_furnished.png</td><td class='n'>DRAFT</td><td class='n'>1015.8 KB</td><td class='n'>2026-10-26 08:51</td></tr><tr><td>03_east_wall_cyborg_furnished.png</td><td class='n'>DRAFT</td><td class='n'>1.0 MB</td><td class='n'>2026-10-26 08:52</td></tr><tr><td>04_corridor_to_reception_furnished.png</td><td class='n'>DRAFT</td><td class='n'>1003.5 KB</td><td class='n'>2026-10-26 08:53</td></tr><tr><td>05_auditorium_wall_from_door_furnished.png</td><td class='n'>DRAFT</td><td class='n'>1.1 MB</td><td class='n'>2026-10-26 08:53</td></tr><tr><td>06_auditorium_wall_passage_furnished.png</td><td class='n'>DRAFT</td><td class='n'>1.2 MB</td><td class='n'>2026-10-26 08:54</td></tr></tbody></table></section>
+<section style="border-bottom:none"><div class="ahead"><span class="num">&#9881;</span><h2>Render settings</h2></div>
+<dl><div class="srow"><dt>Walls</dt><dd>West X -1.75..-1.785 (Y -3.16..+1.28), east X +0.611 (Y -3.16..+0.17), Auditorium north face Y -5.03 (X -2.60..+1.74, centred on the rear door X -1.23..+0.37); ray casts on the GLB (probe_out.txt)</dd></div><div class="srow"><dt>How</dt><dd>Each photo is a new plane 3 mm in front of its wall; nothing else changed (render_reception.py scene, beyond neutral)</dd></div><div class="srow"><dt>Renderer</dt><dd>Blender 4.2 LTS, Cycles, CPU only (i5-10505)</dd></div><div class="srow"><dt>Draft settings</dt><dd>1280 x 720, 32 samples, OIDN (finals 1600 x 900, 256 samples)</dd></div><div class="srow"><dt>Tone mapping</dt><dd>AgX, Medium High Contrast, exposure -0.22 (same as the Reception)</dd></div><div class="srow"><dt>360 tours</dt><dd>Panoramas that see these walls re-rendered with the murals in their own scenes: Reception p00-p03, p05-p11, outside o00, o15-o17, Founder Space 1 p00 (originals in rear_corridor/backup/tour/)</dd></div><div class="srow"><dt>Building page</dt><dd>The three murals are drawn on the realtime building: photo x the light baked on each wall in the building&#x27;s bake scene (world_bake_fix.blend)</dd></div><div class="srow"><dt>People</dt><dd>None rendered (the people in the Auditorium mural are part of the painting)</dd></div></dl></section><footer>Page built 2026-10-27 23:13:27 &middot; nothing uploaded anywhere</footer></div></body></html>

@@ -14,7 +14,7 @@
    "where": "from the lobby into the stair well: wall art, cluster pendant, balustrades, 24 mm",
    "photo": "Hub Space-198.jpg",
    "draft": 1792395291,
-   "final": 1792410899
+   "final": 1793119116
   },
   {
    "id": "10_w_top_close",
@@ -22,7 +22,7 @@
    "where": "from beside the lobby railing into the well: pendant cluster, wall art, the second flight, 20 mm",
    "photo": "Hub Space-198.jpg",
    "draft": 1792411638,
-   "final": 1792413572
+   "final": 1793127571
   }
  ],
  "notes": "<p><b>Flights (verified in the model).</b> Tread clusters of SOURCE_OTHER (scripts/compute_ramps.py, ramps.json): W1 15 treads at 35&deg;,\nW2 10 at 25&deg;, E1 13 at 22&deg;, E2 12 at 25&deg;, E3 11 at 25&deg;. The model's E3 overshoots the floor by two risers (2.53 / 2.62 m) and leaves a 0.15 m\ngap to the slab; its inner balustrade runs over the head of E2 (1.3 m clear). Both are handled on the building page.</p>\n<p><b>Photos.</b> 108, 109, 111, 114 (Founder Space stair); 198, 199, 201&ndash;204 (Reception stair).</p>\n<p><b>Built as new objects.</b> Dark brown rubber treads and grey risers on the model flights (shader); steel balustrades with wood handrails along every\nopen side; dark grey fascia panels on the east stair's stringers; a white wall with the yellow and black &ldquo;pacman&rdquo; mural; a plant on the landing in a teal\nringed pot; a roll-up banner at the foot; a dark wood panelled wall beside W1; a fire-exit sign. The Cafeteria's wall art and cluster pendant over the\nReception stair are reused.</p>\n<p><b>Differences from the photos.</b> (1) The model's Reception stair well is about 1 m wide; the real well is much larger and open over the lower flight.\n(2) The ground floor seen from the Founder Space stair is a light stand-in for Founder Space 1, not that room's finished scene.</p>",
