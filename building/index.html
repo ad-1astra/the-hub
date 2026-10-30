@@ -2242,6 +2242,9 @@ const STAIR_MID = [[1.15, 1.60, 0.20], [3.45, 1.60, 1.60], [3.45, 0.78, 1.60], [
 const $g = id => document.getElementById(id);
 
 // ------------------------------------------------------------------ hub routing (copied; HUB.meta.walk -> GW)
+const OBSTACLES = [                                            // [level, Blender x1, y1, x2, y2 (a point or a line), half width] (fix4_scene.py)
+  [0, -0.60, 3.35, -0.60, 3.35, 0.42],                         // the Reception's robot totem: 4 printed cubes on a 0.42 m round base
+  [0, 1.303, 2.063, 1.897, 2.657, 0.12] ];                     // the INTERCRAFT roll-up banner by the stair (0.84 m print, 0.24 m foot)
 let __walk = null;
 function getWalk() {
   if (__walk !== null) return __walk;
@@ -2269,6 +2272,14 @@ function getWalk() {
     let mainId = 0; for (let s = 1; s < sizes.length; s++) if (sizes[s] > sizes[mainId]) mainId = s;
     return { comp, mainId };
   }
+  // (user 2026-10-30: "make sure that the character doesn't pass through objects like this one") objects added after the map was made:
+  // their footprint + the map's usual ~0.25 m body clearance is not walkable (found by rooms/route_card/tests/clip_check.mjs)
+  for (const [lv, ax, ay, bx, by, r] of OBSTACLES) { const R = r + 0.25, dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy || 1e-9;
+    for (let j = Math.floor((-Math.max(ay, by) - R - w.z0) / w.res); j <= Math.floor((-Math.min(ay, by) + R - w.z0) / w.res); j++)
+      for (let i = Math.floor((Math.min(ax, bx) - R - w.x0) / w.res); i <= Math.floor((Math.max(ax, bx) + R - w.x0) / w.res); i++) {
+        if (i < 0 || j < 0 || i >= w.nx || j >= w.nz) continue;
+        const px = w.x0 + (i + 0.5) * w.res, py = -(w.z0 + (j + 0.5) * w.res), t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2));
+        if (Math.hypot(px - ax - dx * t, py - ay - dy * t) < R) lvArr[lv][j * w.nx + i] = 0; } }
   const c0 = components(lvArr[0], w.nx, w.nz), c1 = components(lvArr[1], w.nx, w.nz);
   __walk = { res: w.res, x0: w.x0, z0: w.z0, nx: w.nx, nz: w.nz, lv: lvArr, comp: [c0.comp, c1.comp], mainId: [c0.mainId, c1.mainId],
     cam: w.c0 ? [bits(w.c0), bits(w.c1)] : null };            // where the chase camera may be (no wall, glass or furniture within ~0.1 m)
@@ -3354,6 +3365,9 @@ window.__guide = { dest: () => DEST.map(d => d.id), ready: () => DEST.filter(d =
   open360: () => $g('walk-hud-360').click(), back: () => $g('hub-back').click(),
   voice: v => { if (v !== undefined && !!v !== VOICE.on) $g('walk-hud-voice').click(); return { on: VOICE.on, voice: VOICE.v && VOICE.v.name, local: !!(VOICE.v && VOICE.v.localService) }; },
   spoken: () => VOICE.spoken.slice(), access: () => walk ? walk.access.map(a => ({ door: ACCESS[a.i].name, s: +a.s.toFixed(2), done: a.done })) : [],
+  pathFor: (from, to) => { const fr = from ? { ...D[from], type: 'room' } : fromNode(), r = viaDesk(fr, D[to], computeRoute(fr, D[to])); if (!r) return null;
+    const q = buildPath(r.pts); return { X: Array.from(q.X), Z: Array.from(q.Z), F: Array.from(q.F), L: Array.from(q.L) }; },
+  doorNear: (x, z, lv, pad) => doorAt(x, z, lv, pad) >= 0,
   doors: () => walk ? walk.doors.map(d => ({ i: d.i, s: +d.s.toFixed(2) })) : [], doorOpen: i => DOOR3[i] ? +DOOR3[i].k.toFixed(2) : null, nDoors: () => DOOR3.length,
   holding: () => !!(walk && walk.hold), hud: () => ({ sub: $g('walk-hud').querySelector('.sub').textContent, text: $g('walk-hud-text').textContent }) };
 })();
