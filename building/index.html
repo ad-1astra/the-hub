@@ -57,7 +57,20 @@ h3{margin:2px 0 8px;font-size:11px;letter-spacing:.09em;text-transform:uppercase
 #pbar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:30;transition:width .3s,opacity .6s}
 #entering{top:62px;left:50%;transform:translateX(-50%);padding:8px 16px;font-size:13px;display:none;border-left:4px solid var(--accent);z-index:22}
 #note{bottom:14px;left:50%;transform:translateX(-50%);padding:7px 14px;font-size:12px;color:var(--mut);max-width:min(620px,calc(100vw - 420px));text-align:center}
+/* (user 2026-10-30, phones only: "remove all the words so only the loading icon must be there from the start when the model is scanned")
+   html.phone-loading (set below, cleared when the loading screen lifts): the loading circle and nothing else */
+html.phone-loading #rooms,html.phone-loading #hud,html.phone-loading #mini,html.phone-loading #note,html.phone-loading #click,
+html.phone-loading #entering,html.phone-loading #loading,html.phone-loading #pbar{display:none !important}
+html.phone-loading #hubui{visibility:hidden !important}
 </style>
+<script>/* (user 2026-10-30) the phone-only look: html.phone, + phone-ios / phone-android (which hub logo the QR carries); ?phone=1|0 overrides */
+(function () { try { var ua = navigator.userAgent, ios = /iPhone|iPod/i.test(ua), and = /Android/i.test(ua);
+  var small = Math.min(screen.width, screen.height) <= 500 && matchMedia('(pointer:coarse)').matches;
+  var phone = ios || (and && /Mobile/i.test(ua)) || (/Mobi/i.test(ua) && !/iPad|Tablet/i.test(ua)) || small, q = /[?&]phone=([01])/.exec(location.search);
+  if (q) phone = q[1] === '1';
+  if (phone) document.documentElement.className += ' phone phone-loading ' + (ios || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) ? 'phone-ios' : 'phone-android');
+} catch (e) {} })();
+</script>
 </head>
 <body>
 <canvas id="view"></canvas>
@@ -299,14 +312,25 @@ if (DEVICE.on) {
     const url = location.origin + location.pathname.replace(/index\.html$/, '');
     ov.insertAdjacentHTML('beforeend', '<div class="qrcard" id="qrcard"><div class="lbl">Open on your phone</div><div id="qrbox"></div>' +
       '<div class="qrnote" id="qrnote">' + (local ? 'This PC\u2019s own address: phones can scan it once the site is online' : lan ? 'Phones on this Wi-Fi: scan to walk the building' : 'Scan to walk the building on your phone') + '</div></div>');
+    // (user 2026-10-30, phones: "change it to the logo of the ict hub and its color but make it work the same way ... for iphone and for
+    // android") phones: the hub blue on white, the hub logo's mark in the middle (hub-logo/mark-iphone.png on iPhones, mark-android.png
+    // elsewhere, made by rooms/phone_ui/make_hub_logo_marks.py), error correction H (30 %) so the modules under the logo are not needed
+    const PH = document.documentElement.classList.contains('phone');
+    const logoP = !PH ? Promise.resolve(null) : new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null);
+      im.src = new URL('hub-logo/mark-' + (document.documentElement.classList.contains('phone-ios') ? 'iphone' : 'android') + '.png', document.baseURI).href; });
     const draw = () => { const box = document.getElementById('qrbox'); if (!box || typeof QRCode === 'undefined') return;
-      const q = new QRCode(document.createElement('div'), { text: url, correctLevel: QRCode.CorrectLevel.M })._oQRCode, n = q.getModuleCount(), N = n + 8;
-      const dpr = window.devicePixelRatio || 1, css = innerWidth > 720 ? 190 : 140, m = Math.max(2, Math.floor(css * dpr / N));
+      const q = new QRCode(document.createElement('div'), { text: url, correctLevel: PH ? QRCode.CorrectLevel.H : QRCode.CorrectLevel.M })._oQRCode, n = q.getModuleCount(), N = n + 8;
+      const dpr = window.devicePixelRatio || 1, css = PH ? 176 : innerWidth > 720 ? 190 : 140, m = Math.max(2, Math.floor(css * dpr / N));
       const cv = document.createElement('canvas'); cv.width = cv.height = N * m; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'QR code: ' + url);
       cv.style.cssText = `width:${N * m / dpr}px;height:${N * m / dpr}px;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:10px`;
-      const g = cv.getContext('2d'); g.fillStyle = '#F3ECE2'; g.fillRect(0, 0, N * m, N * m); g.fillStyle = '#16120E';
-      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) g.fillRect((c + 4) * m, (r + 4) * m, m, m);
-      box.style.padding = '0'; box.replaceChildren(cv); window.__qrText = url; };
+      const g = cv.getContext('2d'); g.fillStyle = PH ? '#FFFFFF' : '#F3ECE2'; g.fillRect(0, 0, N * m, N * m); g.fillStyle = PH ? '#0000C8' : '#16120E';
+      if (!PH) { for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) g.fillRect((c + 4) * m, (r + 4) * m, m, m);
+        box.style.padding = '0'; box.replaceChildren(cv); window.__qrText = url; return; }
+      logoP.then(logo => {                                       // the logo square: an odd number of modules, ~28 % across, one clear module round it
+        const L = logo ? Math.max(5, Math.round(n * 0.28) | 1) : 0, a = (n - L) / 2 - 1, b = a + L + 1;
+        for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c) && !(L && r >= a && r <= b && c >= a && c <= b)) g.fillRect((c + 4) * m, (r + 4) * m, m, m);
+        if (L) { g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high'; g.drawImage(logo, (a + 1 + 4) * m, (a + 1 + 4) * m, L * m, L * m); }
+        box.style.padding = '0'; box.style.background = '#FFFFFF'; box.replaceChildren(cv); window.__qrText = url; }); };
     const sc = document.createElement('script'); sc.src = new URL('lib/qrcode.min.js', document.baseURI).href;
     sc.onload = () => { try { draw(); } catch (e) { document.getElementById('qrnote').textContent = url; } };
     sc.onerror = () => { document.getElementById('qrnote').textContent = url; };
@@ -503,6 +527,9 @@ const loader = new GLTFLoader();
 const baseColliders = [];
 let base = null, loadMs = 0;
 const loadEl = document.getElementById('load'), pctEl = document.getElementById('loadpct'), errEl = document.getElementById('err');
+// (user 2026-10-30, phones) html.phone-loading follows the loading screen: on while it shows (FAST START can show it again), off once it lifts
+if (document.documentElement.classList.contains('phone')) { const ld = () => document.documentElement.classList.toggle('phone-loading', loadEl.style.display !== 'none');
+  ld(); new MutationObserver(ld).observe(loadEl, { attributes: true, attributeFilter: ['style'] }); }
 await new Promise(res => loader.load('./base.glb', g => {
   base = g.scene;
   base.traverse(o => { if (!o.isMesh) return; o.material = baseMat(Array.isArray(o.material) ? o.material[0] : o.material);
@@ -2510,6 +2537,138 @@ function setMapExpanded(on) { const w = $g('ex-map-wrap'); w.classList.toggle('e
   if (cv.width !== t) { cv.width = t; cv.height = Math.round(t * 300 / 480); } drawMap(); }
 $g('ex-map-expand').onclick = () => setMapExpanded(!$g('ex-map-wrap').classList.contains('expanded'));
 $g('ex-map-backdrop').onclick = () => setMapExpanded(false);
+// ---- PHONE UI (user 2026-10-30, "for the mobile phones only, all mobile phones"; html.phone is set in the head). On phones only:
+//  - the title words top left are gone and the QR card (hub blue + hub logo, see the QR block) takes their place
+//  - a glass hand taps the Map button until the Map is opened; a first-visit tour (same hand) shows how to use the Map
+//  - the Map sheet: no 2D map and no room list; I AM AT / GOING TO (bold) each open a drop-down of the rooms
+//  - the walking card: the direction on one horizontal line (controls on the line above it), the text shrunk to fit
+if (document.documentElement.classList.contains('phone')) {
+  const HAND = 'M12 30V8A5 5 0 0 1 22 8V26A4.25 4.25 0 0 1 30.5 27A4 4 0 0 1 38.5 29.5A3.4 3.4 0 0 1 45 33V44C45 52 40 58 33 58H21C15 58 11 55 9 50L3.5 39A3.6 3.6 0 0 1 9.5 35.5L12 39Z';
+  const st = document.createElement('style'); st.id = 'phone-css'; st.textContent = `
+html.phone #hubui .masthead{display:none !important}
+html.phone #hubui .qrcard{top:calc(clamp(20px,4vw,40px) + env(safe-area-inset-top,0px));left:calc(clamp(20px,4vw,44px) + env(safe-area-inset-left,0px));right:auto;max-width:none}
+@media (max-height:480px){html.phone body:not(.guiding):not(.route-open) #hubui .explore:not(.show) ~ .qrcard{display:block}}
+html.phone #hubui .ex-map-wrap,html.phone #hubui .ex-search{display:none !important}
+html.phone #hubui .ex-pick{position:relative;padding:11px 34px 11px 13px;gap:4px}
+html.phone #hubui .ex-pick small{font-family:var(--h-body);font-size:12px;font-weight:800;letter-spacing:.1em;color:#FFFFFF}
+html.phone #hubui .ex-pick span{font-size:15px;font-weight:700}
+html.phone #hubui .ex-pick::after{content:"";position:absolute;right:14px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:2px solid #FFFFFF;border-bottom:2px solid #FFFFFF;
+  transform:rotate(45deg);transition:transform .2s}
+html.phone #hubui .explore.dd-open[data-dd=start] #ex-pick-from::after,html.phone #hubui .explore.dd-open[data-dd=dest] #ex-pick-to::after{transform:translateY(4px) rotate(225deg)}
+html.phone #hubui .explore:not(.dd-open) .ex-pick.active{background:rgba(243,236,226,.04);border-color:var(--h-hair)}
+html.phone #hubui .ex-dd{display:none;position:relative;flex-direction:column;gap:6px;margin-top:-2px;padding:10px;border-radius:14px;
+  background:rgba(18,16,40,.9);border:1px solid rgba(255,255,255,.18);box-shadow:0 18px 40px -16px rgba(0,0,0,.7)}
+html.phone #hubui .explore.dd-open .ex-dd{display:flex;animation:phDdIn .18s ease-out}
+html.phone #hubui .ex-dd::before{content:"";position:absolute;top:-7px;left:22%;width:12px;height:12px;background:rgba(18,16,40,.95);
+  border-left:1px solid rgba(255,255,255,.18);border-top:1px solid rgba(255,255,255,.18);transform:rotate(45deg)}
+html.phone #hubui .explore[data-dd=dest] .ex-dd::before{left:auto;right:22%}
+html.phone #hubui .ex-dd .ex-list-hd{font-size:10px;font-weight:700;color:#FFFFFF;padding:0 2px}
+html.phone #hubui .ex-dd .ex-list{max-height:min(44vh,380px)}
+@keyframes phDdIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+html.phone #hubui .walk-hud{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"sub sub ctrl" "arrow main main";
+  align-items:center;column-gap:10px;row-gap:4px;width:min(calc(100vw - 16px),540px);padding:10px 12px 12px}
+@media (max-width:720px){html.phone #hubui .walk-hud{max-width:none}}
+html.phone #hubui .walk-hud .txt{display:contents}
+html.phone #hubui .walk-hud .txt .sub{grid-area:sub;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.phone #hubui .walk-hud .txt .main{grid-area:main;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px;line-height:1.3}
+html.phone #hubui .walk-hud .arrow{grid-area:arrow;font-size:24px;width:28px}
+html.phone #hubui .walk-hud-ctrl{grid-area:ctrl;margin-left:0;padding-left:0;border-left:none}
+#hubui .mh{position:fixed;left:0;top:0;width:0;height:0;z-index:41;pointer-events:none;display:none;animation:mhIn .35s cubic-bezier(.34,1.56,.64,1)}
+#hubui .mh-bob{position:absolute;left:0;top:0;animation:mhBobUp 1.6s ease-in-out infinite}
+#hubui .mh.down .mh-bob{animation-name:mhBobDown}
+#hubui .mh-hand{position:absolute;left:-17px;top:-1px;width:48px;height:60px;transform-origin:17px 1px;transform:rotate(-14deg)}
+#hubui .mh.down .mh-hand{transform:rotate(194deg)}
+#hubui .mh-hand svg,#hubui .mh-glass{position:absolute;left:0;top:0;width:48px;height:60px;overflow:visible}
+#hubui .mh-shadow{transform:translate(2px,4px);filter:blur(3px)}
+#hubui .mh-shadow path{fill:rgba(0,0,50,.3)}
+#hubui .mh-glass{background:linear-gradient(155deg,rgba(255,255,255,.88),rgba(236,240,255,.5) 48%,rgba(190,200,255,.5));
+  -webkit-clip-path:path('${HAND}');clip-path:path('${HAND}');-webkit-backdrop-filter:blur(7px) saturate(1.8);backdrop-filter:blur(7px) saturate(1.8)}
+#hubui .mh-edge .o{fill:none;stroke:rgba(0,0,70,.42);stroke-width:2.6;stroke-linejoin:round}
+#hubui .mh-edge .i{fill:none;stroke:rgba(255,255,255,.95);stroke-width:1.3;stroke-linejoin:round}
+#hubui .mh-edge .cr{fill:none;stroke:rgba(255,255,255,.75);stroke-width:1.2;stroke-linecap:round}
+#hubui .mh-edge .gl{fill:rgba(255,255,255,.9)}
+@supports not ((clip-path:path('M0 0')) or (-webkit-clip-path:path('M0 0'))){#hubui .mh-glass{display:none}#hubui .mh-edge .i{fill:rgba(255,255,255,.72)}}
+#hubui .mh-ripple{position:absolute;left:-22px;top:-22px;width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.95);
+  box-shadow:0 0 0 1px rgba(0,0,80,.25),0 0 16px rgba(255,255,255,.65);opacity:0;animation:mhRip 1.6s ease-out infinite}
+@keyframes mhIn{from{transform:scale(.5)}to{transform:scale(1)}}
+@keyframes mhBobDown{0%,100%{transform:translateY(-15px)}46%,56%{transform:translateY(0) scale(.94)}}
+@keyframes mhBobUp{0%,100%{transform:translateY(15px)}46%,56%{transform:translateY(0) scale(.94)}}
+@keyframes mhRip{0%,44%{opacity:0;transform:scale(.3)}50%{opacity:.95;transform:scale(.42)}100%{opacity:0;transform:scale(1.6)}}
+#hubui .mtour{position:fixed;inset:0;z-index:40;pointer-events:none;display:none}
+#hubui .mtour.show{display:block}
+#hubui .mt-spot{position:fixed;border-radius:17px;pointer-events:none;transition:left .35s,top .35s,width .35s,height .35s;
+  box-shadow:0 0 0 200vmax rgba(6,8,30,.58),0 0 0 1.5px rgba(255,255,255,.8),0 0 18px 2px rgba(255,255,255,.35)}
+#hubui .mt-card{position:fixed;left:50%;width:min(88vw,330px);transform:translateX(-50%);pointer-events:auto;padding:16px 16px 12px;border-radius:18px;color:#FFFFFF;
+  background:linear-gradient(150deg,rgba(255,255,255,.24),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.38);
+  -webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);
+  box-shadow:0 20px 50px -18px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.45);animation:phDdIn .25s ease-out}
+#hubui .mt-card h4{font:800 17px var(--h-body);margin-bottom:4px}
+#hubui .mt-card p{font:500 14px/1.45 var(--h-body);color:rgba(255,255,255,.92)}
+#hubui .mt-card p b{font-weight:800;color:#FFFFFF}
+#hubui .mt-foot{display:flex;align-items:center;gap:8px;margin-top:12px}
+#hubui .mt-dots{display:flex;gap:5px;margin-right:auto}
+#hubui .mt-dots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.35);transition:width .2s}
+#hubui .mt-dots i.on{width:16px;background:#FFFFFF}
+#hubui .mt-card button{padding:9px 14px;font-size:13px;font-weight:700;border-radius:10px;color:#FFFFFF}
+#hubui .mt-card button.mt-skip{background:none;border-color:rgba(255,255,255,.3)}
+#hubui .mt-card button.mt-next{background:#0000C8;border-color:rgba(255,255,255,.35)}`;
+  document.head.appendChild(st);
+  // the drop-downs: the room list (and its heading) move into a box under the two buttons, shown only while one of them is open
+  const ex = $g('explore'), dd = document.createElement('div'); dd.className = 'ex-dd'; dd.id = 'ex-dd';
+  ex.querySelector('.ex-picker').after(dd); dd.append($g('ex-list-hd'), $g('ex-list'));
+  const ddSet = mode => { ex.classList.toggle('dd-open', !!mode); if (mode) ex.dataset.dd = mode; else delete ex.dataset.dd; };
+  const ddTap = mode => () => ddSet(ex.classList.contains('dd-open') && ex.dataset.dd === mode ? null : mode);
+  $g('ex-pick-from').addEventListener('click', ddTap('start')); $g('ex-pick-to').addEventListener('click', ddTap('dest'));
+  $g('ex-list').addEventListener('click', e => { const b = e.target.closest && e.target.closest('.ex-room'); if (b && !b.classList.contains('off')) ddSet(null); });
+  new MutationObserver(() => { if (!ex.classList.contains('show')) ddSet(null); }).observe(ex, { attributes: true, attributeFilter: ['class'] });
+  // the walking card's direction: one line, the font made smaller (down to 10 px) until it fits
+  const hudT = $g('walk-hud-text'), fitHud = () => { hudT.style.fontSize = ''; let fs = parseFloat(getComputedStyle(hudT).fontSize) || 16;
+    for (let i = 0; i < 14 && hudT.scrollWidth > hudT.clientWidth + 1 && fs > 10; i++) { fs -= 0.5; hudT.style.fontSize = fs + 'px'; } };
+  new MutationObserver(fitHud).observe(hudT, { childList: true, characterData: true, subtree: true });
+  addEventListener('resize', () => setTimeout(fitHud, 80));
+  // the glass hand (one, shared by the Map hint and the tour) and the tour's dimmed spotlight + glass card
+  $g('hubui').insertAdjacentHTML('beforeend', '<div class="mtour" id="mtour"><div class="mt-spot" id="mt-spot"></div><div class="mt-card" id="mt-card" role="dialog" aria-live="polite">' +
+    '<h4 id="mt-h"></h4><p id="mt-p"></p><div class="mt-foot"><div class="mt-dots" id="mt-dots"></div><button class="mt-skip" id="mt-skip">Skip</button><button class="mt-next" id="mt-next">Next</button></div></div></div>' +
+    `<div class="mh" id="mh" aria-hidden="true"><div class="mh-bob"><div class="mh-hand"><svg class="mh-shadow" viewBox="0 0 48 60"><path d="${HAND}"/></svg><div class="mh-glass"></div>` +
+    `<svg class="mh-edge" viewBox="0 0 48 60"><path class="o" d="${HAND}"/><path class="i" d="${HAND}"/><path class="cr" d="M30.5 28v6M38.5 30.5v5M12.5 40l3.5 4.5"/>` +
+    '<ellipse class="gl" cx="15.2" cy="9.5" rx="1.5" ry="3.4"/></svg></div></div><div class="mh-ripple"></div></div>');
+  const STEPS = [
+    { el: 'btn-explore', h: 'Find any room', p: 'Tap <b>Map</b> to open the room finder.' },
+    { el: 'ex-pick-from', h: 'Where are you?', p: 'Tap <b>I AM AT</b> and choose the room you are in now.' },
+    { el: 'ex-pick-to', h: 'Where to?', p: 'Tap <b>GOING TO</b> and choose a room. The guide walks you there.' } ];
+  let tour = -1, tourWait = false, mapSeen = false;
+  const HT = document.documentElement, mh = $g('mh'), spot = $g('mt-spot'), card = $g('mt-card');
+  const tourDone = () => { try { return localStorage.getItem('hubMapTour') === 'done'; } catch (e) { return false; } };
+  const endTour = () => { tour = -1; tourWait = false; $g('mtour').classList.remove('show'); try { localStorage.setItem('hubMapTour', 'done'); } catch (e) {} };
+  const goStep = k => { tour = k; tourWait = false; const s = STEPS[k]; $g('mt-h').textContent = s.h; $g('mt-p').innerHTML = s.p;
+    $g('mt-dots').innerHTML = STEPS.map((_, i) => '<i' + (i === k ? ' class="on"' : '') + '></i>').join('');
+    $g('mt-next').textContent = k === STEPS.length - 1 ? 'Got it' : 'Next'; };
+  $g('mt-skip').onclick = endTour;
+  $g('mt-next').onclick = () => { if (tour === 0) $g('btn-explore').click(); else if (tour === 1) goStep(2); else endTour(); };
+  $g('btn-explore').addEventListener('click', () => { mapSeen = true; if (tour === 0) setTimeout(() => ex.classList.contains('show') ? goStep(1) : endTour(), 60); });
+  $g('ex-pick-from').addEventListener('click', () => { if (tour === 1) tourWait = true; });          // its drop-down is open: the tour waits for the choice
+  $g('ex-pick-to').addEventListener('click', () => { if (tour >= 1) endTour(); });
+  const startTour = () => { if (HT.classList.contains('phone-loading')) return setTimeout(startTour, 400);
+    setTimeout(() => { if (tour < 0 && !tourDone() && !mapSeen && !document.body.classList.contains('guiding') && !ex.classList.contains('show')) goStep(0); }, 1400); };
+  startTour();
+  let mk = '';
+  const tick = () => { requestAnimationFrame(tick);
+    const B = document.body, busy = HT.classList.contains('phone-loading') || B.classList.contains('guiding') || B.classList.contains('hub-pano') || B.classList.contains('map-expanded') ||
+      $g('walk-hud').classList.contains('show');
+    if (tour >= 0 && (B.classList.contains('guiding') || B.classList.contains('hub-pano') || (tour > 0 && !ex.classList.contains('show')))) endTour();
+    if (tour === 1 && tourWait && !ex.classList.contains('dd-open')) goStep(2);
+    const inTour = tour >= 0 && !tourWait; $g('mtour').classList.toggle('show', inTour);
+    const target = inTour ? $g(STEPS[tour].el) : tour < 0 && !mapSeen && !busy && !ex.classList.contains('show') ? $g('btn-explore') : null;
+    const r = target && target.getBoundingClientRect();
+    if (!r || !r.width) { if (mk) { mh.style.display = 'none'; mk = ''; } return; }
+    const map = target.id === 'btn-explore', down = r.top > 110;           // the fingertip on the word "Map" / on the button's label; from above when there is room
+    const x = Math.round(map ? r.left + r.width / 2 + 14 : r.left + Math.min(46, r.width / 2)), y = Math.round(map ? r.top + r.height / 2 + 2 : r.top + 18);
+    const k = x + ',' + y + ',' + down;
+    if (k !== mk) { mh.style.left = x + 'px'; mh.style.top = y + 'px'; mh.classList.toggle('down', down); mh.style.display = 'block'; mk = k; }
+    if (inTour) { spot.style.left = (r.left - 3) + 'px'; spot.style.top = (r.top - 3) + 'px'; spot.style.width = (r.width + 6) + 'px'; spot.style.height = (r.height + 6) + 'px';
+      if (down) { card.style.top = 'auto'; card.style.bottom = Math.round(innerHeight - r.top + 84) + 'px'; } else { card.style.bottom = 'auto'; card.style.top = Math.round(r.bottom + 84) + 'px'; } } };
+  requestAnimationFrame(tick);
+}
 
 // ------------------------------------------------------------------ the guide character (the hub's size; Idle / Walk clips when the figure has them)
 // (user 2026-10-28: the new figure characterhub.glb in place of the hub's character.glb: same 0.55 m, feet on the floor, faces +Z as the
@@ -2965,6 +3124,7 @@ function walkTick(dt) {
 // ------------------------------------------------------------------ live map (the hub's map style): the real floor plan of the walked floor, route, step marks
 const gmap = $g('ex-map'), gctx = gmap.getContext('2d');
 function drawMap() {
+  if (document.documentElement.classList.contains('phone')) return;   // (2026-10-30) phones: the Map sheet has no 2D map
   const lv = walk ? walk.level : (lastArrive ? lastArrive.level : (HUBUI ? 0 : here().level));
   const PL = lv ? PLAN1 : PLAN, img = lv ? planImg1 : planImg, ready = lv ? plan1Ready : planReady;
   const V = lv ? { bx0: -19.6, bx1: 19.6, by0: -3.8, by1: 13.9 } : { bx0: -19.6, bx1: 19.6, by0: -14.0, by1: 8.4 };
