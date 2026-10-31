@@ -2260,8 +2260,9 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
       #endif
       vec4 w = modelMatrix * vec4(position, 1.); vWorld = w.xyz; vNormalW = normalize(mat3(modelMatrix) * normal);
       gl_Position = projectionMatrix * viewMatrix * w; }`;
-  const ENV_GLSL = `vec3 skyEnv(vec3 R){ float h = R.y; vec3 hor = vec3(1.30, 1.40, 1.55), zen = vec3(0.34, 0.55, 1.10), gnd = vec3(0.20, 0.18, 0.16);
-      return h > 0. ? mix(hor, zen, pow(h, .45)) : mix(hor * 0.55, gnd, pow(-h, .35)); }`;
+  const ENV_GLSL = `vec3 skyEnv(vec3 R){ float h = R.y; vec3 hor = vec3(1.45, 1.55, 1.70), zen = vec3(0.30, 0.52, 1.10), gnd = vec3(0.30, 0.25, 0.20);
+      vec3 sky = mix(hor, zen, pow(max(h, 0.), .45)), g = mix(gnd, vec3(0.12, 0.10, 0.09), pow(max(-h, 0.), .35));
+      return mix(g, sky, smoothstep(-0.015, 0.015, h)) + vec3(6.0) * pow(max(dot(R, sunDir), 0.), 400.); }`;
   const LIT_FS = `uniform vec3 sunDir, sunCol, skyCol, gndCol, base; uniform sampler2D map; uniform float hasMap, alphaTest, rough, specK, envK, transl, shade, emit, gain, flip;
     varying vec2 vUv; varying vec3 vWorld; varying vec3 vNormalW; varying vec3 vCol; ${ENV_GLSL}
     void main(){ vec4 t = hasMap > 0.5 ? texture2D(map, vUv) : vec4(1.); if (t.a < alphaTest) discard;
@@ -2444,80 +2445,102 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
   REAL.parts.trees = TREES.length; REAL.parts.palms = PALMS.length; REAL.parts.cards = leafAcc.idx.length / 6;
 
   // -------------------------------------------------------------- parked cars (Hub Space-2/-4/-5/-6, `the out side/cars.jpeg`): nose out in the bays
+  // (user 2026-10-31: "make the cars look very real", photos in `cars/`: orange BMW M5 Touring, red Toyota RAV4, black Mercedes E-class,
+  // dark grey VW ID.4, silver Subaru Forester): smooth bodies with wheel-arch flares, black SUV cladding, window frames, door seams and
+  // handles, LED lamps, multi-spoke alloys, roof rails, each car's own grille; paint = metallic clear coat reflecting the sky over a sharp
+  // horizon (what makes a car read as real); one mesh per material
   const PROF = {
-    suv:   { L: 4.80, W: 1.88, H: 1.84, wr: 0.37, axR: 1.05, axF: 3.84, belt: 1.10, hoodF: 0.98, hoodX: 1.35, wsTop: 2.10, rb: 0.10, rt: 0.25 },
-    hatch: { L: 4.00, W: 1.70, H: 1.53, wr: 0.31, axR: 0.80, axF: 3.30, belt: 0.95, hoodF: 0.80, hoodX: 1.05, wsTop: 1.80, rb: 0.08, rt: 0.36 },
-    sedan: { L: 4.62, W: 1.76, H: 1.47, wr: 0.31, axR: 1.00, axF: 3.70, belt: 0.92, hoodF: 0.76, hoodX: 1.35, wsTop: 2.05, rb: 0.95, rt: 1.42 } };
-  const glassMat = lit({ base: new THREE.Color(0.018, 0.021, 0.025), specK: 1.6, rough: 0.05, envK: 1.0, side: THREE.DoubleSide });
-  const blackMat = lit({ base: new THREE.Color(0.025, 0.025, 0.027), specK: 0.25, rough: 0.5, envK: 0.15 });
-  const tyreMat = lit({ base: new THREE.Color(0.03, 0.03, 0.03), rough: 0.9 });
-  const rimTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
-    g.fillStyle = '#c8cacc'; g.beginPath(); g.arc(64, 64, 62, 0, 7); g.fill(); g.fillStyle = '#2a2b2d';
-    for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2; g.beginPath(); g.moveTo(64 + Math.cos(a + 0.33) * 18, 64 + Math.sin(a + 0.33) * 18);
-      g.arc(64, 64, 52, a + 0.25, a + 1.0); g.lineTo(64 + Math.cos(a + 0.92) * 18, 64 + Math.sin(a + 0.92) * 18); g.fill(); }
-    g.fillStyle = '#8d9093'; g.beginPath(); g.arc(64, 64, 11, 0, 7); g.fill(); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; return t; })();
-  const rimMat = lit({ map: rimTex, specK: 0.8, rough: 0.3, envK: 0.5 });
-  const lightMat = lit({ base: new THREE.Color(0.85, 0.85, 0.82), specK: 1.2, rough: 0.1, envK: 0.6, emit: 0.15 });
-  const tailMat = lit({ base: new THREE.Color(0.55, 0.03, 0.03), specK: 1.0, rough: 0.15, envK: 0.4, emit: 0.1 });
+    wagon: { L: 5.10, W: 1.97, H: 1.49, wr: 0.35, axR: 1.12, axF: 4.10, belt: 0.98, hoodF: 0.80, hoodX: 1.55, wsTop: 2.35, rb: 0.10, rt: 0.30, clad: 0, rails: 1 },
+    suv:   { L: 4.62, W: 1.86, H: 1.68, wr: 0.36, axR: 0.98, axF: 3.67, belt: 1.04, hoodF: 0.92, hoodX: 1.30, wsTop: 2.05, rb: 0.10, rt: 0.26, clad: 1, rails: 1 },
+    cross: { L: 4.58, W: 1.85, H: 1.62, wr: 0.37, axR: 0.92, axF: 3.68, belt: 1.00, hoodF: 0.86, hoodX: 1.20, wsTop: 2.10, rb: 0.12, rt: 0.42, clad: 1, rails: 0 },
+    sedan: { L: 4.95, W: 1.88, H: 1.47, wr: 0.34, axR: 1.08, axF: 4.04, belt: 0.92, hoodF: 0.76, hoodX: 1.55, wsTop: 2.35, rb: 1.00, rt: 1.55, clad: 0, rails: 0 } };
+  const glassMat = lit({ base: new THREE.Color(0.012, 0.014, 0.017), specK: 2.0, rough: 0.03, envK: 1.0, side: THREE.DoubleSide });
+  const blackMat = lit({ base: new THREE.Color(0.018, 0.018, 0.02), specK: 0.5, rough: 0.35, envK: 0.25 });
+  const cladMat = lit({ base: new THREE.Color(0.022, 0.022, 0.024), rough: 0.85, specK: 0.05 });
+  const chromeMat = lit({ base: new THREE.Color(0.25, 0.25, 0.26), specK: 2.5, rough: 0.05, envK: 1.1 });
+  const tyreMat = lit({ base: new THREE.Color(0.028, 0.028, 0.03), rough: 0.9 });
+  const rimTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
+    g.fillStyle = '#101112'; g.fillRect(0, 0, 256, 256); g.fillStyle = '#b9bcc0'; g.beginPath(); g.arc(128, 128, 124, 0, 7); g.fill();
+    g.fillStyle = '#17181a'; g.beginPath(); g.arc(128, 128, 112, 0, 7); g.fill();
+    g.fillStyle = '#c9ccd0'; for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; g.save(); g.translate(128, 128); g.rotate(a);
+      g.beginPath(); g.moveTo(-7, -26); g.lineTo(7, -26); g.lineTo(11, -114); g.lineTo(-11, -114); g.closePath(); g.fill(); g.restore(); }
+    g.fillStyle = '#5a5d61'; g.beginPath(); g.arc(128, 128, 54, 0, 7); g.fill(); g.fillStyle = '#d4d7da'; g.beginPath(); g.arc(128, 128, 34, 0, 7); g.fill();
+    g.fillStyle = '#2b2c2e'; g.beginPath(); g.arc(128, 128, 16, 0, 7); g.fill();
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; t.anisotropy = 4; return t; })();
+  const rimMat = lit({ map: rimTex, specK: 1.4, rough: 0.2, envK: 0.6 });
+  const ledMat = lit({ base: new THREE.Color(0.9, 0.92, 0.95), emit: 2.2, specK: 1.0, rough: 0.05 });
+  const lampMat = lit({ base: new THREE.Color(0.05, 0.055, 0.06), specK: 2.0, rough: 0.03, envK: 0.9 });
+  const tailMat = lit({ base: new THREE.Color(0.45, 0.012, 0.012), specK: 1.6, rough: 0.05, envK: 0.5, emit: 0.35 });
   function plate(text) { const c = document.createElement('canvas'); c.width = 256; c.height = 64; const g = c.getContext('2d');
     g.fillStyle = '#f2f2ee'; g.fillRect(0, 0, 256, 64); g.strokeStyle = '#111'; g.lineWidth = 4; g.strokeRect(3, 3, 250, 58);
     g.fillStyle = '#111'; g.font = '700 40px Arial, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 128, 34);
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; return lit({ map: t, rough: 0.5 }); }
-  function makeCar(kind, paint, plateTxt) {
+  function makeCar(kind, paint, plateTxt, grille) {
     const P = PROF[kind], { L, W, H, wr, axR, axF, belt, hoodF, hoodX, wsTop, rb, rt } = P, car = new THREE.Group();
-    const paintMat = lit({ base: paint, specK: 1.4, rough: 0.12, envK: 0.75 });
-    const s = new THREE.Shape(), ar = wr + 0.09, ay = wr + 0.02, bot = 0.30;
-    s.moveTo(0.12, bot); s.lineTo(axR - ar, bot); s.absarc(axR, ay, ar, Math.PI, 0, true); s.lineTo(axF - ar, bot); s.absarc(axF, ay, ar, Math.PI, 0, true);
-    s.lineTo(L - 0.14, bot); s.quadraticCurveTo(L, bot + 0.02, L, bot + 0.22); s.lineTo(L, hoodF - 0.16); s.quadraticCurveTo(L, hoodF, L - 0.3, hoodF + 0.01);
-    s.lineTo(L - hoodX, belt); s.lineTo(Math.max(0.12, rb > 0.5 ? 0.12 : 0.12), belt + 0.02); s.quadraticCurveTo(0, belt, 0, belt - 0.14); s.lineTo(0, bot + 0.2);
-    s.quadraticCurveTo(0, bot, 0.12, bot);
-    const bev = { depth: W - 0.16, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.06, bevelSegments: 3, curveSegments: 10 };
-    const body = new THREE.ExtrudeGeometry(s, bev); body.translate(0, 0, -(W - 0.16) / 2);
-    car.add(new THREE.Mesh(body, paintMat));
-    const c = new THREE.Shape(); c.moveTo(rb, belt - 0.02); c.lineTo(L - hoodX - 0.02, belt - 0.02); c.lineTo(L - wsTop, H - 0.05);
-    c.quadraticCurveTo(L - wsTop - 0.12, H, L - wsTop - 0.3, H); c.lineTo(rt + 0.18, H); c.quadraticCurveTo(rt, H, rt - 0.02, H - 0.08); c.lineTo(rb, belt - 0.02);
-    const cw = W - 0.30, cab = new THREE.ExtrudeGeometry(c, { depth: cw - 0.08, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.03, bevelSegments: 2, curveSegments: 8 });
-    cab.translate(0, 0, -(cw - 0.08) / 2);
-    // the cabin's up-facing faces are the painted roof, the rest is glass
+    const paintMat = lit({ base: paint, specK: 2.2, rough: 0.06, envK: 1.0 });
+    const s = new THREE.Shape(), ar = wr + 0.07, ay = wr + 0.015, bot = 0.24 + (P.clad ? 0.06 : 0);
+    s.moveTo(0.18, bot); s.lineTo(axR - ar, bot); s.absarc(axR, ay, ar, Math.PI, 0, true); s.lineTo(axF - ar, bot); s.absarc(axF, ay, ar, Math.PI, 0, true);
+    s.lineTo(L - 0.22, bot); s.quadraticCurveTo(L + 0.01, bot + 0.02, L, bot + 0.26); s.quadraticCurveTo(L + 0.01, hoodF - 0.05, L - 0.12, hoodF - 0.02);
+    s.quadraticCurveTo(L - 0.45, hoodF + 0.06, L - hoodX * 0.55, hoodF + 0.09); s.quadraticCurveTo(L - hoodX + 0.15, belt - 0.02, L - hoodX, belt);
+    s.lineTo(0.35, belt + 0.03); s.quadraticCurveTo(0.02, belt + 0.02, 0.0, belt - 0.16); s.quadraticCurveTo(-0.02, bot + 0.1, 0.18, bot);
+    const bev = { depth: W - 0.22, bevelEnabled: true, bevelThickness: 0.11, bevelSize: 0.08, bevelSegments: 5, curveSegments: 14 };
+    const body = new THREE.ExtrudeGeometry(s, bev); body.translate(0, 0, -(W - 0.22) / 2); car.add(new THREE.Mesh(body, paintMat));
+    const c = new THREE.Shape(); c.moveTo(rb, belt - 0.02); c.lineTo(L - hoodX - 0.02, belt - 0.02); c.quadraticCurveTo(L - (hoodX + wsTop) / 2, (belt + H) / 2 + 0.08, L - wsTop, H - 0.04);
+    c.quadraticCurveTo(L - wsTop - 0.2, H + 0.005, L - wsTop - 0.45, H); c.lineTo(rt + 0.25, H - 0.01); c.quadraticCurveTo(rt, H - 0.01, rt - 0.03, H - 0.10); c.lineTo(rb, belt - 0.02);
+    const cw = W - 0.26, cab = new THREE.ExtrudeGeometry(c, { depth: cw - 0.14, bevelEnabled: true, bevelThickness: 0.07, bevelSize: 0.05, bevelSegments: 4, curveSegments: 12 });
+    cab.translate(0, 0, -(cw - 0.14) / 2);
     const cn = cab.toNonIndexed(), pa = cn.attributes.position, roofP = [], glassP = [];
     for (let i = 0; i < pa.count; i += 3) { const a = new THREE.Vector3().fromBufferAttribute(pa, i), b = new THREE.Vector3().fromBufferAttribute(pa, i + 1), d = new THREE.Vector3().fromBufferAttribute(pa, i + 2);
-      const n = b.clone().sub(a).cross(d.clone().sub(a)).normalize(); (n.y > 0.72 ? roofP : glassP).push(a.x, a.y, a.z, b.x, b.y, b.z, d.x, d.y, d.z); }
-    for (const [arr, m] of [[roofP, paintMat], [glassP, glassMat]]) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3));
+      const n = b.clone().sub(a).cross(d.clone().sub(a)).normalize(), my = (a.y + b.y + d.y) / 3; (n.y > 0.75 && my > H - 0.12 ? roofP : glassP).push(a.x, a.y, a.z, b.x, b.y, b.z, d.x, d.y, d.z); }
+    for (const [arr, m] of [[roofP, kind === 'cross' ? blackMat : paintMat], [glassP, glassMat]]) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3));
       g.setAttribute('uv', new THREE.Float32BufferAttribute(new Array(arr.length / 3 * 2).fill(0), 2)); g.computeVertexNormals(); car.add(new THREE.Mesh(g, m)); }
     const bx = (sx, sy, sz, x, y, z, m) => { const b = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), m); b.position.set(x, y, z); car.add(b); return b; };
-    // pillars (painted) at the windscreen and the back, B pillar black
-    for (const sgn of [-1, 1]) { const z = sgn * (cw / 2 + 0.005);
-      const a0 = new THREE.Vector3(L - hoodX - 0.02, belt, z), a1 = new THREE.Vector3(L - wsTop - 0.05, H - 0.04, z);
-      const ap = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1, 0.03), paintMat); ap.applyMatrix4(segMatrix(a0, a1)); car.add(ap);
-      const c0 = new THREE.Vector3(rb + 0.02, belt, z), c1 = new THREE.Vector3(rt + 0.02, H - 0.04, z);
-      const cp = new THREE.Mesh(new THREE.BoxGeometry(kind === 'sedan' ? 0.30 : 0.12, 1, 0.03), paintMat); cp.applyMatrix4(segMatrix(c0, c1)); car.add(cp);
-      bx(0.09, H - belt - 0.06, 0.03, (axR + axF) / 2 - 0.1, (belt + H) / 2, z, blackMat);
-      bx(0.14, 0.09, 0.13, L - hoodX + 0.08, belt + 0.07, sgn * (W / 2 + 0.05), paintMat);                     // mirrors
-      bx(L * 0.62, 0.05, 0.02, L * 0.5, bot + 0.14, sgn * (W / 2 - 0.005), blackMat);                          // sill trim
-      bx(0.05, 0.12, 0.34, L - 0.015, hoodF - 0.13, sgn * (W / 2 - 0.27), lightMat);                          // headlights
-      bx(0.05, 0.13, 0.28, 0.01, belt - 0.13, sgn * (W / 2 - 0.2), tailMat); }
-    bx(0.04, 0.20, W * 0.42, L - 0.01, hoodF - 0.30, 0, blackMat);                                             // grille
-    bx(0.08, 0.14, W - 0.08, L - 0.02, bot + 0.07, 0, blackMat); bx(0.08, 0.14, W - 0.08, 0.02, bot + 0.07, 0, blackMat);   // lower valances
+    const seg = (a, b, w, d, m) => { const q = new THREE.Mesh(new THREE.BoxGeometry(w, 1, d), m); q.applyMatrix4(segMatrix(a, b)); car.add(q); };
+    const midX = (axR + axF) / 2 - 0.05, pil = kind === 'cross' ? blackMat : paintMat;
+    for (const sgn of [-1, 1]) { const z = sgn * (cw / 2 + 0.03), zs = sgn * (W / 2 + 0.005);
+      seg(new THREE.Vector3(L - hoodX - 0.02, belt, z), new THREE.Vector3(L - wsTop - 0.03, H - 0.05, z), 0.08, 0.035, pil);                      // A pillar
+      seg(new THREE.Vector3(rb + 0.04, belt, z), new THREE.Vector3(rt + 0.02, H - 0.06, z), kind === 'sedan' ? 0.34 : 0.16, 0.035, pil);           // C / D pillar
+      bx(0.10, H - belt - 0.07, 0.035, midX, (belt + H) / 2 - 0.02, z, blackMat);                                                               // B pillar
+      bx(L - hoodX - rb - 0.1, 0.022, 0.02, (L - hoodX + rb) / 2, belt + 0.012, z + sgn * 0.004, chromeMat);                                  // window sill trim
+      for (const xs of [midX - 0.06, L - hoodX - 0.05, midX - (midX - rb) * 0.85]) bx(0.008, belt - bot - 0.14, 0.01, xs, (belt + bot) / 2 + 0.03, zs, blackMat);   // door seams
+      for (const xh of [midX + 0.12, midX - (midX - rb) * 0.55]) bx(0.15, 0.028, 0.03, xh, belt - 0.12, zs + sgn * 0.012, kind === 'sedan' ? chromeMat : blackMat);   // handles
+      const mir = bx(0.18, 0.10, 0.16, L - hoodX + 0.12, belt + 0.06, sgn * (W / 2 + 0.06), paintMat); mir.rotation.y = sgn * 0.15;
+      bx(L * 0.55, 0.07, 0.02, L * 0.52, bot + 0.07, sgn * (W / 2 - 0.002), P.clad ? cladMat : blackMat);                                    // sill
+      if (P.clad) for (const xa of [axR, axF]) { const r = new THREE.Mesh(new THREE.RingGeometry(ar - 0.005, ar + 0.07, 24, 1, 0, Math.PI), cladMat);
+        r.position.set(xa, ay, sgn * (W / 2 + 0.008)); if (sgn < 0) r.rotation.y = Math.PI; car.add(r); }
+      bx(0.06, 0.11, 0.42, L - 0.03, hoodF - 0.12, sgn * (W / 2 - 0.30), lampMat); bx(0.064, 0.018, 0.36, L - 0.028, hoodF - 0.085, sgn * (W / 2 - 0.30), ledMat);
+      bx(0.06, 0.09, 0.40, 0.025, belt - 0.12, sgn * (W / 2 - 0.26), tailMat);
+      if (P.rails) bx(L - wsTop - rt - 0.3, 0.035, 0.035, (L - wsTop + rt) / 2 + 0.05, H + 0.02, sgn * (cw / 2 - 0.12), blackMat); }
+    if (kind === 'cross') bx(0.06, 0.016, W - 0.5, L - 0.028, hoodF - 0.05, 0, ledMat);                                                      // ID.4 light bar
+    if (kind === 'cross' || kind === 'suv') bx(0.05, 0.03, W - 0.55, 0.02, belt - 0.10, 0, tailMat);                                        // tail strip
+    if (grille === 'kidney') { for (const sgn of [-1, 1]) { bx(0.05, 0.24, 0.34, L - 0.02, bot + 0.30, sgn * 0.19, blackMat); bx(0.052, 0.25, 0.012, L - 0.018, bot + 0.30, sgn * 0.36, chromeMat); } }
+    else if (grille === 'star') { bx(0.05, 0.24, 0.80, L - 0.02, bot + 0.30, 0, blackMat); bx(0.054, 0.26, 0.012, L - 0.017, bot + 0.30, 0.41, chromeMat); bx(0.054, 0.26, 0.012, L - 0.017, bot + 0.30, -0.41, chromeMat);
+      const st = new THREE.Mesh(new THREE.CircleGeometry(0.07, 20), chromeMat); st.position.set(L + 0.008, bot + 0.31, 0); st.rotation.y = Math.PI / 2; car.add(st); }
+    else if (grille === 'hex') { bx(0.05, 0.20, 0.82, L - 0.02, bot + 0.36, 0, blackMat); bx(0.056, 0.025, 0.80, L - 0.015, bot + 0.38, 0, chromeMat); }
+    else if (grille === 'wide') { bx(0.05, 0.16, 1.05, L - 0.02, bot + 0.18, 0, blackMat); bx(0.05, 0.06, 0.6, L - 0.02, bot + 0.42, 0, blackMat); }
+    bx(0.09, 0.13, W - 0.10, L - 0.02, bot + 0.05, 0, P.clad ? cladMat : blackMat); bx(0.09, 0.13, W - 0.10, 0.02, bot + 0.05, 0, P.clad ? cladMat : blackMat);   // valances
     const pm = plate(plateTxt);
-    const pf = new THREE.Mesh(new THREE.PlaneGeometry(0.52, 0.12), pm); pf.position.set(L + 0.012, bot + 0.27, 0); pf.rotation.y = Math.PI / 2; car.add(pf);
-    const pr = new THREE.Mesh(new THREE.PlaneGeometry(0.52, 0.12), pm); pr.position.set(-0.012, belt - 0.32, 0); pr.rotation.y = -Math.PI / 2; car.add(pr);
-    const tyre = new THREE.CylinderGeometry(wr, wr, 0.24, 24); tyre.rotateX(Math.PI / 2);
-    const rim = new THREE.CircleGeometry(wr * 0.66, 24);
-    for (const xw of [axR, axF]) for (const sgn of [-1, 1]) { const t = new THREE.Mesh(tyre, tyreMat); t.position.set(xw, wr, sgn * (W / 2 - 0.15)); car.add(t);
-      const r = new THREE.Mesh(rim, rimMat); r.position.set(xw, wr, sgn * (W / 2 - 0.15 + 0.125)); r.rotation.y = sgn > 0 ? 0 : Math.PI; car.add(r); }
-    // one mesh per material (phones: ~8 draw calls a car instead of ~30)
+    const pf = new THREE.Mesh(new THREE.PlaneGeometry(0.52, 0.12), pm); pf.position.set(L + 0.04, bot + 0.16, 0); pf.rotation.y = Math.PI / 2; car.add(pf);
+    const pr = new THREE.Mesh(new THREE.PlaneGeometry(0.52, 0.12), pm); pr.position.set(-0.04, belt - 0.33, 0); pr.rotation.y = -Math.PI / 2; car.add(pr);
+    const tyre = new THREE.CylinderGeometry(wr, wr, 0.25, 32); tyre.rotateX(Math.PI / 2);
+    const rim = new THREE.CircleGeometry(wr * 0.74, 32);
+    for (const xw of [axR, axF]) for (const sgn of [-1, 1]) { const t = new THREE.Mesh(tyre, tyreMat); t.position.set(xw, wr, sgn * (W / 2 - 0.14)); car.add(t);
+      const r = new THREE.Mesh(rim, rimMat); r.position.set(xw, wr, sgn * (W / 2 - 0.14 + 0.127)); r.rotation.y = sgn > 0 ? 0 : Math.PI; car.add(r); }
     car.updateMatrixWorld(true); const byMat = new Map();
     for (const o of [...car.children]) { if (!o.isMesh) continue; if (!byMat.has(o.material)) byMat.set(o.material, Acc()); addGeo(byMat.get(o.material), o.geometry, o.matrix); car.remove(o); }
     for (const [m, acc] of byMat) car.add(new THREE.Mesh(accGeo(acc), m));
     car.userData.L = L; car.userData.W = W; car.userData.H = H; return car;
   }
   const carShadow = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.52, depthWrite: true, depthFunc: THREE.LessDepth, side: THREE.DoubleSide });
-  const CARS = [   // Blender bay centre x, y (front toward +Y = out of the bay), kind, paint (linear), plate
-    [8.75, 12.10, 'suv', [0.010, 0.018, 0.045], 'UBK 427M'], [11.25, 12.25, 'hatch', [0.030, 0.034, 0.042], 'UBD 018Q'],
-    [16.25, 12.05, 'suv', [0.72, 0.72, 0.70], 'UAX 903T'], [18.75, 12.20, 'sedan', [0.42, 0.43, 0.44], 'UBH 556K'],
-    [-8.75, 12.10, 'suv', [0.70, 0.70, 0.69], 'UBF 271A'], [-11.25, 12.05, 'suv', [0.012, 0.012, 0.014], 'UBJ 744C'],
-    [-16.25, 12.20, 'sedan', [0.74, 0.74, 0.72], 'UBE 390R']];
-  CARS.forEach(([x, y, kind, col, pl], i) => { const car = makeCar(kind, new THREE.Color(...col), pl), rnd = rngOf(5100 + i * 13);
+  const CARS = [   // Blender bay centre x, y (front toward +Y = out of the bay), kind, paint (linear), plate, grille (the user's photos in cars/)
+    [8.75, 12.10, 'suv', [0.42, 0.012, 0.016], 'UBK 427M', 'wide'],        // red Toyota RAV4
+    [11.25, 12.05, 'cross', [0.030, 0.033, 0.038], 'UBD 018Q', 'none'],    // dark grey VW ID.4
+    [16.25, 12.00, 'wagon', [0.80, 0.21, 0.035], 'UAX 903T', 'kidney'],    // orange BMW M5 Touring
+    [18.75, 12.10, 'sedan', [0.008, 0.008, 0.009], 'UBH 556K', 'star'],    // black Mercedes E-class
+    [-8.75, 12.10, 'suv', [0.36, 0.37, 0.38], 'UBF 271A', 'hex'],          // silver Subaru Forester
+    [-11.25, 12.05, 'suv', [0.70, 0.70, 0.69], 'UBJ 744C', 'wide'],        // white SUV (Hub Space-4/-5)
+    [-16.25, 12.10, 'sedan', [0.62, 0.63, 0.64], 'UBE 390R', 'star']];     // silver saloon
+  CARS.forEach(([x, y, kind, col, pl, gr], i) => { const car = makeCar(kind, new THREE.Color(...col), pl, gr), rnd = rngOf(5100 + i * 13);
     const yawJ = (rnd() - 0.5) * 0.06; car.rotation.y = Math.PI / 2 + yawJ;
     const L = car.userData.L; car.name = 'REAL_CAR_' + i; car.traverse(o => { if (o.isMesh) o.frustumCulled = false; }); G.add(car);
     // the car stands with its rear at y - L/2 ... front at y + L/2 (rotation: local +x -> Blender +Y)
@@ -2530,11 +2553,16 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
     upBox('REAL_CAR', UPH.guards, x - car.userData.W / 2, x + car.userData.W / 2, y - L / 2, y + L / 2, GZ, GZ + car.userData.H); });
   REAL.parts.cars = CARS.length;
 
-  // -------------------------------------------------------------- the entrance pole (model column X -0.84..-0.66, Y 13.148..13.328) in its printed art
+  // -------------------------------------------------------------- the entrance poles in their printed art: the model's column (X -0.75) + three more (user
+  // 2026-10-31: "increase the number of the poles ... so that in total there are 4 poles but well spaced"), 1.75 m apart on the porch front
   { const pa = tex('pole_a.jpg'), pb = tex('pole_b.jpg'), plain = lit({ base: new THREE.Color(0.55, 0.56, 0.58), shade: 0.6 });
     const ma = lit({ map: pa, shade: 0.55, specK: 0.15, rough: 0.4, envK: 0.1 }), mb = lit({ map: pb, shade: 0.55, specK: 0.15, rough: 0.4, envK: 0.1 });
-    const pole = new THREE.Mesh(new THREE.BoxGeometry(0.30, 2.17, 0.30), [mb, mb, plain, plain, mb, ma]);   // +x -x +y -y +z(doors) -z(forecourt)
-    pole.position.copy(B2T(-0.75, 13.238, -0.03 + 2.17 / 2)); pole.name = 'REAL_POLE'; pole.frustumCulled = false; G.add(pole); REAL.parts.pole = true; }
+    REAL.poles = [-2.50, -0.75, 1.00, 2.75];
+    REAL.poles.forEach((px, k) => { const f = k % 2 ? mb : ma, sd = k % 2 ? ma : mb;
+      const pole = new THREE.Mesh(new THREE.BoxGeometry(0.30, 2.17, 0.30), [sd, sd, plain, plain, sd, f]);   // +x -x +y -y +z(doors) -z(forecourt)
+      pole.position.copy(B2T(px, 13.238, -0.03 + 2.17 / 2)); pole.name = 'REAL_POLE_' + k; pole.frustumCulled = false; G.add(pole);
+      if (px !== -0.75) upBox('REAL_POLE', UPH.guards, px - 0.15, px + 0.15, 13.088, 13.388, -0.03, 2.14); });
+    REAL.parts.pole = REAL.poles.length; }
 
   // -------------------------------------------------------------- the sign: a lit box on the balcony fascia, re-drawn from the photo
   { const face = lit({ map: tex('sign.jpg'), emit: 0.55, shade: 0.75, specK: 0.35, rough: 0.2, envK: 0.15 }), alu = lit({ base: new THREE.Color(0.75, 0.76, 0.77), specK: 0.3, rough: 0.35 });
@@ -2625,7 +2653,8 @@ const $g = id => document.getElementById(id);
 const OBSTACLES = [                                            // [level, Blender x1, y1, x2, y2 (a point or a line), half width] (fix4_scene.py)
   [0, -0.60, 3.35, -0.60, 3.35, 0.42],                         // the Reception's robot totem: 4 printed cubes on a 0.42 m round base
   [0, 1.303, 2.063, 1.897, 2.657, 0.12],                       // the INTERCRAFT roll-up banner by the stair (0.84 m print, 0.24 m foot)
-  [0, 1.97, 7.52, 1.97, 7.52, 0.30] ];                         // (2026-10-31) the rubber plant beside the reception desk's display case
+  [0, 1.97, 7.52, 1.97, 7.52, 0.30],                           // (2026-10-31) the rubber plant beside the reception desk's display case
+  [0, -2.50, 13.238, -2.50, 13.238, 0.15], [0, 1.00, 13.238, 1.00, 13.238, 0.15], [0, 2.75, 13.238, 2.75, 13.238, 0.15] ];   // the three added art poles
 let __walk = null;
 function getWalk() {
   if (__walk !== null) return __walk;
