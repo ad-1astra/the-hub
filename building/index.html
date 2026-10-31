@@ -1675,6 +1675,7 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
       for (int i = 0; i < 16; i++) { vec4 z = zones[i]; if (vWorld.x > z.x && vWorld.x < z.z && vWorld.z > z.y && vWorld.z < z.w && vWorld.y < ztop[i] && !envelope) discard; }
       if (outCut > 0.5 && !((vWorld.x > -18.95 && vWorld.x < 18.95 && vWorld.z > -7.95 && vWorld.z < 3.40) || (vWorld.x > -5.95 && vWorld.x < 4.45 && vWorld.z > -13.95 && vWorld.z < -7.70))) discard;   // old crowns outside (new trees)
       if (vWorld.x > -2.34 && vWorld.x < 0.84 && vWorld.z > -13.72 && vWorld.z < -13.645 && vWorld.y > 1.87 && vWorld.y < 2.57) discard;   // the old flat sign (the new lit one)
+      if (vWorld.x > -4.37 && vWorld.x < -2.33 && vWorld.z > -2.09 && vWorld.z < -1.35 && vWorld.y > 2.446 && vWorld.y < 3.32) discard;   // (user 2026-10-31) the Cafeteria buffet counter + blue trays removed
       if (vWorld.x > 0.85 && vWorld.x < 3.80 && vWorld.z > -2.00 && vWorld.z < -1.25 && vWorld.y > 2.05 && vWorld.y < 2.50) discard;
       if (vWorld.x > 2.90 && vWorld.x < 3.84 && vWorld.z > -1.27 && vWorld.z < -0.24 && vWorld.y > 2.05 && vWorld.y < 2.50) discard;
       vec3 c = bakeLin(decodeBake(texture2D(map, vUv).rgb));
@@ -3862,7 +3863,7 @@ function seatTick(dt) {
     sh.visible = !!(charGroup.visible && (walk || !seated)); if (sh.visible) { sh.position.set(charGroup.position.x, (SEAT.feetY !== null ? SEAT.feetY : charGroup.position.y) + 0.012, charGroup.position.z);
       sh.material.opacity = 0.55 * (charMats && charMats[0] ? Math.min(1, charMats[0].opacity) : 1); } }
 }
-{ const _end = endWalk; endWalk = function (arrived) { const w = walk; _end(arrived); if (arrived && w && charGroup && charGroup.visible) startSeat(w); else stopSeat(); };
+{ const _end = endWalk; endWalk = function (arrived) { _end(arrived); stopSeat(); };   // (user 2026-10-31: no sitting - he stands where he arrives)
   const _start = startWalk; startWalk = function (route, dest) { stopSeat(true); return _start(route, dest); };
   const _door = doorTick; doorTick = function (dt) { _door(dt); try { seatTick(dt); } catch (e) { if (!SEAT.err) { SEAT.err = 1; console.warn('seat', e); } } }; }
 // ---- GUIDE SEAT + FEET END ----
