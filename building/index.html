@@ -1632,6 +1632,7 @@ const PROJ_GLSL = `uniform sampler2D prT0; uniform sampler2D prT1; uniform sampl
     if (n.w <= 0. || P.y < b.x || P.y > b.y || L > 16. || P.x < z.x || P.x > z.z || P.z < z.y || P.z > z.w) return 0.;
     if (((P.z < -7.70 && N.z < -0.7) || (P.z > 3.10 && N.z > 0.7) || (P.x < -18.45 && N.x < -0.7) || (P.x > 18.45 && N.x > 0.7)) && dot(N, d) > 0.) return 0.;   // (real_out)
     if (P.x > -2.36 && P.x < 0.86 && P.z > -13.76 && P.z < -13.50 && P.y > 1.85 && P.y < 2.62) return 0.;
+    if (P.x > -4.46 && P.x < -2.24 && P.z > -2.18 && P.z < -1.20 && P.y > 2.43 && P.y < 3.40) return 0.;   // where the Cafeteria buffet stood (the renders saw it)
     float face = abs(dot(N, -d));                                   // either side (thin leaves, panels): the distance cube decides what it saw
     if (L > textureLod(dc, d, 0.).r * 1.02 + 0.04) return 0.;
     return n.w * smoothstep(0.06, 0.40, face); }                   // grazing views of a surface stretch the panorama: they fade out
@@ -1675,7 +1676,7 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
       for (int i = 0; i < 16; i++) { vec4 z = zones[i]; if (vWorld.x > z.x && vWorld.x < z.z && vWorld.z > z.y && vWorld.z < z.w && vWorld.y < ztop[i] && !envelope) discard; }
       if (outCut > 0.5 && !((vWorld.x > -18.95 && vWorld.x < 18.95 && vWorld.z > -7.95 && vWorld.z < 3.40) || (vWorld.x > -5.95 && vWorld.x < 4.45 && vWorld.z > -13.95 && vWorld.z < -7.70))) discard;   // old crowns outside (new trees)
       if (vWorld.x > -2.34 && vWorld.x < 0.84 && vWorld.z > -13.72 && vWorld.z < -13.645 && vWorld.y > 1.87 && vWorld.y < 2.57) discard;   // the old flat sign (the new lit one)
-      if (vWorld.x > -4.37 && vWorld.x < -2.33 && vWorld.z > -2.09 && vWorld.z < -1.35 && vWorld.y > 2.446 && vWorld.y < 3.32) discard;   // (user 2026-10-31) the Cafeteria buffet counter + blue trays removed
+      if (vWorld.x > -4.37 && vWorld.x < -2.33 && vWorld.z > -2.09 && vWorld.z < -1.35 && vWorld.y > 2.4415 && vWorld.y < 3.32) discard;   // (user 2026-10-31) the Cafeteria buffet counter + blue trays removed
       if (vWorld.x > 0.85 && vWorld.x < 3.80 && vWorld.z > -2.00 && vWorld.z < -1.25 && vWorld.y > 2.05 && vWorld.y < 2.50) discard;
       if (vWorld.x > 2.90 && vWorld.x < 3.84 && vWorld.z > -1.27 && vWorld.z < -0.24 && vWorld.y > 2.05 && vWorld.y < 2.50) discard;
       vec3 c = bakeLin(decodeBake(texture2D(map, vUv).rgb));
@@ -2615,6 +2616,44 @@ const REMOVED_GLSL = `if (vWorld.x > ${REMOVED_BOX[0].toFixed(3)} && vWorld.x < 
     leaves.name = 'REAL_REC_leaves'; R.add(leaves);
     upBox('REAL_REC_PLANT', UPH.guards, PX - 0.26, PX + 0.26, PY - 0.26, PY + 0.26, 0.0, 1.6);
     REAL.parts.case = true; }
+  // CAFETERIA where the buffet stood (user 2026-10-31: "remove the dark thing ... make it look like the floor of the cafeteria ... there looks to
+  // be a hole on the wall near the dark thing"): the floor under the removed buffet baked dark -> tiles laid over it; the buffet hid the UJ
+  // Connect doorway (X -3.80 .. -2.74 in the partition at Y 1.24 .. 1.29, head ~2.06 m) -> a glazed double door like the Cafeteria's others,
+  // swinging open while the guide or the walker is at it
+  { const FZ = 2.44, tc = document.createElement('canvas'); tc.width = tc.height = 256; const g = tc.getContext('2d');
+    g.fillStyle = '#ece6dc'; g.fillRect(0, 0, 256, 256); g.fillStyle = '#d6cfc3'; g.fillRect(0, 0, 256, 3); g.fillRect(0, 0, 3, 256);
+    for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(${200 + Math.random() * 40 | 0},${190 + Math.random() * 40 | 0},${180 + Math.random() * 40 | 0},0.18)`; g.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
+    const tt = new THREE.CanvasTexture(tc); tt.colorSpace = THREE.NoColorSpace; tt.wrapS = tt.wrapT = THREE.RepeatWrapping; tt.anisotropy = 8;
+    const X0 = -4.42, X1 = -2.26, Y0 = 1.30, Y1 = 2.14, T = 0.6;
+    const pg = new THREE.PlaneGeometry(X1 - X0, Y1 - Y0); pg.rotateX(-Math.PI / 2); const uv = pg.attributes.uv, pp = pg.attributes.position;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, (pp.getX(i) + (X0 + X1) / 2) / T, (-pp.getZ(i) + (Y0 + Y1) / 2) / T);
+    const floor = new THREE.Mesh(pg, litIn({ map: tt, base: new THREE.Color(1.38, 1.38, 1.38), specK: 0.25, rough: 0.25, envK: 0.15 }));
+    floor.position.copy(B2T((X0 + X1) / 2, (Y0 + Y1) / 2, FZ + 0.013)); floor.name = 'REAL_CAF_floor'; floor.renderOrder = 1; floor.frustumCulled = false; R.add(floor); REAL.cafFloor = floor.material;
+    const alu = litIn({ base: new THREE.Color(0.80, 0.80, 0.78), specK: 0.4, rough: 0.3 }), blk = litIn({ base: new THREE.Color(0.012, 0.012, 0.013), specK: 0.5, rough: 0.3 });
+    const gl = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, side: THREE.DoubleSide, vertexShader: BAKED_VS,
+      fragmentShader: `varying vec3 vWorld; varying vec3 vNormalW; void main(){ vec3 V = normalize(cameraPosition - vWorld);
+        float Fr = min(0.04 + 0.96 * pow(1. - abs(dot(V, normalize(vNormalW))), 5.), 0.42); gl_FragColor = vec4(vec3(2.6, 2.55, 2.45) * Fr + vec3(0.8, 0.86, 0.86) * 0.08, 0.06 + Fr); }` });
+    const DX0 = -3.80, DX1 = -2.74, DY = 1.265, DH = 2.04;
+    const box = (grp, x0, x1, y0, y1, z0, z1, m, hx, hy) => { const b = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, z1 - z0, y1 - y0), m);
+      b.position.set((x0 + x1) / 2 - hx, (z0 + z1) / 2, -((y0 + y1) / 2 - hy)); if (m === gl) b.renderOrder = 2; grp.add(b); };
+    const frame = new THREE.Group(); frame.name = 'REAL_UJ_DOOR_frame'; R.add(frame);
+    box(frame, DX0, DX0 + 0.05, DY - 0.05, DY + 0.05, FZ, FZ + DH + 0.05, alu, 0, 0); box(frame, DX1 - 0.05, DX1, DY - 0.05, DY + 0.05, FZ, FZ + DH + 0.05, alu, 0, 0);
+    box(frame, DX0, DX1, DY - 0.05, DY + 0.05, FZ + DH, FZ + DH + 0.05, alu, 0, 0);
+    const LW = (DX1 - DX0 - 0.10) / 2, leaves = [];
+    for (const [hx, sgn] of [[DX0 + 0.05, 1], [DX1 - 0.05, -1]]) { const lf = new THREE.Group(); lf.position.copy(B2T(hx, DY, 0)); lf.name = 'REAL_UJ_DOOR_leaf';
+      const a0 = sgn > 0 ? hx : hx - LW, a1 = a0 + LW;
+      for (const [z0, z1] of [[0, 0.10], [0.95, 1.03], [DH - 0.07, DH - 0.01]]) box(lf, a0, a1, DY - 0.022, DY + 0.022, FZ + z0, FZ + z1, alu, hx, DY);
+      box(lf, a0, a0 + 0.055, DY - 0.022, DY + 0.022, FZ, FZ + DH - 0.01, alu, hx, DY); box(lf, a1 - 0.055, a1, DY - 0.022, DY + 0.022, FZ, FZ + DH - 0.01, alu, hx, DY);
+      for (const [z0, z1] of [[0.10, 0.95], [1.03, DH - 0.07]]) box(lf, a0 + 0.055, a1 - 0.055, DY - 0.004, DY + 0.004, FZ + z0, FZ + z1, gl, hx, DY);
+      const hxp = sgn > 0 ? a1 - 0.08 : a0 + 0.08; for (const s of [-1, 1]) box(lf, hxp - 0.06, hxp + 0.06, DY + s * 0.05 - 0.01, DY + s * 0.05 + 0.01, FZ + 0.98, FZ + 1.00, blk, hx, DY);
+      R.add(lf); leaves.push([lf, sgn]); }
+    let k = 0, last = performance.now(); const C = B2T((DX0 + DX1) / 2, DY, FZ);
+    floor.onBeforeRender = () => { const now = performance.now(), dt = Math.min(0.1, (now - last) / 1000); last = now;
+      let near = Math.hypot(pos.x - C.x, pos.z - C.z) < 1.8 && pos.y > FZ && pos.y < FZ + 2.4;
+      try { const s = window.__guide && window.__guide.state(); if (s && s.char && Math.hypot(s.char[0] - C.x, s.char[2] - C.z) < 2.4 && s.char[1] > FZ - 0.3) near = true; } catch (e) {}
+      k += Math.sign((near ? 1 : 0) - k) * Math.min(Math.abs((near ? 1 : 0) - k), dt / 0.8); const a = k * k * (3 - 2 * k) * 1.45;
+      for (const [lf, sgn] of leaves) lf.rotation.y = sgn * a; };
+    REAL.parts.cafFix = true; }
   // the Wall of Fame (lobby wall north face y 3.42, x -5.27 .. -3.00): the photo on the wall; the earlier carved hexagons (fix4) are hidden
   { const m = litIn({ map: tex('fame.jpg'), base: new THREE.Color(1.0, 1.0, 1.0) });
     const fame = new THREE.Mesh(new THREE.PlaneGeometry(2.27, 2.14), m); fame.rotation.y = Math.PI; fame.position.copy(B2T(-4.135, 3.4235, 1.07)); fame.name = 'REAL_REC_fame'; R.add(fame);
